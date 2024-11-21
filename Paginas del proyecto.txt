@@ -1,0 +1,103 @@
+1. Página de Inicio
+Elementos clave:
+Escaparate de productos destacados y promociones.
+Barra de búsqueda visible.
+Acceso directo a categorías de productos.
+Información de la empresa (contacto, dirección, etc.).
+Acceso a la cesta de la compra visible en todo momento.
+Información de contacto en el pie de página.
+
+2. Página de Categorías de Productos
+Elementos clave:
+Listado de categorías, departamentos y/o fabricantes (acorde con la estructura de las tiendas físicas).
+Filtros de búsqueda por nombre, categoría o fabricante.
+Opción de ordenar productos por precio, popularidad, etc.
+Acceso a la cesta de la compra visible.
+Visualización clara de productos agotados con etiquetas "agotado".
+Imagen de cada producto.
+
+3. Página de Producto
+Elementos clave:
+Imagen(es) del producto con opción de ampliar.
+Descripción detallada del producto.
+Precio y disponibilidad.
+Opción de elegir cantidad y agregar al carrito.
+Reseñas o valoraciones del producto (si aplica).
+Información adicional como características, especificaciones o instrucciones de uso.
+
+4. Página de la Cesta de Compra
+Elementos clave:
+Listado de productos en la cesta con opción de ajustar cantidades o eliminar productos.
+Total de la compra y estimación de gastos de envío.
+Acceso al proceso de compra directamente desde la cesta.
+Opción de aplicar cupones de descuento (si aplica).
+Visibilidad constante de la cesta desde cualquier parte del sitio.
+Información de entrega (si ya se ha completado).
+
+5. Página de Registro / Ingreso
+Elementos clave:
+Campos para ingresar correo electrónico y contraseña para usuarios registrados.
+Opción de crear una cuenta nueva con correo y contraseña.
+Opciones de recuperación de contraseña.
+Guía clara del proceso de registro e inicio de sesión.
+
+6. Página de Pago (Checkout)
+Elementos clave:
+Formulario para ingresar datos de contacto y dirección de envío.
+Selección de método de pago (pasarela de pago o contrarrembolso).
+Resumen del pedido con productos, cantidades, precio total y gastos de envío.
+Confirmación de la compra antes de realizar el pago.
+Métodos de pago seguros implementados.
+Protocolo de seguridad visible (certificados SSL).
+
+7. Página de Confirmación de Compra
+Elementos clave:
+Detalles de la compra realizada: productos, precio total, dirección de envío.
+Confirmación de pago y estado del pedido.
+Enlace al seguimiento del pedido con ID de pedido.
+Información sobre el envío (tiempo estimado, empresa de mensajería).
+
+8. Página de Seguimiento de Pedido
+Elementos clave:
+Campo para ingresar el ID del pedido y visualizar el estado actual del mismo (por ejemplo: En proceso, Enviado, Entregado).
+Detalles del pedido (productos comprados, dirección de entrega, etc.).
+
+9. Panel de Administrador (Backend)
+Elementos clave:
+Gestión de productos (alta, baja, edición).
+Gestión de pedidos (estado, fecha, usuario, productos).
+Gestión de usuarios (roles, información de contacto).
+Informes de ventas y métricas clave.
+Configuración de métodos de pago, opciones de envío y promociones.
+
+10. Página de Política de Envío
+Elementos clave:
+Detalles sobre las opciones de entrega disponibles.
+Información sobre el envío gratuito (umbral de gasto mínimo).
+Tiempos estimados de entrega según la zona geográfica.
+Protocolo en caso de incidencias con el envío.
+
+11. Página de Novedades/Promociones
+Elementos clave:
+Sección que destaca productos en oferta o promociones vigentes.
+
+12. Páginas de Clientes (Historial de Pedidos, etc.)
+Elementos clave:
+Visualización de historial de pedidos (si es permitido).
+Opción para modificar información personal y de pago.
+
+13. Página de Política de Privacidad / Términos y Condiciones
+Elementos clave:
+Información sobre el tratamiento de datos personales (cumpliendo con las normativas de privacidad).
+Detalles sobre las condiciones de compra y políticas de devolución (si aplica).
+
+14. Página de Contacto
+Elementos clave:
+Formulario de contacto para que los usuarios puedan enviar preguntas o comentarios.
+Información de contacto (teléfono, correo electrónico, dirección física).
+Mapa de ubicación si es relevante.
+
+15. Página de "Sobre Nosotros"
+Elementos clave:
+Información sobre la empresa, su misión y visión.
+Equipo de trabajo o historia de la compañía.

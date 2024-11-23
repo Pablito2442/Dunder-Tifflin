@@ -1,0 +1,82 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:129.0) Gecko/20100101 Firefox/129.0" version="24.8.4">
+  <diagram name="Page-1" id="DXTh6R3aeqgEhro9hztP">
+    <mxGraphModel dx="886" dy="565" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="vMBZcdw96KSy_M2HUAYO-50" value="Backend" style="swimlane;" vertex="1" parent="1">
+          <mxGeometry x="190" y="380" width="340" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="vMBZcdw96KSy_M2HUAYO-55" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="vMBZcdw96KSy_M2HUAYO-50" source="vMBZcdw96KSy_M2HUAYO-51" target="vMBZcdw96KSy_M2HUAYO-52">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="vMBZcdw96KSy_M2HUAYO-83" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="vMBZcdw96KSy_M2HUAYO-50" source="vMBZcdw96KSy_M2HUAYO-51">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-40" y="170" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vMBZcdw96KSy_M2HUAYO-51" value="REST API" style="swimlane;startSize=260;" vertex="1" parent="vMBZcdw96KSy_M2HUAYO-50">
+          <mxGeometry x="20" y="110" width="88" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="vMBZcdw96KSy_M2HUAYO-56" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="vMBZcdw96KSy_M2HUAYO-50" source="vMBZcdw96KSy_M2HUAYO-52" target="vMBZcdw96KSy_M2HUAYO-51">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="vMBZcdw96KSy_M2HUAYO-57" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="vMBZcdw96KSy_M2HUAYO-50" source="vMBZcdw96KSy_M2HUAYO-52" target="vMBZcdw96KSy_M2HUAYO-53">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="vMBZcdw96KSy_M2HUAYO-52" value="Controller" style="swimlane;startSize=260;" vertex="1" parent="vMBZcdw96KSy_M2HUAYO-50">
+          <mxGeometry x="130" y="110" width="80" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="vMBZcdw96KSy_M2HUAYO-58" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="vMBZcdw96KSy_M2HUAYO-50" source="vMBZcdw96KSy_M2HUAYO-53" target="vMBZcdw96KSy_M2HUAYO-52">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="vMBZcdw96KSy_M2HUAYO-79" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="vMBZcdw96KSy_M2HUAYO-50" source="vMBZcdw96KSy_M2HUAYO-53">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="360" y="170" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vMBZcdw96KSy_M2HUAYO-53" value="Service&#xa;ORM" style="swimlane;startSize=260;" vertex="1" parent="vMBZcdw96KSy_M2HUAYO-50">
+          <mxGeometry x="240" y="110" width="80" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="vMBZcdw96KSy_M2HUAYO-81" value="Frontend" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="vMBZcdw96KSy_M2HUAYO-50">
+          <mxGeometry x="-140" width="120" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="vMBZcdw96KSy_M2HUAYO-85" value="" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://cdn0.iconfinder.com/data/icons/long-shadow-web-icons/512/javascript-128.png" vertex="1" parent="vMBZcdw96KSy_M2HUAYO-81">
+          <mxGeometry x="14" y="44" width="40" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="vMBZcdw96KSy_M2HUAYO-86" value="" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://cdn0.iconfinder.com/data/icons/long-shadow-web-icons/512/css-128.png" vertex="1" parent="vMBZcdw96KSy_M2HUAYO-81">
+          <mxGeometry x="67" y="44" width="40" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="vMBZcdw96KSy_M2HUAYO-87" value="" style="dashed=0;outlineConnect=0;html=1;align=center;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;shape=mxgraph.weblogos.html5" vertex="1" parent="vMBZcdw96KSy_M2HUAYO-81">
+          <mxGeometry x="45" y="250" width="30" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="vMBZcdw96KSy_M2HUAYO-90" value="" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://cdn2.iconfinder.com/data/icons/boxicons-logos/24/bxl-django-128.png" vertex="1" parent="vMBZcdw96KSy_M2HUAYO-50">
+          <mxGeometry x="200" y="40" width="48" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="vMBZcdw96KSy_M2HUAYO-89" value="" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://cdn0.iconfinder.com/data/icons/long-shadow-web-icons/512/python-128.png" vertex="1" parent="vMBZcdw96KSy_M2HUAYO-50">
+          <mxGeometry x="95" y="40" width="48" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="vMBZcdw96KSy_M2HUAYO-82" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="vMBZcdw96KSy_M2HUAYO-61" target="vMBZcdw96KSy_M2HUAYO-51">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="vMBZcdw96KSy_M2HUAYO-61" value="Vista" style="swimlane;startSize=320;" vertex="1" parent="1">
+          <mxGeometry x="70" y="490" width="80" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="vMBZcdw96KSy_M2HUAYO-80" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="vMBZcdw96KSy_M2HUAYO-78" target="vMBZcdw96KSy_M2HUAYO-53">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="550" y="550" />
+              <mxPoint x="550" y="550" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vMBZcdw96KSy_M2HUAYO-78" value="Base de Datos" style="swimlane;whiteSpace=wrap;html=1;startSize=50;" vertex="1" parent="1">
+          <mxGeometry x="550" y="380" width="80" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="vMBZcdw96KSy_M2HUAYO-88" value="" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.mysql_db_instance;fillColor=#2E73B8;gradientColor=none;" vertex="1" parent="vMBZcdw96KSy_M2HUAYO-78">
+          <mxGeometry x="20" y="148" width="40" height="44.5" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

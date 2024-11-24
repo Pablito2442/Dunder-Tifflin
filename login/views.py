@@ -8,9 +8,6 @@ from django.shortcuts import render, redirect
 from .forms import LoginForm, RegisterForm
 import re
 
-# Vista para la página de inicio, solo accesible para usuarios autenticados
-@login_required
-
 def user_login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)

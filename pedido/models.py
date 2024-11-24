@@ -12,6 +12,7 @@ class Pedido(models.Model):
     ]
 
     cliente = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    correo_cliente = models.EmailField(blank=True, null=True)  # Correo para usuarios no registrados
     fecha = models.DateTimeField(auto_now_add=True)
     estado = models.CharField(max_length=20, choices=ESTADOS, default='pendiente')
     direccion_envio = models.TextField()

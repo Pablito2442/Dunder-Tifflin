@@ -1,0 +1,28 @@
+<h1>Finalizar Pedido</h1>
+
+{% if error %}
+<div class="error">
+    <p>{{ error }}</p>
+</div>
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+    {% if not request.user.is_authenticated %}
+    <label for="correo_cliente">Correo Electrónico:</label>
+    <input type="email" id="correo_cliente" name="correo_cliente" required>
+    {% endif %}
+
+    <label for="direccion_envio">Dirección de Envío:</label>
+    <textarea id="direccion_envio" name="direccion_envio" required></textarea>
+
+    <label for="metodo_pago">Método de Pago:</label>
+    <select id="metodo_pago" name="metodo_pago" required>
+        <option value="contrareembolso">Contrareembolso</option>
+        <option value="tarjeta">Tarjeta</option>
+    </select>
+
+    <button type="submit">Confirmar Pedido</button>
+</form>
+
+<a href="{% url 'ver_carrito' %}">Volver al Carrito</a>

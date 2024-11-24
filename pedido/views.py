@@ -16,10 +16,12 @@ def finalizar_pedido(request):
     if request.method == 'POST':
         direccion_envio = request.POST['direccion_envio']
         metodo_pago = request.POST['metodo_pago']
+        correo_cliente = request.POST.get('correo_cliente', None)  # Captura del correo
 
         # Crear el pedido
         pedido = Pedido.objects.create(
             cliente=request.user if request.user.is_authenticated else None,
+            correo_cliente=correo_cliente if not request.user.is_authenticated else None,
             direccion_envio=direccion_envio,
             metodo_pago=metodo_pago,
             total=0,  # Se calculará después

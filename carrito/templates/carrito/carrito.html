@@ -1,0 +1,39 @@
+<h1>Carrito de Compras</h1>
+
+{% if carrito %}
+<table>
+    <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Precio</th>
+            <th>Subtotal</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for key, item in carrito.items %}
+        <tr>
+            <td>{{ item.nombre }}</td>
+            <td>
+                <a href="{% url 'reducir_cantidad' key %}">-</a>
+                {{ item.cantidad }}
+                <a href="{% url 'incrementar_cantidad' key %}">+</a>
+            </td>
+            <td>€{{ item.precio }}</td>
+            {% load custom_filters %}
+            <td>€{{ item.cantidad|floatformat:2|multiply:item.precio }}</td>
+            <td>
+                <a href="{% url 'eliminar_carrito' key %}">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<p>Total: €{{ total }}</p>
+<a href="{% url 'finalizar_pedido' %}">Finalizar Compra</a>
+<a href="{% url 'vaciar_carrito' %}">Vaciar Carrito</a>
+{% else %}
+<p>El carrito está vacío.</p>
+<a href="{% url 'catalogo' %}">Volver al Catálogo</a>
+{% endif %}

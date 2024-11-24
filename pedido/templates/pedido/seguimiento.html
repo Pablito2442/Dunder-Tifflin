@@ -1,0 +1,32 @@
+<h1>Seguimiento del Pedido</h1>
+
+<p>Pedido ID: {{ pedido.id }}</p>
+<p>Estado: {{ pedido.estado }}</p>
+<p>Fecha: {{ pedido.fecha }}</p>
+<p>Dirección de Envío: {{ pedido.direccion_envio }}</p>
+<p>Método de Pago: {{ pedido.metodo_pago }}</p>
+<p>Total: €{{ pedido.total }}</p>
+
+<h3>Detalles del Pedido</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Precio Unitario</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for detalle in pedido.detalles.all %}
+        <tr>
+            <td>{{ detalle.producto.nombre }}</td>
+            <td>{{ detalle.cantidad }}</td>
+            <td>€{{ detalle.precio_unitario }}</td>
+            <td>€{{ detalle.subtotal }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'catalogo' %}">Volver al Catálogo</a>

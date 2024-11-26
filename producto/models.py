@@ -57,7 +57,7 @@ class Producto(models.Model):
     nombre = models.CharField(max_length=200, unique=True, null=False, blank=False)
     descripcion = models.TextField(null=False, blank=True)
     precio = models.DecimalField(max_digits=10, decimal_places=2)
-    cantidadEnStock = models.PositiveIntegerField(default=0)  # Control de inventario
+    cantidad_en_stock = models.PositiveIntegerField(default=0)  # Control de inventario
     categoria = models.TextField(
         choices=Categoria.choices,  # Referencing the choices defined in Status class
         default=Categoria.MISCELANEA

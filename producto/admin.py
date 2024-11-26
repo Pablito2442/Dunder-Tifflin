@@ -11,17 +11,17 @@ class FabricanteAdmin(admin.ModelAdmin):
     list_display_links = ('nombre',)
 
 @admin.register(Foto)
-class ProductoAdmin(admin.ModelAdmin):
-    list_display = ('producto',)
+class FotoAdmin(admin.ModelAdmin):
+    list_display = ('producto', 'imagen')
     list_display_links = ('producto',)
-    search_fields = ('producto__name',)
+    search_fields = ('producto',)
     list_filter = ('producto',)
 
 
 @admin.register(Producto)
 class ProductoAdmin(admin.ModelAdmin):
-    list_display = ('nombre', 'descripcion', 'precio', 'cantidadEnStock', 'categoria', 'fabricante', 'destacado', 'agotado')
+    list_display = ('nombre', 'descripcion', 'precio', 'cantidad_en_stock', 'categoria', 'fabricante', 'destacado', 'agotado')
     list_filter = ('categoria', 'fabricante', 'destacado', 'agotado')
     search_fields = ('nombre', 'descripcion', 'fecha_creacion', 'fecha_actualizacion')
-    list_editable = ('precio', 'cantidadEnStock', 'categoria', 'fabricante', 'destacado')
+    list_editable = ('precio', 'cantidad_en_stock', 'categoria', 'fabricante', 'destacado')
     list_display_links = ('nombre',)

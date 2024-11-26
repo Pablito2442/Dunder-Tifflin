@@ -1,12 +1,16 @@
+<head>
+    <script src="https://js.braintreegateway.com/web/dropin/1.43.0/js/dropin.min.js"></script>
+</head>
+
 <h1>Finalizar Pedido</h1>
 
 {% if error %}
-<div class="error">
-    <p>{{ error }}</p>
+<div class="error" style="color:red">
+    <h3>{{ error }}</h3>
 </div>
 {% endif %}
 
-<form method="post">
+<form method="post" id="form">
     {% csrf_token %}
     {% if not request.user.is_authenticated %}
     <label for="correo_cliente">Correo Electrónico:</label>
@@ -21,8 +25,51 @@
         <option value="contrareembolso">Contrareembolso</option>
         <option value="tarjeta">Tarjeta</option>
     </select>
+    
+    <div id="dropin-container" style="display: none"></div>
+    <input type="hidden" id="nonce" name="payment_method_nonce"/>
 
-    <button type="submit">Confirmar Pedido</button>
+    <script>
+        document.getElementById('metodo_pago').addEventListener('change', mostrarTarjeta)
+
+        function mostrarTarjeta(){
+            metodo_pago = document.getElementById('metodo_pago')
+            if (metodo_pago.value === 'tarjeta'){
+                contenedor_tarjeta = document.getElementById('dropin-container')
+                contenedor_tarjeta.setAttribute('style', '')
+            } else {
+                contenedor_tarjeta = document.getElementById('dropin-container')
+                contenedor_tarjeta.setAttribute('style', 'display: none')
+            }
+        }
+    </script>
+
+    <div>
+        <button type="submit">Confirmar Pedido</button>
+    </div>
+
+    <script type="text/javascript">
+        const form = document.getElementById('form')
+        const client_token = "{{ client_token }}"
+        braintree.dropin.create({
+            authorization: client_token,
+            container: document.getElementById('dropin-container')
+            }, (error, dropinInstance) => {
+                if (error) console.log(error)
+                form.addEventListener('submit', event=>{
+                    metodo_pago = document.getElementById('metodo_pago')
+                    if (metodo_pago.value === 'tarjeta'){
+                        event.preventDefault()
+                        dropinInstance.requestPaymentMethod((error, payload)=>{
+                            if (error) console.log(error)
+                            document.getElementById('nonce').value=payload.nonce
+                            form.submit()
+                        })
+                    }
+                    
+                })
+            });
+    </script>
 </form>
 
 <a href="{% url 'ver_carrito' %}">Volver al Carrito</a>

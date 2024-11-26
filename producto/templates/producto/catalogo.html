@@ -1,0 +1,26 @@
+<html>
+    <head>
+
+    </head>
+    <body>
+        <h1>Catálogo</h1>
+        {% for producto in productos%}
+        <div style="border-color: black; border-width: 1px; border-style: solid; border-radius: 10px; padding: 3">
+            Nombre: {{producto.nombre}} <br>
+            Descripción: {{producto.descripcion}} <br>
+            Precio: {{producto.precio}} € &ensp;
+            Unidades restantes: {{producto.stock}}<br>
+            Categoría: {{producto.categoria.nombre}} &ensp;
+            Fabricante: {{producto.fabricante.nombre}}  <br>
+            <div style="margin: 10 10 10 10">
+                <a href="{% url 'agregar_carrito' producto.id %}">
+                <span style="border-color: black; border-width: 1px; border-style: solid; border-radius: 10px; padding: 3">
+                    Añadir a carrito
+                </span>
+                </a>
+            </div>
+        </div>
+        <br>
+        {% endfor %}
+    </body>
+</html>

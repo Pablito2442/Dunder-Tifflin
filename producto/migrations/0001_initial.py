@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
                 ('nombre', models.CharField(max_length=200, unique=True)),
                 ('descripcion', models.TextField(blank=True)),
                 ('precio', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('cantidadEnStock', models.PositiveIntegerField(default=0)),
+                ('cantidad_en_stock', models.PositiveIntegerField(default=0)),
                 ('categoria', models.TextField(choices=[('sillas', 'Sillas'), ('iluminación', 'Iluminación'), ('escritorios', 'Escritorios'), ('miscelánea', 'Miscelánea')], default='miscelánea')),
                 ('destacado', models.BooleanField(default=False)),
                 ('agotado', models.BooleanField(default=False)),

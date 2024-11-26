@@ -1,43 +1,62 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Login Page</title>
-  <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.2.0/css/all.css'>
-  <link rel="stylesheet" href="{% static 'login/css/style.css' %}">
-</head>
-<body>
-
-  <div class="container">
-    <div class="screen">
-      <div class="screen__content">
-        <form class="login" method="post">
-          {% csrf_token %}
-          {{ form.as_p }}
-          <button class="button login__submit">
-            <span class="button__text">Log In Now</span>
-            <i class="button__icon fas fa-chevron-right"></i>
-          </button>        
-        </form>
-        <div class="social-login">
-          <h3>log in via</h3>
-          <div class="social-icons">
-            <a href="#" class="social-login__icon fab fa-instagram"></a>
-            <a href="#" class="social-login__icon fab fa-facebook"></a>
-            <a href="#" class="social-login__icon fab fa-twitter"></a>
-          </div>
-        </div>
-
+   <head>
+      <meta charset="UTF-8">
+      <title>Dunder Tifflin</title>
+      <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.2.0/css/all.css'>
+      <link rel="stylesheet" href="{% static 'login/css/style.css' %}">
+   </head>
+   <body>
+      <div class="container">
+         <div class="screen">
+            <div class="screen__content">
+               <form class="login" method="post">
+                  {% csrf_token %}
+                  {{ form.as_p }}
+                  <button class="button login__submit">
+                  <span class="button__text">Iniciar Sesión</span>
+                  <i class="button__icon fas fa-chevron-right"></i>
+                  </button>        
+               </form>
+               <div class="social-login">
+                  <!-- Botón que redirige a la página de registro -->
+                  <a href="{% url 'register' %}" class="button login__submit">
+                  <span class="button__text">Regístrarse</span>
+                  <i class="button__icon fas fa-chevron-right"></i>
+                  </a>
+               </div>
+            </div>
+            <div class="screen__background">
+               <span class="screen__background__shape screen__background__shape4"></span>
+               <span class="screen__background__shape screen__background__shape3"></span>    
+               <span class="screen__background__shape screen__background__shape2"></span>
+               <span class="screen__background__shape screen__background__shape1"></span>
+            </div>
+         </div>
       </div>
-      <div class="screen__background">
-        <span class="screen__background__shape screen__background__shape4"></span>
-        <span class="screen__background__shape screen__background__shape3"></span>    
-        <span class="screen__background__shape screen__background__shape2"></span>
-        <span class="screen__background__shape screen__background__shape1"></span>
-      </div>      
-    </div>
-  </div>
-
-</body>
+      <!-- Mostrar los mensajes de éxito -->
+      {% if messages %}
+      <div id="message-container">
+         {% for message in messages %}
+         <div class="popup-message {% if message.tags %}{{ message.tags }}{% endif %}">
+            {{ message }}
+            <span class="close-btn" onclick="this.parentElement.style.display='none'">X</span>
+         </div>
+         {% endfor %}
+      </div>
+      {% endif %}
+      <script>
+         // Mostrar los mensajes emergentes al cargar la página
+         window.onload = function() {
+             let messages = document.querySelectorAll('.popup-message');
+             messages.forEach(function(message) {
+                 message.style.display = 'block';
+                 setTimeout(function() {
+                     message.style.display = 'none';
+                 }, 5000); // Ocultar después de 5 segundos
+             });
+         }
+      </script>
+   </body>
 </html>

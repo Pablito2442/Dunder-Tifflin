@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'carrito',
     'catalogo',
     'inicio',
-    'inventario',
     'login',
     'usuario',
     'producto',
@@ -134,3 +133,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+BRAINTREE_MERCHANT_ID= "kxsttcxndt4cz2bm"
+BRAINTREE_PUBLIC_KEY= "p75tvtfx3tgr9z8w"
+BRAINTREE_PRIVATE_KEY= "a42231b58bd05dda4faaf787614c05a2"

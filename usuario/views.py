@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth import update_session_auth_hash
+from pedido.models import Pedido
 
 #
 # Vistas y Botones de la vista de index
@@ -81,75 +82,14 @@ def cambiar_contraseña(request):
 #
 
 def panel_pedidos(request):
-    return render(request, 'pedidos.html')
-
+    pedidos = Pedido.objects.filter(cliente_id=request.user)
+    return render(request, 'pedidos.html', {'pedidos': pedidos})
 
 #
 # Vistas y Botones de la vista de pagos
 #
 
 def panel_pagos(request):
+    # pagos = Pagos.objects.filter(cliente_id=request.user)
+    # return render(request, 'pagos.html', {'pagos': pagos})
     return render(request, 'pagos.html')
-
-
-#
-# Vistas y Botones de la vista de administracion productos
-#
-
-def panel_tablas_productos_administracion(request):
-    return render(request, 'administracion_productos.html')
-
-
-#
-# Vistas y Botones de la vista de administracion Usuarios
-#
-
-def panel_tablas_usuarios_administracion(request):   
-    usuarios = User.objects.all()
-    
-    return render(request, 'administracion_usuarios.html', {'usuarios': usuarios})
-
-def modificar_usuario_administrados(request):
-    if request.method == 'POST':
-        usuario_id = request.POST.get('usuario_id')
-        try:
-            user = User.objects.get(id=usuario_id)
-            
-            # Actualizar campos básicos
-            user.first_name = request.POST.get('first_name', '').strip()
-            user.last_name = request.POST.get('last_name', '').strip()
-            user.email = request.POST.get('email', '').strip()
-
-            # Manejar el checkbox is_staff
-            is_staff_value = request.POST.get('is_staff')
-            user.is_staff = True if is_staff_value == 'on' else False
-
-            user.save()
-            return JsonResponse({'success': True})
-        except User.DoesNotExist:
-            return JsonResponse({'success': False, 'message': 'Usuario no encontrado'})
-    return JsonResponse({'success': False, 'message': 'Método no permitido'})
-
-def eliminar_usuario(request, usuario_id):
-    if request.method == 'POST':
-        usuario = get_object_or_404(User, id=usuario_id)
-        usuario.delete()
-        return JsonResponse({'success': True})
-    else:
-        return JsonResponse({'success': False, 'error': 'Método no permitido'})
-
-
-#
-# Vistas y Botones de la vista de administracion pedidos
-#
-
-def panel_tablas_pedidos_administracion(request):
-    return render(request, 'administracion_pedidos.html')
-
-
-#
-# Vistas y Botones de la vista de administracion pagos
-#
-
-def panel_tablas_pagos_administracion(request):
-    return render(request, 'administracion_pagos.html')

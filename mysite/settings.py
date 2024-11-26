@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'carrito',
     'catalogo',
     'inicio',
-    'inventario',
     'login',
     'usuario',
     'producto',

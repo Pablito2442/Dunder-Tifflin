@@ -1,8 +1,11 @@
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import RedirectView 
 
 urlpatterns = [
     path('admin/', admin.site.urls),  # Panel de administración de Django
+    
+    path('', RedirectView.as_view(url='/inicio/', permanent=True)),  # Redirección a inicio
     
     path('inicio/', include('inicio.urls')),  # Panel de pagina inicial
     

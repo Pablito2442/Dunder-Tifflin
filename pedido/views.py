@@ -57,7 +57,7 @@ def finalizar_pedido(request):
             ))
 
             # Actualizar stock del producto
-            producto.stock -= item['cantidad']
+            producto.cantidad_en_stock -= item['cantidad']
             productos_modificados.append(producto)
 
             total += subtotal
@@ -82,7 +82,7 @@ def finalizar_pedido(request):
         # Guardar todas las entidades una vez se complete la transaccion con exito
         pedido.save()
         DetallePedido.objects.bulk_create(detalles_pedido)
-        Producto.objects.bulk_update(productos_modificados, ['stock'])
+        Producto.objects.bulk_update(productos_modificados, ['cantidad_en_stock'])
 
         # Vaciar el carrito después de crear el pedido
         del request.session['carrito']

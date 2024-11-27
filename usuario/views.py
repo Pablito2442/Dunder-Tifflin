@@ -150,6 +150,7 @@ def modificar_usuario_administrados(request):
             user = User.objects.get(id=usuario_id)
             
             # Actualizar campos básicos
+            user.username = request.POST.get('username', '').strip()
             user.first_name = request.POST.get('first_name', '').strip()
             user.last_name = request.POST.get('last_name', '').strip()
             user.email = request.POST.get('email', '').strip()
@@ -172,6 +173,27 @@ def eliminar_usuario(request, usuario_id):
     else:
         return JsonResponse({'success': False, 'error': 'Método no permitido'})
 
+def anadir_usuario(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        is_staff = request.POST.get('is_staff') == 'on'  # Convertir a booleano
+
+        # Crear el nuevo usuario
+        user = User.objects.create_user(username=username, email=email, first_name=first_name, last_name=last_name)
+
+        # Establecer la contraseña por defecto 'usuario'
+        user.set_password('usuario')
+
+        # Asignar si el usuario es administrador
+        user.is_staff = is_staff
+        user.save()
+
+        # Retornar una respuesta JSON
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False})
 
 #
 # Vistas y Botones de la vista de administracion pedidos

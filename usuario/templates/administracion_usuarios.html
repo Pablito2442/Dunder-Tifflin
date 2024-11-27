@@ -29,6 +29,9 @@
       <link rel="stylesheet" href="{% static 'css/style.css' %}">
       <!--responsive.css-->
       <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-switch@3.4.0/dist/css/bootstrap3/bootstrap-switch.min.css">
+
    </head>
    <body>
       <!--welcome-hero start -->
@@ -96,7 +99,7 @@
                                                      <thead>
                                                          <tr>
                                                              <th>ID</th>
-                                                             <th>Username</th>
+                                                             <th>Usuario</th>
                                                              <th>Nombre</th>
                                                              <th>Apellidos</th>
                                                              <th>Email</th>
@@ -153,6 +156,12 @@
                                          </div>
                                      </div>
                                      <!-- End Advanced Tables -->
+                                     <button class="btn-cart welcome-add-cart welcome-more-info animated fadeInDown" 
+                                     style="opacity: 0; margin-top: -10px;" 
+                                     data-toggle="modal" 
+                                     data-target="#modalAñadir">
+                                     Añadir Usuario
+                                 </button>                                 
                                  </div>
                              </div>
                            </div>
@@ -178,67 +187,217 @@
             </button>
          </div>
          <div class="modal-body">
-            <form id="formModificar" method="POST" action="{% url 'actualizar_usuario' %}">
+            <form id="formModificar" method="POST">
                {% csrf_token %}
-               <input type="hidden" id="usuario_id" name="usuario_id" value="{{ user.id }}">
+               <input type="hidden" id="usuario_id" name="usuario_id"> <!-- Aquí se asigna dinámicamente el ID del usuario -->
                <div class="form-group">
-                  <label for="username">Username</label>
-                  <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}">
+                  <label for="username">Usuario</label>
+                  <input type="text" class="form-control" id="username" name="username">
                </div>
                <div class="form-group">
-                  <label for="first_name">First Name</label>
-                  <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}">
+                  <label for="first_name">Nombre</label>
+                  <input type="text" class="form-control" id="first_name" name="first_name">
                </div>
                <div class="form-group">
-                  <label for="last_name">Last Name</label>
-                  <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}">
+                  <label for="last_name">Apellidos</label>
+                  <input type="text" class="form-control" id="last_name" name="last_name">
                </div>
                <div class="form-group">
-                  <label for="email">Email</label>
-                  <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}">
+                  <label for="email">Correo Electronico</label>
+                  <input type="email" class="form-control" id="email" name="email">
                </div>
+               <div class="form-group">
+                  <label for="is_staff">Es administrador</label>
+                  <input type="checkbox" id="is_staff" name="is_staff" data-on-text="Sí" data-off-text="No">
+                  </div>
                <button type="submit" class="btn btn-primary">Guardar cambios</button>
             </form>
          </div>
       </div>
    </div>
 </div>
-  
-<!-- Modal de Cambio de Contraseña -->
-<div class="modal fade" id="modalCambiarContrasena" tabindex="-1" role="dialog" aria-labelledby="modalCambiarContrasenaLabel" aria-hidden="true">
+
+<!-- Modal de Eliminación -->
+<div class="modal fade" id="modalEliminar" tabindex="-1" role="dialog" aria-labelledby="modalEliminarLabel" aria-hidden="true">
    <div class="modal-dialog" role="document">
       <div class="modal-content">
          <div class="modal-header">
-            <h5 class="modal-title" id="modalCambiarContrasenaLabel">Cambiar Contraseña</h5>
+            <h5 class="modal-title" id="modalEliminarLabel">Eliminar Usuario</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
          </div>
          <div class="modal-body">
-            <form id="formCambiarContrasea" method="POST" action="{% url 'cambiar_contraseña' %}">
-               {% csrf_token %}
-               <div class="form-group">
-                  <label for="old_password">Contraseña Actual</label>
-                  <input type="password" class="form-control" id="old_password" name="old_password" required>
-               </div>
-               <div class="form-group">
-                  <label for="new_password">Nueva Contraseña</label>
-                  <input type="password" class="form-control" id="new_password" name="new_password" required>
-               </div>
-               <button type="submit" class="btn btn-warning">Actualizar Contraseña</button>
-            </form>
+            <p>¿Estás seguro de que deseas eliminar a este usuario?</p>
+            <button type="button" class="btn btn-danger" id="btnEliminar">Eliminar</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
          </div>
       </div>
    </div>
 </div>
 
-<!-- SCRIPTS -->
+<!-- Modal de Añadir Usuario -->
+<div class="modal fade" id="modalAñadir" tabindex="-1" role="dialog" aria-labelledby="modalAñadirLabel" aria-hidden="true">
+   <div class="modal-dialog" role="document">
+       <div class="modal-content">
+           <div class="modal-header">
+               <h5 class="modal-title" id="modalAñadirLabel">Añadir Usuario</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                   <span aria-hidden="true">&times;</span>
+               </button>
+           </div>
+           <div class="modal-body">
+               <form id="formAñadir" method="POST">
+                   {% csrf_token %}
+                   <div class="form-group">
+                       <label for="username">Usuario</label>
+                       <input type="text" class="form-control" id="username" name="username" required>
+                   </div>
+                   <div class="form-group">
+                       <label for="first_name">Nombre</label>
+                       <input type="text" class="form-control" id="first_name" name="first_name" required>
+                   </div>
+                   <div class="form-group">
+                       <label for="last_name">Apellidos</label>
+                       <input type="text" class="form-control" id="last_name" name="last_name" required>
+                   </div>
+                   <div class="form-group">
+                       <label for="email">Correo Electrónico</label>
+                       <input type="email" class="form-control" id="email" name="email" required>
+                   </div>
+                   <div class="form-group">
+                       <label for="is_staff">Es administrador</label>
+                       <input type="checkbox" id="is_staff" name="is_staff" data-on-text="Sí" data-off-text="No">
+                   </div>
+                   <button type="submit" class="btn btn-primary">Añadir Usuario</button>
+               </form>
+           </div>
+       </div>
+   </div>
+</div>
+
+<!-- Scripts -->
 <script src="{% static 'js/jquery-1.10.2.js' %}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
-<script src="{% static 'js/jquery.metisMenu.js' %}"></script>
-<script src="{% static 'js/morris/raphael-2.1.0.min.js' %}"></script>
-<script src="{% static 'js/morris/morris.js' %}"></script>
-<script src="{% static 'js/custom.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-switch@3.4.0/dist/js/bootstrap-switch.min.js"></script>
+<script>
+   // Enviar los datos al servidor para añadir el nuevo usuario
+$('#formAñadir').on('submit', function(event) {
+   event.preventDefault();  // Evitar que se recargue la página
 
+   var formData = $(this).serialize();  // Obtener los datos del formulario
+   var csrfToken = $('input[name="csrfmiddlewaretoken"]').val();  // Obtener el token CSRF
+
+   // Realizar la solicitud AJAX para añadir el nuevo usuario
+   $.ajax({
+       url: '/usuario/anadir_usuario/',  // URL para crear el nuevo usuario (ajústala a tu ruta)
+       type: 'POST',
+       data: formData + '&csrfmiddlewaretoken=' + csrfToken,  // Incluir el token CSRF
+       success: function(response) {
+           if (response.success) {
+               $('#modalAñadir').modal('hide');  // Cerrar el modal
+               location.reload();  // Recargar la página para reflejar el nuevo usuario
+           } else {
+               console.log('Error al añadir el usuario');
+           }
+       },
+       error: function() {
+           console.log('Error al enviar los datos');
+       }
+   });
+});
+
+// Asignar los datos del usuario al abrir el modal de modificar
+$('#modalModificar').on('show.bs.modal', function (event) {
+   var button = $(event.relatedTarget);
+   var usuarioId = button.data('id');
+   var usuarioUsername = button.data('username');
+   var usuarioEmail = button.data('email');
+   var usuarioFirstName = button.data('first-name');
+   var usuarioLastName = button.data('last-name');
+   var usuarioIsStaff = button.data('is-staff') === "true";
+
+   // Asignar valores al formulario
+   $('#usuario_id').val(usuarioId);
+   $('#username').val(usuarioUsername);
+   $('#email').val(usuarioEmail);
+   $('#first_name').val(usuarioFirstName);
+   $('#last_name').val(usuarioLastName);
+   $('#is_staff').bootstrapSwitch('state', usuarioIsStaff);  // Configurar el slider
+
+// Inicializar el slider correctamente
+if (usuarioIsStaff === "true") {
+ $('#is_staff').bootstrapSwitch('state', true);  // Activar el slider (Sí)
+} else {
+ $('#is_staff').bootstrapSwitch('state', false);  // Desactivar el slider (No)
+}
+});
+
+  
+   // Enviar los datos modificados al servidor con AJAX
+   $('#formModificar').on('submit', function(event) {
+       event.preventDefault();  // Evitar el comportamiento por defecto del formulario (recargar la página)
+       
+       var formData = $(this).serialize();  // Serializar los datos del formulario
+       var csrfToken = $('input[name="csrfmiddlewaretoken"]').val();  // Obtener el token CSRF
+       
+       // Realizar la solicitud AJAX para actualizar los datos del usuario
+       $.ajax({
+           url: '/usuario/modificar_usuario/',  // URL para actualizar el usuario
+           type: 'POST',
+           data: formData + '&csrfmiddlewaretoken=' + csrfToken,  // Incluir el token CSRF
+           success: function(response) {
+               if (response.success) {
+                   $('#modalModificar').modal('hide');  // Cerrar el modal
+                   location.reload();  // Recargar la página para reflejar el cambio
+               } else {
+                   console.log('Error al actualizar el usuario');
+               }
+           },
+           error: function() {
+               console.log('Error al enviar los datos');
+           }
+       });
+   });
+
+   // Asignar el ID del usuario al hacer clic en el botón de eliminar
+   $('#modalEliminar').on('show.bs.modal', function(event) {
+       var button = $(event.relatedTarget);  // Botón que abre el modal
+       var usuarioId = button.data('id');  // Extraer el ID del usuario
+       var usuarioUsername = button.data('username');  // Extraer el nombre de usuario si necesitas mostrarlo
+       
+       // Asignar el ID del usuario al botón de eliminación dentro del modal
+       $('#btnEliminar').data('id', usuarioId);  // Asignamos el ID del usuario al botón
+       
+       // Si necesitas, puedes mostrar el nombre de usuario en el modal también
+       $('#modalEliminarLabel').text('Eliminar usuario: ' + usuarioUsername);
+   });
+
+   // Enviar la solicitud AJAX para eliminar el usuario cuando se haga clic en el botón de eliminar
+   $('#btnEliminar').on('click', function() {
+       var usuarioId = $(this).data('id');  // Obtener el ID del usuario
+       var csrfToken = $('input[name="csrfmiddlewaretoken"]').val();  // Obtener el token CSRF
+       
+       // Realizar la solicitud AJAX para eliminar el usuario
+       $.ajax({
+           url: '/usuario/eliminar_usuario/' + usuarioId + '/',  // URL para eliminar el usuario
+           type: 'POST',
+           data: {
+               'csrfmiddlewaretoken': csrfToken  // Pasar el token CSRF
+           },
+           success: function(response) {
+               if (response.success) {
+                   $('#modalEliminar').modal('hide');  // Cerrar el modal
+                   location.reload();  // Recargar la página para reflejar el cambio
+               } else {
+                   console.log('Error al eliminar el usuario');
+               }
+           },
+           error: function() {
+               console.log('Error al eliminar el usuario');
+           }
+       });
+   });
+</script>     
 </body>
 </html>

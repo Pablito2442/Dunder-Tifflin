@@ -38,6 +38,7 @@ urlpatterns = [
     path('administracion_usuarios/', views.panel_tablas_usuarios_administracion, name='panel_administracion_usuarios'),
     path('modificar_usuario/', views.modificar_usuario_administrados, name='modificar_usuario'),
     path('eliminar_usuario/<int:usuario_id>/', views.eliminar_usuario, name='eliminar_usuario'),
+    path('anadir_usuario/', views.anadir_usuario, name='anadir_usuario'),
     
     # Rutas para el panel de administracion de productos
     path('administracion_productos/', views.panel_tablas_productos_administracion, name='panel_administracion_productos'),

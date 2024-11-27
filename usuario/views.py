@@ -4,6 +4,8 @@ from django.http import JsonResponse
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth import update_session_auth_hash
+from pedido.models import Pedido
+from producto.models import Producto
 
 #
 # Vistas y Botones de la vista de index
@@ -81,14 +83,16 @@ def cambiar_contraseña(request):
 #
 
 def panel_pedidos(request):
-    return render(request, 'pedidos.html')
-
+    pedidos = Pedido.objects.filter(cliente_id=request.user)
+    return render(request, 'pedidos.html', {'pedidos': pedidos})
 
 #
 # Vistas y Botones de la vista de pagos
 #
 
 def panel_pagos(request):
+    # pagos = Pagos.objects.filter(cliente_id=request.user)
+    # return render(request, 'pagos.html', {'pagos': pagos})
     return render(request, 'pagos.html')
 
 
@@ -97,7 +101,37 @@ def panel_pagos(request):
 #
 
 def panel_tablas_productos_administracion(request):
-    return render(request, 'administracion_productos.html')
+    productos = Producto.objects.all()
+    return render(request, 'administracion_productos.html', {'productos': productos})
+
+def agregar_producto(request):
+    if request.method == "POST":
+        nombre = request.POST.get('nombre')
+        descripcion = request.POST.get('descripcion')
+        precio = request.POST.get('precio')
+        
+        # Validación básica
+        if not nombre or not descripcion or not precio:
+            messages.error(request, "Todos los campos son obligatorios.")
+            return redirect('panel_administracion_productos')  # Cambia por el nombre correcto de tu URL
+        
+        try:
+            # Intentar convertir el precio a un número flotante
+            precio = float(precio)
+            
+            # Crear y guardar el nuevo producto
+            nuevo_producto = Producto(nombre=nombre, descripcion=descripcion, precio=precio)
+            nuevo_producto.save()
+            
+            # Mostrar un mensaje de éxito
+            messages.success(request, "Producto agregado correctamente.")
+        except ValueError:
+            messages.error(request, "El precio debe ser un número válido.")
+        
+        return redirect('panel_administracion_productos')  # Cambia por el nombre correcto de tu URL
+    
+    # Si el método no es POST, redirige al listado
+    return redirect('panel_administracion_productos')
 
 
 #
@@ -116,6 +150,7 @@ def modificar_usuario_administrados(request):
             user = User.objects.get(id=usuario_id)
             
             # Actualizar campos básicos
+            user.username = request.POST.get('username', '').strip()
             user.first_name = request.POST.get('first_name', '').strip()
             user.last_name = request.POST.get('last_name', '').strip()
             user.email = request.POST.get('email', '').strip()
@@ -138,6 +173,27 @@ def eliminar_usuario(request, usuario_id):
     else:
         return JsonResponse({'success': False, 'error': 'Método no permitido'})
 
+def anadir_usuario(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        is_staff = request.POST.get('is_staff') == 'on'  # Convertir a booleano
+
+        # Crear el nuevo usuario
+        user = User.objects.create_user(username=username, email=email, first_name=first_name, last_name=last_name)
+
+        # Establecer la contraseña por defecto 'usuario'
+        user.set_password('usuario')
+
+        # Asignar si el usuario es administrador
+        user.is_staff = is_staff
+        user.save()
+
+        # Retornar una respuesta JSON
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False})
 
 #
 # Vistas y Botones de la vista de administracion pedidos

@@ -13,40 +13,42 @@ def user_login(request):
         form = LoginForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            print(f"Usuario ingresado: {cd['username']}, Contraseña ingresada: {cd['password']}")
-            
+
             # Comprobar si el valor ingresado es un correo electrónico
             username_or_email = cd['username']
             user = None
-            
+
             # Si es un correo electrónico, buscar el usuario por correo
-            if re.match(r"[^@]+@[^@]+\.[^@]+", username_or_email): 
+            if re.match(r"[^@]+@[^@]+\.[^@]+", username_or_email):
                 try:
                     user = User.objects.get(email=username_or_email)
                 except User.DoesNotExist:
-                    return HttpResponse('Invalid login')
+                    messages.error(request, 'Ingreso inválido')
+                    return redirect('login')  # Redirigir para mostrar el mensaje de error
             else:
                 # Si no es un correo, buscar por el nombre de usuario
                 user = User.objects.filter(username=username_or_email).first()
-            
+
             # Intentar la autenticación con el usuario encontrado
             if user:
                 user = authenticate(request, username=user.username, password=cd['password'])
-                
+
                 if user is not None:
                     if user.is_active:
                         login(request, user)
-                        return redirect('panel_usuario')  # Redirige al panel de usuario
+                        return redirect('panel_usuario')
                     else:
-                        return HttpResponse('Disabled account')
+                        messages.error(request, 'Cuenta deshabilitada')
+                        return redirect('login')
                 else:
-                    return HttpResponse('Invalid login')
+                    messages.error(request, 'Ingreso inválido')
+                    return redirect('login')
             else:
-                return HttpResponse('Invalid login')
-
+                messages.error(request, 'Ingreso inválido')
+                return redirect('login')
     else:
         form = LoginForm()
-    
+
     return render(request, 'login.html', {'form': form})
 
 def registro(request):
@@ -77,11 +79,15 @@ def registro(request):
                         password=make_password(password)  # Encriptar la contraseña antes de guardarla
                     )
                     messages.success(request, '¡Registro exitoso! Ahora puedes iniciar sesión.')
-                    return redirect('login')  # Redirigir a la página de login 
+                    return redirect('login')  # Redirigir a la página de login con el mensaje de éxito
             except Exception as e:
                 messages.error(request, f'Error al crear el usuario: {str(e)}')
     else:
         form = RegisterForm()
+
+    # Personalizar la clase 'login__input' en cada campo
+    for field in form:
+        field.field.widget.attrs.update({'class': 'login__input'})
 
     return render(request, 'registro.html', {'form': form})
 

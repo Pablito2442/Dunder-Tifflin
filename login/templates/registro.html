@@ -1,36 +1,60 @@
-{% load static i18n %}
-
+{% load static %}
 <!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="{% static 'registro/css/style.css' %}">
-  <title>Formulario Registro</title>
-</head>
-<body>
-  <section class="form-register">
-    <h4>Formulario Registro</h4>
-
-    {% if messages %}
-      <ul>
-        {% for message in messages %}
-          <li class="alert {% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-
-    <form method="POST">
-      {% csrf_token %}
-      {{ form.as_p }}
-
-      <p>Estoy de acuerdo con <a href="#">Términos y Condiciones</a></p>
-      
-      <input class="botons" type="submit" value="Registrar">
-    </form>
-
-    <p><a href="{% url 'login' %}">¿Ya tengo Cuenta?</a></p>
-  </section>
-</body>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <title>Dunder Tifflin</title>
+      <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.2.0/css/all.css'>
+      <link rel="stylesheet" href="{% static 'login/css/style.css' %}">
+   </head>
+   <body>
+      <div class="container">
+         <div class="screen">
+            <div class="screen__content">
+               <form class="registro" method="post">
+                  {% csrf_token %}
+                  {{ form.as_p }}
+                  <button class="button login__submit">
+                  <span class="button__text">Registrarme</span>
+                  <i class="button__icon fas fa-chevron-right"></i>
+                  </button>
+               </form>
+               <p class="social-register">
+                  <a href="{% url 'login' %}" class="button login__submit">
+                  <span class="button__text">¿Ya tienes Cuenta?</span>
+                  </a>
+               </p>
+            </div>
+            <div class="screen__background">
+               <span class="screen__background__shape screen__background__shape4"></span>
+               <span class="screen__background__shape screen__background__shape3"></span>
+               <span class="screen__background__shape screen__background__shape2"></span>
+               <span class="screen__background__shape screen__background__shape1"></span>
+            </div>
+         </div>
+      </div>
+      <!-- Mensajes emergentes -->
+      {% if messages %}
+      <div id="message-container">
+         {% for message in messages %}
+         <div class="popup-message {% if message.tags %}{{ message.tags }}{% endif %}">
+            {{ message }}
+            <span class="close-btn" onclick="this.parentElement.style.display='none'">X</span>
+         </div>
+         {% endfor %}
+      </div>
+      {% endif %}
+      <script>
+         // Mostrar los mensajes emergentes al cargar la página
+         window.onload = function() {
+             let messages = document.querySelectorAll('.popup-message');
+             messages.forEach(function(message) {
+                 message.style.display = 'block';
+                 setTimeout(function() {
+                     message.style.display = 'none';
+                 }, 5000); // Ocultar después de 5 segundos
+             });
+         }
+      </script>
+   </body>
 </html>

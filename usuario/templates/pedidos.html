@@ -1,116 +1,218 @@
-﻿{% load static %}
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="en">
    <head>
-      <meta charset="utf-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <!-- meta data -->
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <!--font-family-->
+      <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
+      <!-- title of site -->
       <title>Dunder Tifflin</title>
-      <!-- Bootstrap Styles -->
-      <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet" />
-      <!-- FontAwesome Styles -->
-      <link href="{% static 'css/font-awesome.css' %}" rel="stylesheet" />
-      <!-- Morris Chart Styles -->
-      <link href="{% static 'js/morris/morris-0.4.3.min.css' %}" rel="stylesheet" />
-      <!-- Custom Styles -->
-      <link href="{% static 'css/custom.css' %}" rel="stylesheet" />
-      <!-- GOOGLE FONTS-->
-      <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+      <!-- For favicon png -->
+      <link rel="shortcut icon" type="image/icon" href="{% static 'logo/favicon.png' %}">
+      <!--font-awesome.min.css-->
+      <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+      <!--linear icon css-->
+      <link rel="stylesheet" href="{% static 'css/linearicons.css' %}">
+      <!--animate.css-->
+      <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+      <!--owl.carousel.css-->
+      <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+      <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+      <!--bootstrap.min.css-->
+      <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+      <!-- bootsnav -->
+      <link rel="stylesheet" href="{% static 'css/bootsnav.css' %}">
+      <!--style.css-->
+      <link rel="stylesheet" href="{% static 'css/style.css' %}">
+      <!--responsive.css-->
+      <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
    </head>
    <body>
-      <div id="wrapper">
-         <nav class="navbar navbar-default navbar-cls-top" role="navigation" style="margin-bottom: 0">
-            <div class="navbar-header">
-               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
-               <span class="sr-only">Toggle navigation</span>
-               <span class="icon-bar"></span>
-               <span class="icon-bar"></span>
-               <span class="icon-bar"></span>
-               </button>
-               <a class="navbar-brand" href="index.html">Binary admin</a> 
-            </div>
-            <div style="color: white; padding: 15px 50px 5px 50px; float: right; font-size: 16px;">
-               Último acceso: {{ user.last_login|date:"d M Y H:i" }} &nbsp; 
-               <a href="{% url 'inicio' %}" class="btn btn-danger square-btn-adjust">Logout</a>
-            </div>
-         </nav>
-         <!-- /. NAV TOP -->
-         <nav class="navbar-default navbar-side" role="navigation">
-            <div class="sidebar-collapse">
-               <ul class="nav" id="main-menu">
-                  <li class="text-center">
-                     <img src="{% static 'img/find_user.png' %}" class="user-image img-responsive" />
-                  </li>
-                  <li><a href="{% url 'panel_usuario' %}"><i class="fa fa-dashboard fa-3x"></i> Información General </a></li>
-                  <li><a href="{% url 'panel_usuario_pedidos' %}"><i class="fa fa-desktop fa-3x"></i> Gestión de los pedidos </a></li>
-                  <li><a href="{% url 'panel_usuario_pagos' %}"><i class="fa fa-qrcode fa-3x"></i> Gestión de Pagos </a></li>
-                  {% if user.is_staff %}
-                  <li>
-                     <a href="#"><i class="fa fa-sitemap fa-3x"></i> Gestión de Administrador<span class="fa arrow"></span></a>
-                     <ul class="nav nav-second-level">
-                        <li><a href="{% url 'panel_administracion_productos' %}">Administrar Productos</a></li>
-                        <li><a href="{% url 'panel_administracion_usuarios' %}">Administrar Usuario</a></li>
-                        <li><a href="{% url 'panel_administracion_pagos' %}">Administrar Pagos</a></li>
-                        <li><a href="{% url 'panel_administracion_pedidos' %}">Administrar Pedidos</a></li>
-                     </ul>
-                  </li>
-                  {% endif %}
-               </ul>
-            </div>
-         </nav>
-         <!-- /. NAV SIDE  -->
-         <div id="page-wrapper">
-            <div id="page-inner">
-               <div class="row">
-                  <div class="col-md-12">
-                     <h2>Bienvenido de nuevo</h2>
-                     <h5>Bienvenido, {{ user.first_name }} {{ user.last_name }}. ¡Nos alegra verte de nuevo!</h5>
-                  </div>
+      <!--welcome-hero start -->
+      <header id="home" class="welcome-hero">
+         {% include 'navbar_inicio.html' %}
+      </header>
+      <!--/.welcome-hero-->
+      <!--welcome-hero end -->
+
+      <!-- Informacion del pedido Start -->
+      <section id="blog" class="blog" style="margin-top: 50px;">
+         <div class="container">
+            <div class="row">
+               <!-- Sidebar (Nav) -->
+               <div class="col-md-3" style="margin-top: 50px;">
+                  <nav class="navbar-default navbar-side" role="navigation">
+                     <div class="sidebar-collapse">
+                        <ul class="nav" id="main-menu">
+                           <li><a href="{% url 'panel_usuario' %}"><i class="fa fa fa-3x"></i> Información General </a></li>
+                           <li><a href="{% url 'panel_usuario_pedidos' %}"><i class="fa fa fa-3x"></i> Gestión de los pedidos </a></li>
+                           <li><a href="{% url 'panel_usuario_pagos' %}"><i class="fa fa fa-3x"></i> Gestión de Pagos </a></li> 
+                        </ul>
+                     </div>
+                  </nav>
+      
+                  <nav class="navbar-default navbar-side" role="navigation">
+                     <div class="sidebar-collapse">
+                        {% if user.is_staff %}
+                        <p class="animated fadeInUp" style="opacity: 0; margin-top: 20px;">
+                           <strong>Opciones para el adminitrador:</strong>
+                        </p>
+                        <ul class="nav" id="main-menu">
+                                 <li><a href="{% url 'panel_administracion_productos' %}">Administrar Productos</a></li>
+                                 <li><a href="{% url 'panel_administracion_usuarios' %}">Administrar Usuario</a></li>
+                                 <li><a href="{% url 'panel_administracion_pagos' %}">Administrar Pagos</a></li>
+                                 <li><a href="{% url 'panel_administracion_pedidos' %}">Administrar Pedidos</a></li>
+                           {% endif %}
+                        </ul>
+                     </div>
+                  </nav>
                </div>
-               <!-- /. ROW  -->
-               <hr />
-               <div class="row">
-                  <div class="col-md-3 col-sm-6 col-xs-6">
-                     <div class="panel panel-back noti-box">
-                        <span class="icon-box bg-color-red set-icon">
-                        <i class="fa fa-envelope-o"></i>
-                        </span>
-                        <div class="text-box">
-                           <p class="main-text">120 New</p>
-                           <p class="text-muted">Messages</p>
+               <!-- Main Content (pedido Info) -->
+               <div class="col-md-9">
+                  <div id="page-wrapper">
+                     <div id="page-inner">
+                        <div class="row">
+                           <div class="col-md-12">
+                              <div class="single-blog">
+                                 <div class="welcome-hero-txt">
+                                    <h4 class="animated fadeInUp" style="opacity: 0; margin-left: -300px;">¡Bienvenido, {{ user.username }}!</h4>
+                                    <h2 class="animated fadeInUp" style="opacity: 0;">Información de tus Pedidos</h2>
+                                    <h3 class="animated fadeInUp" style="opacity: 0; font-size: 26px;">Ultimo Pedido</h3>
+                                    <p class="animated fadeInUp" style="opacity: 0;">
+                                       <strong>Correo Electrónico de seguimiento:</strong> {{ pedido.correo_cliente }}
+                                    </p>
+                                    <p class="animated fadeInUp" style="opacity: 0;">
+                                       <strong>Fecha de Pedido:</strong> {{ pedido.fecha|date:"d M Y" }}
+                                    </p>
+                                    <p class="animated fadeInUp" style="opacity: 0;">
+                                       <strong>Estado:</strong> {{ pedido.estado }}
+                                    </p>
+                                    <p class="animated fadeInUp" style="opacity: 0;">
+                                       <strong>Direccion de Envio:</strong> {{ pedido.direccion_envio }}
+                                    </p>
+                                    <p class="animated fadeInUp" style="opacity: 0;">
+                                       <strong>Método de Pago:</strong> {{ pedido.metodo_pago }}
+                                    </p>
+                                    <p class="animated fadeInUp" style="opacity: 0;">
+                                       <strong>Cantidad Total:</strong> {{ pedido.total}}
+                                    </p>
+                                    <button class="btn-cart welcome-add-cart welcome-more-info animated fadeInDown" 
+                                    style="opacity: 0; margin-top: -10px;" 
+                                    data-toggle="modal" 
+                                    data-target="#modalModificar">
+                                    Modificar Información
+                                    </button>									 
+                                 </div>
+                              </div>
+                           </div>
                         </div>
                      </div>
                   </div>
-                  <div class="col-md-3 col-sm-6 col-xs-6">
-                     <div class="panel panel-back noti-box">
-                        <span class="icon-box bg-color-green set-icon">
-                        <i class="fa fa-bars"></i>
-                        </span>
-                        <div class="text-box">
-                           <p class="main-text">30 Tasks</p>
-                           <p class="text-muted">Remaining</p>
-                        </div>
-                     </div>
-                  </div>
                </div>
-               <!-- /. ROW  -->
-               <hr />
             </div>
-            <!-- /. PAGE INNER  -->
          </div>
-         <!-- /. PAGE WRAPPER  -->
+      </section>
+      <!-- Informacion de los pedidos relizados End -->
+
+<!-- Información del pedido Start -->
+<section id="blog" class="blog" style="margin-top: -150px;">
+   <div class="container">
+      <div class="row">
+         <!-- Main Content (pedido Info) -->
+         <div class="col-md-9">
+            <div id="page-wrapper">
+               <div id="page-inner">
+                  <div class="row">
+                     <div class="col-md-12">
+                        <div class="single-blog">
+                           <div class="welcome-hero-txt">
+                              <h3 class="animated fadeInUp" style="opacity: 0; font-size: 26px;">Registro de Pedidos</h3>
+                              
+                              <!-- Tabla con todos los pedidos de esta persona -->
+                              <table class="table table-bordered table-hover">
+                                 <thead>
+                                    <tr>
+                                       <th>#</th>
+                                       <th>Fecha</th>
+                                       <th>Estado</th>
+                                       <th>Total</th>
+                                       <th>Detalles</th>
+                                    </tr>
+                                 </thead>
+                                 <tbody>
+                                    {% for pedido in pedidos %}
+                                    <tr>
+                                       <td>{{ pedido.id }}</td>
+                                       <td>{{ pedido.fecha|date:"d M Y" }}</td>
+                                       <td>{{ pedido.estado }}</td>
+                                       <td>${{ pedido.total }}</td>
+                                       <td>
+                                          <a href="{% url 'detalle_pedido' pedido.id %}" class="btn btn-info btn-sm">Ver Detalles</a>
+                                       </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                       <td colspan="5" class="text-center">No tienes pedidos registrados aún.</td>
+                                    </tr>
+                                    {% endfor %}
+                                 </tbody>
+                              </table>
+                              
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
       </div>
-      <!-- /. WRAPPER  -->
-      <!-- SCRIPTS -AT THE BOTOM TO REDUCE THE LOAD TIME-->
-      <!-- JQUERY SCRIPTS -->
-      <script src="{% static 'js/jquery-1.10.2.js' %}"></script>
-      <!-- Bootstrap Scripts -->
-      <script src="{% static 'js/bootstrap.min.js' %}"></script>
-      <!-- MetisMenu Scripts -->
-      <script src="{% static 'js/jquery.metisMenu.js' %}"></script>
-      <!-- Morris Chart Scripts -->
-      <script src="{% static 'js/morris/raphael-2.1.0.min.js' %}"></script>
-      <script src="{% static 'js/morris/morris.js' %}"></script>
-      <!-- Custom Scripts -->
-      <script src="{% static 'js/custom.js' %}"></script>
-   </body>
+   </div>
+</section>
+<!-- Información de los pedidos realizados End -->
+
+
+    <!-- Modal de Modificación -->
+    <div class="modal fade" id="modalModificar" tabindex="-1" role="dialog" aria-labelledby="modalModificarLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h5 class="modal-title" id="modalModificarLabel">Modificar Pedido</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body">
+               <form id="formModificar" method="POST" action="{% url 'actualizar_usuario' %}">
+                  {% csrf_token %}
+                  <input type="hidden" id="usuario_id" name="usuario_id" value="{{ pedido.id }}">
+
+                  <!-- Modificación del correo -->
+                  <div class="form-group">
+                     <label for="correo_cliente">Correo Electrónico</label>
+                     <input type="email" class="form-control" id="correo_cliente" name="correo_cliente" value="{{ pedido.correo_cliente }}">
+                  </div>
+
+                  <!-- Modificación de la dirección de envío -->
+                  <div class="form-group">
+                     <label for="direccion_envio">Dirección de Envío</label>
+                     <input type="text" class="form-control" id="direccion_envio" name="direccion_envio" value="{{ pedido.direccion_envio }}">
+                  </div>
+
+                  <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+               </form>
+            </div>
+         </div>
+      </div>
+   </div>
+<!-- SCRIPTS -->
+<script src="{% static 'js/jquery-1.10.2.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/jquery.metisMenu.js' %}"></script>
+<script src="{% static 'js/morris/raphael-2.1.0.min.js' %}"></script>
+<script src="{% static 'js/morris/morris.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
+</body>
 </html>

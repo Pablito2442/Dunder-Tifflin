@@ -149,3 +149,4 @@ class Country(models.TextChoices):
     SAINT_VINCENT_AND_THE_GRENADINES = 'VC', 'Saint Vincent and the Grenadines'
     SAMOA = 'WS', 'Samoa'
     SPAIN = 'SP', 'Spain'
+    USA = 'US', 'United States of America'

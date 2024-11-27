@@ -39,6 +39,10 @@ class Categoria(models.TextChoices):
     SILLAS = 'sillas', 'Sillas'
     ILUMINACION = 'iluminación', 'Iluminación'
     ESCRITORIOS = 'escritorios', 'Escritorios'
+    ESTANTERIAS = 'estanterías', 'Estanterías'
+    DECORACION = 'decoración', 'Decoración'
+    ALFOMBRILLAS = 'alfommbrillas', 'Alfombrillas'
+    ORGANIZADORES = 'organizadores', 'Organizadores'
     MISCELANEA = 'miscelánea', 'Miscelánea'
 
 class Foto(models.Model):

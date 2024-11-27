@@ -24,7 +24,7 @@
             {% load custom_filters %}
             <td>€{{ item.cantidad|floatformat:2|multiply:item.precio }}</td>
             <td>
-                <a href="{% url 'eliminar_carrito' key %}">Eliminar</a>
+                <!--<a href="{@% url 'eliminar_carrito' key %}">Eliminar</a>-->
             </td>
         </tr>
         {% endfor %}

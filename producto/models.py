@@ -54,7 +54,7 @@ class Producto(models.Model):
     descripcion = models.TextField(null=False, blank=True)
     precio = models.DecimalField(max_digits=10, decimal_places=2)
     cantidad_en_stock = models.PositiveIntegerField(default=0)  # Control de inventario
-    categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True, blank=True, default=None)  # Referencing the Categoria model
+    categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True, blank=True, default=None, db_column='categoria')  # Referencing the Categoria model
     fabricante = models.ForeignKey(Fabricante, on_delete=models.SET_NULL, null=True, related_name='productos')
     destacado = models.BooleanField(default=False)  # Para escaparate principal
     agotado = models.BooleanField(default=False)  # Para marcar productos sin disponibilidad explícitamente

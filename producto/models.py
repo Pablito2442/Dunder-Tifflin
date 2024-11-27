@@ -35,15 +35,17 @@ class Fabricante(models.Model):
         ordering = ['nombre']
 
 
-class Categoria(models.TextChoices):
-    SILLAS = 'sillas', 'Sillas'
-    ILUMINACION = 'iluminación', 'Iluminación'
-    ESCRITORIOS = 'escritorios', 'Escritorios'
-    ESTANTERIAS = 'estanterías', 'Estanterías'
-    DECORACION = 'decoración', 'Decoración'
-    ALFOMBRILLAS = 'alfommbrillas', 'Alfombrillas'
-    ORGANIZADORES = 'organizadores', 'Organizadores'
-    MISCELANEA = 'miscelánea', 'Miscelánea'
+class Categoria(models.Model):
+    """Representa una categoría de productos."""
+    nombre = models.CharField(max_length=100, unique=True)
+    slug = models.SlugField(unique=True)
+
+    def __str__(self):
+        return self.nombre
+
+    class Meta:
+        verbose_name_plural = "Categorías"
+        ordering = ['nombre']
 
 class Foto(models.Model):
     imagen = models.ImageField(upload_to='fotos_producto/')

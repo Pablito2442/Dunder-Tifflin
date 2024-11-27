@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth import update_session_auth_hash
 from pedido.models import Pedido
+from producto.models import Producto
 
 #
 # Vistas y Botones de la vista de index
@@ -93,3 +94,96 @@ def panel_pagos(request):
     # pagos = Pagos.objects.filter(cliente_id=request.user)
     # return render(request, 'pagos.html', {'pagos': pagos})
     return render(request, 'pagos.html')
+
+
+#
+# Vistas y Botones de la vista de administracion productos
+#
+
+def panel_tablas_productos_administracion(request):
+    productos = Producto.objects.all()
+    return render(request, 'administracion_productos.html', {'productos': productos})
+
+def agregar_producto(request):
+    if request.method == "POST":
+        nombre = request.POST.get('nombre')
+        descripcion = request.POST.get('descripcion')
+        precio = request.POST.get('precio')
+        
+        # Validación básica
+        if not nombre or not descripcion or not precio:
+            messages.error(request, "Todos los campos son obligatorios.")
+            return redirect('panel_administracion_productos')  # Cambia por el nombre correcto de tu URL
+        
+        try:
+            # Intentar convertir el precio a un número flotante
+            precio = float(precio)
+            
+            # Crear y guardar el nuevo producto
+            nuevo_producto = Producto(nombre=nombre, descripcion=descripcion, precio=precio)
+            nuevo_producto.save()
+            
+            # Mostrar un mensaje de éxito
+            messages.success(request, "Producto agregado correctamente.")
+        except ValueError:
+            messages.error(request, "El precio debe ser un número válido.")
+        
+        return redirect('panel_administracion_productos')  # Cambia por el nombre correcto de tu URL
+    
+    # Si el método no es POST, redirige al listado
+    return redirect('panel_administracion_productos')
+
+
+#
+# Vistas y Botones de la vista de administracion Usuarios
+#
+
+def panel_tablas_usuarios_administracion(request):   
+    usuarios = User.objects.all()
+    
+    return render(request, 'administracion_usuarios.html', {'usuarios': usuarios})
+
+def modificar_usuario_administrados(request):
+    if request.method == 'POST':
+        usuario_id = request.POST.get('usuario_id')
+        try:
+            user = User.objects.get(id=usuario_id)
+            
+            # Actualizar campos básicos
+            user.first_name = request.POST.get('first_name', '').strip()
+            user.last_name = request.POST.get('last_name', '').strip()
+            user.email = request.POST.get('email', '').strip()
+
+            # Manejar el checkbox is_staff
+            is_staff_value = request.POST.get('is_staff')
+            user.is_staff = True if is_staff_value == 'on' else False
+
+            user.save()
+            return JsonResponse({'success': True})
+        except User.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Usuario no encontrado'})
+    return JsonResponse({'success': False, 'message': 'Método no permitido'})
+
+def eliminar_usuario(request, usuario_id):
+    if request.method == 'POST':
+        usuario = get_object_or_404(User, id=usuario_id)
+        usuario.delete()
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False, 'error': 'Método no permitido'})
+
+
+#
+# Vistas y Botones de la vista de administracion pedidos
+#
+
+def panel_tablas_pedidos_administracion(request):
+    return render(request, 'administracion_pedidos.html')
+
+
+#
+# Vistas y Botones de la vista de administracion pagos
+#
+
+def panel_tablas_pagos_administracion(request):
+    return render(request, 'administracion_pagos.html')

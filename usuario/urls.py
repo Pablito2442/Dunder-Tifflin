@@ -32,4 +32,19 @@ urlpatterns = [
     
     # Rutas para el panel de pagos
     path('pagos/', views.panel_pagos, name='panel_usuario_pagos'),
+    
+    
+    # Rutas para el panel de administración de usuarios
+    path('administracion_usuarios/', views.panel_tablas_usuarios_administracion, name='panel_administracion_usuarios'),
+    path('modificar_usuario/', views.modificar_usuario_administrados, name='modificar_usuario'),
+    path('eliminar_usuario/<int:usuario_id>/', views.eliminar_usuario, name='eliminar_usuario'),
+    
+    # Rutas para el panel de administracion de productos
+    path('administracion_productos/', views.panel_tablas_productos_administracion, name='panel_administracion_productos'),
+    path('agregar_producto/', views.agregar_producto, name='agregar_producto'),
+    
+    path('administracion_pedidos/', views.panel_tablas_pedidos_administracion, name='panel_administracion_pedidos'),
+    
+    path('administracion_pagos/', views.panel_tablas_pagos_administracion, name='panel_administracion_pagos'),
+    
 ]

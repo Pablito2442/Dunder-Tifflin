@@ -47,16 +47,6 @@ class Categoria(models.Model):
         verbose_name_plural = "Categorías"
         ordering = ['nombre']
 
-class Foto(models.Model):
-    imagen = models.ImageField(upload_to='fotos_producto/')
-    producto = models.ForeignKey('Producto', related_name='fotos', on_delete=models.PROTECT)
-
-    def __str__(self):
-        return f"Foto de {self.producto.nombre}"
-    
-    class Meta:
-        verbose_name_plural = "Fotos"
-        ordering = ['producto']
 
 class Producto(models.Model):
     """Modelo principal para los productos."""
@@ -70,6 +60,7 @@ class Producto(models.Model):
     agotado = models.BooleanField(default=False)  # Para marcar productos sin disponibilidad explícitamente
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     fecha_actualizacion = models.DateTimeField(auto_now=True)
+    imagen = models.ImageField(upload_to='fotos_producto/')
 
     def __str__(self):
         return self.nombre

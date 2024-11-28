@@ -2,7 +2,6 @@
 <!doctype html>
 <html class="no-js" lang="en">
    <head>
-      <!-- meta data -->
       <meta charset="utf-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -23,49 +22,51 @@
    <body>
       <header id="home" class="welcome-hero">
          <div id="header-carousel" class="carousel slide carousel-fade" data-ride="carousel">
+            <!-- Generar los indicadores dinámicamente -->
             <ol class="carousel-indicators">
-               <li data-target="#header-carousel" data-slide-to="0" class="active"><span class="small-circle"></span></li>
-               <li data-target="#header-carousel" data-slide-to="1"><span class="small-circle"></span></li>
-               <li data-target="#header-carousel" data-slide-to="2"><span class="small-circle"></span></li>
+               {% for producto in productos_destacados %}
+                  <li data-target="#header-carousel" data-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}"><span class="small-circle"></span></li>
+               {% endfor %}
             </ol>
-            
+
+            <!-- Generar los items dinámicamente -->
             <div class="carousel-inner" role="listbox">
                {% for producto in productos_destacados %}
-               <div class="item {% if forloop.first %}active{% endif %}">
-                  <div class="single-slide-item">
-                     <div class="container">
-                        <div class="welcome-hero-content">
-                           <div class="row">
-                              <div class="col-sm-7">
-                                 <div class="single-welcome-hero">
-                                    <div class="welcome-hero-txt">
-                                       <h4>Great Design Collection</h4>
-                                       <h2>{{ producto.nombre }}</h2>
-                                       <p>{{ producto.descripcion }}</p>
-                                       <div class="packages-price">
-                                          <p>${{ producto.precio }}</p>
-                                       </div>
-                                       <button class="btn-cart welcome-add-cart" onclick="window.location.href='#'">
-                                          <span class="lnr lnr-plus-circle"></span> add <span>to</span> cart
-                                       </button>
-                                       <button class="btn-cart welcome-add-cart welcome-more-info" onclick="window.location.href='#'">
-                                          Más informacion
-                                       </button>
-                                    </div><!--/.welcome-hero-txt-->
-                                 </div><!--/.single-welcome-hero-->
-                              </div><!--/.col-->
-                              <div class="col-sm-5">
-                                 <div class="single-welcome-hero">
-                                    <div class="welcome-hero-img">
-                                       <img src="{{ producto.imagen.url }}" alt="slider image">
-                                    </div><!--/.welcome-hero-txt-->
-                                 </div><!--/.single-welcome-hero-->
-                              </div><!--/.col-->
-                           </div><!--/.row-->
-                        </div><!--/.welcome-hero-content-->
-                     </div><!-- /.container-->
-                  </div><!-- /.single-slide-item-->
-               </div><!-- /.item -->
+                  <div class="item {% if forloop.first %}active{% endif %}">
+                     <div class="single-slide-item">
+                        <div class="container">
+                           <div class="welcome-hero-content">
+                              <div class="row">
+                                 <div class="col-sm-7">
+                                    <div class="single-welcome-hero">
+                                       <div class="welcome-hero-txt">
+                                          <h4>Producto destacado</h4>
+                                          <h2>{{ producto.nombre }}</h2>
+                                          <p>{{ producto.descripcion }}</p>
+                                          <div class="packages-price">
+                                             <p>{{ producto.precio }} €</p>
+                                          </div>
+                                          <button class="btn-cart welcome-add-cart" onclick="window.location.href='{% url 'agregar_carrito' producto.id %}'">
+                                             <span class="lnr lnr-plus-circle"></span> Añadir <span>al</span> carrito
+                                         </button>                                         
+                                          <button class="btn-cart welcome-add-cart welcome-more-info" onclick="window.location.href='#'">
+                                             Más información
+                                          </button>
+                                       </div><!--/.welcome-hero-txt-->
+                                    </div><!--/.single-welcome-hero-->
+                                 </div><!--/.col-->
+                                 <div class="col-sm-5">
+                                    <div class="single-welcome-hero">
+                                       <div class="welcome-hero-img">
+                                          <img src="{{ producto.foto.url }}" alt="slider image">
+                                       </div><!--/.welcome-hero-txt-->
+                                    </div><!--/.single-welcome-hero-->
+                                 </div><!--/.col-->
+                              </div><!--/.row-->
+                           </div><!--/.welcome-hero-content-->
+                        </div><!-- /.container-->
+                     </div><!-- /.single-slide-item-->
+                  </div><!-- /.item -->
                {% endfor %}
             </div><!-- /.carousel-inner -->
          </div><!--/#header-carousel-->

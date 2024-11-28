@@ -3,8 +3,7 @@ from .models import Producto, Categoria, Fabricante
 
 # Listar productos por categoría o fabricante
 def listar_productos(request, categoria_id=None, fabricante_id=None):
-    #categorias = Categoria.objects.all()
-    categorias = Categoria.choices
+    categorias = Categoria.objects.all()
     fabricantes = Fabricante.objects.all()
     productos = Producto.objects.filter(agotado=False, cantidad_en_stock__gt=0)  # Solo productos disponibles
 

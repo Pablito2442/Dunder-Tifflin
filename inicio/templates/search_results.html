@@ -1,0 +1,10 @@
+<h1>Search Results for: "{{ query }}"</h1>
+{% if results %}
+    <ul>
+    {% for result in results %}
+        <li>{{ result.nombre }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No results found.</p>
+{% endif %}

@@ -49,7 +49,6 @@
                         <ul class="nav" id="main-menu">
                            <li><a href="{% url 'panel_usuario' %}"><i class="fa fa fa-3x"></i> Información General </a></li>
                            <li><a href="{% url 'panel_usuario_pedidos' %}"><i class="fa fa fa-3x"></i> Gestión de los pedidos </a></li>
-                           <li><a href="{% url 'panel_usuario_pagos' %}"><i class="fa fa fa-3x"></i> Gestión de Pagos </a></li>
                         </ul>
                      </div>
                   </nav>
@@ -62,7 +61,6 @@
                         <ul class="nav" id="main-menu">
                            <li><a href="{% url 'panel_administracion_productos' %}">Administrar Productos</a></li>
                            <li><a href="{% url 'panel_administracion_usuarios' %}">Administrar Usuario</a></li>
-                           <li><a href="{% url 'panel_administracion_pagos' %}">Administrar Pagos</a></li>
                            <li><a href="{% url 'panel_administracion_pedidos' %}">Administrar Pedidos</a></li>
                            {% endif %}
                         </ul>
@@ -121,7 +119,6 @@
                                                                   data-is-staff="{{ pedido.metodo_pago }}">
                                                                Modificar
                                                                </button>
-                                                               
                                                                <!-- Botón para abrir el modal de eliminar Pedido -->
                                                                <button class="btn btn-danger" data-toggle="modal" data-target="#modalEliminarPedido" 
                                                                   data-id="{{ pedido.id }}">
@@ -174,7 +171,6 @@
                                                                   data-id-producto="{{ detalle.producto_id }}">
                                                                Modificar
                                                                </button>
-                                                               
                                                                <!-- Botón para abrir el modal de eliminar Detalle -->
                                                                <button class="btn btn-danger" data-toggle="modal" data-target="#modalEliminarDetalle" 
                                                                   data-id="{{ detalle.id }}">
@@ -206,121 +202,117 @@
       </section>
       <!-- Informacion general End -->
       <!-- Modal de Modificación de Pedido -->
-<div class="modal fade" id="modalModificarPedido" tabindex="-1" role="dialog" aria-labelledby="modalModificarPedidoLabel" aria-hidden="true">
-   <div class="modal-dialog" role="document">
-      <div class="modal-content">
-         <div class="modal-header">
-            <h5 class="modal-title" id="modalModificarPedidoLabel">Modificar Pedido</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-               <span aria-hidden="true">&times;</span>
-            </button>
-         </div>
-         <div class="modal-body">
-            <form id="formModificarPedido" method="POST" action="{% url 'modificar_pedido' %}">
-               {% csrf_token %}
-               <input type="hidden" id="pedido_id" name="pedido_id">
-               <div class="form-group">
-                  <label for="correo_cliente">Correo Cliente</label>
-                  <input type="text" class="form-control" id="correo_cliente" name="correo_cliente">
+      <div class="modal fade" id="modalModificarPedido" tabindex="-1" role="dialog" aria-labelledby="modalModificarPedidoLabel" aria-hidden="true">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title" id="modalModificarPedidoLabel">Modificar Pedido</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                  </button>
                </div>
-               <div class="form-group">
-                  <label for="estado">Estado</label>
-                  <input type="text" class="form-control" id="estado" name="estado">
+               <div class="modal-body">
+                  <form id="formModificarPedido" method="POST" action="{% url 'modificar_pedido' %}">
+                     {% csrf_token %}
+                     <input type="hidden" id="pedido_id" name="pedido_id">
+                     <div class="form-group">
+                        <label for="correo_cliente">Correo Cliente</label>
+                        <input type="text" class="form-control" id="correo_cliente" name="correo_cliente">
+                     </div>
+                     <div class="form-group">
+                        <label for="estado">Estado</label>
+                        <input type="text" class="form-control" id="estado" name="estado">
+                     </div>
+                     <div class="form-group">
+                        <label for="direccion_envio">Dirección de Envío</label>
+                        <input type="text" class="form-control" id="direccion_envio" name="direccion_envio">
+                     </div>
+                     <div class="form-group">
+                        <label for="metodo_pago">Método de Pago</label>
+                        <input type="text" class="form-control" id="metodo_pago" name="metodo_pago">
+                     </div>
+                     <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                  </form>
                </div>
-               <div class="form-group">
-                  <label for="direccion_envio">Dirección de Envío</label>
-                  <input type="text" class="form-control" id="direccion_envio" name="direccion_envio">
-               </div>
-               <div class="form-group">
-                  <label for="metodo_pago">Método de Pago</label>
-                  <input type="text" class="form-control" id="metodo_pago" name="metodo_pago">
-               </div>
-               <button type="submit" class="btn btn-primary">Guardar cambios</button>
-            </form>
+            </div>
          </div>
       </div>
-   </div>
-</div>
-
-<!-- Modal de Eliminación de Pedido -->
-<div class="modal fade" id="modalEliminarPedido" tabindex="-1" role="dialog" aria-labelledby="modalEliminarPedidoLabel" aria-hidden="true">
-   <div class="modal-dialog" role="document">
-      <div class="modal-content">
-         <div class="modal-header">
-            <h5 class="modal-title" id="modalEliminarPedidoLabel">Eliminar Pedido</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-               <span aria-hidden="true">&times;</span>
-            </button>
-         </div>
-         <div class="modal-body">
-            <p>¿Estás seguro de que deseas eliminar este pedido?</p>
-            <form id="formEliminarPedido" method="POST" action="{% url 'eliminar_pedido' %}">
-               {% csrf_token %}
-               <input type="hidden" id="pedido_id_eliminar" name="pedido_id">
-               <button type="submit" class="btn btn-danger">Eliminar</button>
-               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-            </form>
+      <!-- Modal de Eliminación de Pedido -->
+      <div class="modal fade" id="modalEliminarPedido" tabindex="-1" role="dialog" aria-labelledby="modalEliminarPedidoLabel" aria-hidden="true">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title" id="modalEliminarPedidoLabel">Eliminar Pedido</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                  </button>
+               </div>
+               <div class="modal-body">
+                  <p>¿Estás seguro de que deseas eliminar este pedido?</p>
+                  <form id="formEliminarPedido" method="POST" action="{% url 'eliminar_pedido' %}">
+                     {% csrf_token %}
+                     <input type="hidden" id="pedido_id_eliminar" name="pedido_id">
+                     <button type="submit" class="btn btn-danger">Eliminar</button>
+                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                  </form>
+               </div>
+            </div>
          </div>
       </div>
-   </div>
-</div>
-
-<!-- Modal de Modificación de Detalle -->
-<div class="modal fade" id="modalModificarDetalle" tabindex="-1" role="dialog" aria-labelledby="modalModificarDetalleLabel" aria-hidden="true">
-   <div class="modal-dialog" role="document">
-      <div class="modal-content">
-         <div class="modal-header">
-            <h5 class="modal-title" id="modalModificarDetalleLabel">Modificar Detalle de Pedido</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-               <span aria-hidden="true">&times;</span>
-            </button>
-         </div>
-         <div class="modal-body">
-            <form id="formModificarDetalle" method="POST" action="{% url 'modificar_detalles_pedidos' %}">
-               {% csrf_token %}
-               <input type="hidden" id="detalle_id" name="detalle_id">
-               <div class="form-group">
-                  <label for="cantidad">Cantidad</label>
-                  <input type="number" class="form-control" id="cantidad" name="cantidad">
+      <!-- Modal de Modificación de Detalle -->
+      <div class="modal fade" id="modalModificarDetalle" tabindex="-1" role="dialog" aria-labelledby="modalModificarDetalleLabel" aria-hidden="true">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title" id="modalModificarDetalleLabel">Modificar Detalle de Pedido</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                  </button>
                </div>
-               <div class="form-group">
-                  <label for="precio_unitario">Precio Unitario</label>
-                  <input type="text" class="form-control" id="precio_unitario" name="precio_unitario">
+               <div class="modal-body">
+                  <form id="formModificarDetalle" method="POST" action="{% url 'modificar_detalles_pedidos' %}">
+                     {% csrf_token %}
+                     <input type="hidden" id="detalle_id" name="detalle_id">
+                     <div class="form-group">
+                        <label for="cantidad">Cantidad</label>
+                        <input type="number" class="form-control" id="cantidad" name="cantidad">
+                     </div>
+                     <div class="form-group">
+                        <label for="precio_unitario">Precio Unitario</label>
+                        <input type="text" class="form-control" id="precio_unitario" name="precio_unitario">
+                     </div>
+                     <div class="form-group">
+                        <label for="id_producto">Id Producto</label>
+                        <input type="text" class="form-control" id="id_producto" name="id_producto">
+                     </div>
+                     <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                  </form>
                </div>
-               <div class="form-group">
-                  <label for="id_producto">Id Producto</label>
-                  <input type="text" class="form-control" id="id_producto" name="id_producto">
-               </div>
-               <button type="submit" class="btn btn-primary">Guardar cambios</button>
-            </form>
+            </div>
          </div>
       </div>
-   </div>
-</div>
-
-<!-- Modal de Eliminación de Detalle -->
-<div class="modal fade" id="modalEliminarDetalle" tabindex="-1" role="dialog" aria-labelledby="modalEliminarDetalleLabel" aria-hidden="true">
-   <div class="modal-dialog" role="document">
-      <div class="modal-content">
-         <div class="modal-header">
-            <h5 class="modal-title" id="modalEliminarDetalleLabel">Eliminar Detalle de Pedido</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-               <span aria-hidden="true">&times;</span>
-            </button>
-         </div>
-         <div class="modal-body">
-            <p>¿Estás seguro de que deseas eliminar este detalle?</p>
-            <form id="formEliminarDetalle" method="POST" action="{% url 'eliminar_detalles_pedidos' %}">
-               {% csrf_token %}
-               <input type="hidden" id="detalle_id_eliminar" name="detalle_id">
-               <button type="submit" class="btn btn-danger">Eliminar</button>
-               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-            </form>
+      <!-- Modal de Eliminación de Detalle -->
+      <div class="modal fade" id="modalEliminarDetalle" tabindex="-1" role="dialog" aria-labelledby="modalEliminarDetalleLabel" aria-hidden="true">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title" id="modalEliminarDetalleLabel">Eliminar Detalle de Pedido</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                  </button>
+               </div>
+               <div class="modal-body">
+                  <p>¿Estás seguro de que deseas eliminar este detalle?</p>
+                  <form id="formEliminarDetalle" method="POST" action="{% url 'eliminar_detalles_pedidos' %}">
+                     {% csrf_token %}
+                     <input type="hidden" id="detalle_id_eliminar" name="detalle_id">
+                     <button type="submit" class="btn btn-danger">Eliminar</button>
+                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                  </form>
+               </div>
+            </div>
          </div>
       </div>
-   </div>
-</div>
-
       <!-- Mensajes emergentes -->
       {% if messages %}
       <div id="message-container">

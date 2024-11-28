@@ -37,124 +37,212 @@
       </header>
       <!--/.welcome-hero-->
       <!--welcome-hero end -->
-
-
       <!-- Informacion general Start -->
-<section id="blog" class="blog" style="margin-top: 50px;">
-   <div class="container">
-      <div class="row">
-         <!-- Sidebar (Nav) -->
-         <div class="col-md-3" style="margin-top: 50px;">
-            <nav class="navbar-default navbar-side" role="navigation">
-               <div class="sidebar-collapse">
-                  <ul class="nav" id="main-menu">
-                     <li><a href="{% url 'panel_usuario' %}"><i class="fa fa fa-3x"></i> Información General </a></li>
-                     <li><a href="{% url 'panel_usuario_pedidos' %}"><i class="fa fa fa-3x"></i> Gestión de los pedidos </a></li>
-                     <li><a href="{% url 'panel_usuario_pagos' %}"><i class="fa fa fa-3x"></i> Gestión de Pagos </a></li> 
-                  </ul>
-               </div>
-            </nav>
-
-            <nav class="navbar-default navbar-side" role="navigation">
-               <div class="sidebar-collapse">
-                  {% if user.is_staff %}
-                  <p class="animated fadeInUp" style="opacity: 0; margin-top: 20px;">
-                     <strong>Opciones para el adminitrador:</strong>
-                  </p>
-                  <ul class="nav" id="main-menu">
+      <section id="blog" class="blog" style="margin-top: 70px;">
+         <div class="container">
+            <div class="row">
+               <!-- Sidebar (Nav) -->
+               <div class="col-md-3" style="margin-top: 50px;">
+                  <nav class="navbar-default navbar-side" role="navigation">
+                     <div class="sidebar-collapse">
+                        <ul class="nav" id="main-menu">
+                           <li><a href="{% url 'panel_usuario' %}"><i class="fa fa fa-3x"></i> Información General </a></li>
+                           <li><a href="{% url 'panel_usuario_pedidos' %}"><i class="fa fa fa-3x"></i> Gestión de los pedidos </a></li>
+                           <li><a href="{% url 'panel_usuario_pagos' %}"><i class="fa fa fa-3x"></i> Gestión de Pagos </a></li>
+                        </ul>
+                     </div>
+                  </nav>
+                  <nav class="navbar-default navbar-side" role="navigation">
+                     <div class="sidebar-collapse">
+                        {% if user.is_staff %}
+                        <p class="animated fadeInUp" style="opacity: 0; margin-top: 20px;">
+                           <strong>Opciones para el adminitrador:</strong>
+                        </p>
+                        <ul class="nav" id="main-menu">
                            <li><a href="{% url 'panel_administracion_productos' %}">Administrar Productos</a></li>
                            <li><a href="{% url 'panel_administracion_usuarios' %}">Administrar Usuario</a></li>
                            <li><a href="{% url 'panel_administracion_pagos' %}">Administrar Pagos</a></li>
                            <li><a href="{% url 'panel_administracion_pedidos' %}">Administrar Pedidos</a></li>
-                     {% endif %}
-                  </ul>
+                           {% endif %}
+                        </ul>
+                     </div>
+                  </nav>
                </div>
-            </nav>
-
-
-         </div>
-         <!-- Main Content (User Info) -->
-         <div class="col-md-9">
-            <div id="page-wrapper">
-               <div id="page-inner">
-                  <div class="row">
-                     <div class="col-md-12">
-                        <div class="single-blog">
-                           <div class="welcome-hero-txt">
-                              <h4 class="animated fadeInUp" style="opacity: 0; margin-left: -300px;">¡Bienvenido, {{ user.username }}!</h4>
-                              <h2 class="animated fadeInUp" style="opacity: 0;">Administracion de los Productos</h2>
-                              <div class="row">
-                                 <div class="col-md-12">
-                                     <!-- Advanced Tables -->
-                                     <div class="panel panel-default">
-                                         <div class="panel-heading">
-                                             Tabla de Usuarios
-                                         </div>
-                                         <div class="panel-body">
-                                             <div class="table-responsive">
-                                                 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
-                                                     <thead>
+               <!-- Main Content (User Info) -->
+               <div class="col-md-9">
+                  <div id="page-wrapper">
+                     <div id="page-inner">
+                        <div class="row">
+                           <div class="col-md-12">
+                              <div class="single-blog">
+                                 <div class="welcome-hero-txt">
+                                    <h4 class="animated fadeInUp" style="opacity: 0; margin-left: -300px;">¡Bienvenido, {{ user.username }}!</h4>
+                                    <h2 class="animated fadeInUp" style="opacity: 0;">Administracion de los Productos</h2>
+                                    <div class="row">
+                                       <div class="col-md-12">
+                                          <!-- Tabla de productos -->
+                                          <div class="panel panel-default">
+                                             <div class="panel-heading">
+                                                Tabla de Productos
+                                             </div>
+                                             <div class="panel-body">
+                                                <div class="table-responsive">
+                                                   <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                                      <thead>
                                                          <tr>
-                                                             <th>ID</th>
-                                                             <th>Username</th>
-                                                             <th>Nombre</th>
-                                                             <th>Apellidos</th>
-                                                             <th>Email</th>
-                                                             <th>Fecha de Creación</th>
-                                                             <th>Fecha de Última Modificación</th>
-                                                             <th>Es Staff</th>
-                                                             <th>Acciones</th>
+                                                            <th>ID</th>
+                                                            <th>Nombre</th>
+                                                            <th>Descripción</th>
+                                                            <th>Precio</th>
+                                                            <th>Cantidad en Stock</th>
+                                                            <th>Categoría</th>
+                                                            <th>Destacado</th>
+                                                            <th>Agotado</th>
+                                                            <th>Foto</th>
+                                                            <th>Fabricante</th>
+                                                            <th>Acciones</th>
                                                          </tr>
-                                                     </thead>
-                                                     <tbody>
-                                                         {% for usuario in usuarios %}
+                                                      </thead>
+                                                      <tbody>
+                                                         {% for producto in productos %}
                                                          <tr class="odd gradeX">
-                                                             <td>{{ usuario.id }}</td>
-                                                             <td>{{ usuario.username }}</td>
-                                                             <td>{{ usuario.first_name }}</td> 
-                                                             <td>{{ usuario.last_name }}</td>  
-                                                             <td>{{ usuario.email }}</td>
-                                                             <td>{{ usuario.date_joined|date:"d M Y" }}</td>
-                                                             <td>{{ usuario.last_login|date:"d M Y H:i" }}</td>
-                                                             <td>
-                                                                 {% if usuario.is_staff %}
-                                                                 Sí
-                                                                 {% else %}
-                                                                 No
-                                                                 {% endif %}
-                                                             </td>
-                                                             <td>
-                                                                 <!-- Botón para abrir el modal de modificar -->
-                                                                 <button class="btn btn-warning" data-toggle="modal" data-target="#modalModificar" 
-                                                                         data-id="{{ usuario.id }}" 
-                                                                         data-username="{{ usuario.username }}" 
-                                                                         data-email="{{ usuario.email }}" 
-                                                                         data-first-name="{{ usuario.first_name }}" 
-                                                                         data-last-name="{{ usuario.last_name }}" 
-                                                                         data-is-staff="{{ usuario.is_staff }}">
-                                                                     Modificar
-                                                                 </button>
-                                                                 <!-- Botón para abrir el modal de eliminar -->
-                                                                 <button class="btn btn-danger" data-toggle="modal" data-target="#modalEliminar" 
-                                                                         data-id="{{ usuario.id }}" 
-                                                                         data-username="{{ usuario.username }}">
-                                                                     Eliminar
-                                                                 </button>
-                                                             </td>
+                                                            <td>{{ producto.id }}</td>
+                                                            <td>{{ producto.nombre }}</td>
+                                                            <td>{{ producto.descripcion }}</td>
+                                                            <td>{{ producto.precio }}</td>
+                                                            <td>{{ producto.cantidad_en_stock }}</td>
+                                                            <td>{{ producto.categoria }}</td>
+                                                            <td>
+                                                               {% if producto.destacado %}
+                                                               Sí
+                                                               {% else %}
+                                                               No
+                                                               {% endif %}
+                                                            </td>
+                                                            <td>
+                                                               {% if producto.agotado %}
+                                                               Sí
+                                                               {% else %}
+                                                               No
+                                                               {% endif %}
+                                                            </td>
+                                                            <td>
+                                                               <img src="{{ producto.foto }}" alt="Foto de {{ producto.nombre }}" width="50">
+                                                            </td>
+                                                            <td>{{ producto.fabricante_id }}</td>
+                                                            <td>
+                                                               <!-- Botón para modificar -->
+                                                               <button class="btn btn-warning" data-toggle="modal" data-target="#modalModificar" 
+                                                                  data-id="{{ producto.id }}" 
+                                                                  data-nombre="{{ producto.nombre }}" 
+                                                                  data-descripcion="{{ producto.descripcion }}" 
+                                                                  data-precio="{{ producto.precio }}" 
+                                                                  data-cantidad="{{ producto.cantidad_en_stock }}" 
+                                                                  data-categoria="{{ producto.categoria }}" 
+                                                                  data-destacado="{{ producto.destacado }}" 
+                                                                  data-agotado="{{ producto.agotado }}" 
+                                                                  data-foto="{{ producto.foto }}" 
+                                                                  data-fecha-actualizacion="{{ producto.fecha_actualizacion }}">
+                                                               Modificar
+                                                               </button>
+                                                               <!-- Botón para eliminar -->
+                                                               <button class="btn btn-danger" data-toggle="modal" data-target="#modalEliminar" 
+                                                                  data-id="{{ producto.id }}" 
+                                                                  data-nombre="{{ producto.nombre }}">
+                                                               Eliminar
+                                                               </button>
+                                                            </td>
                                                          </tr>
                                                          {% empty %}
                                                          <tr>
-                                                             <td colspan="9" class="text-center">No hay usuarios disponibles</td>
+                                                            <td colspan="13" class="text-center">No hay productos disponibles</td>
                                                          </tr>
                                                          {% endfor %}
-                                                     </tbody>
-                                                 </table>
+                                                      </tbody>
+                                                   </table>
+                                                </div>
                                              </div>
-                                         </div>
-                                     </div>
-                                     <!-- End Advanced Tables -->
+                                          </div>
+                                          <!-- Fin de la tabla de productos -->
+                                          <button class="btn-cart welcome-add-cart welcome-more-info animated fadeInDown" 
+                                             style="opacity: 0; margin-top: -10px;" 
+                                             data-toggle="modal" 
+                                             data-target="#modalAñadir">
+                                          Añadir Producto
+                                          </button>                 
+                                       </div>
+                                       <div class="col-md-12">
+                                          <!-- Tabla de fabricantes -->
+                                          <div class="panel panel-default">
+                                             <div class="panel-heading">
+                                                Tabla de Fabricantes
+                                             </div>
+                                             <div class="panel-body">
+                                                <div class="table-responsive">
+                                                   <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                                      <thead>
+                                                         <tr>
+                                                            <th>ID</th>
+                                                            <th>Nombre</th>
+                                                            <th>Descripción</th>
+                                                            <th>Email</th>
+                                                            <th>Teléfono</th>
+                                                            <th>Sitio Web</th>
+                                                            <th>País</th>
+                                                            <th>Acciones</th>
+                                                         </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                         {% for fabricante in fabricantes %}
+                                                         <tr class="odd gradeX">
+                                                            <td>{{ fabricante.id }}</td>
+                                                            <td>{{ fabricante.nombre }}</td>
+                                                            <td>{{ fabricante.descripcion }}</td>
+                                                            <td>{{ fabricante.email }}</td>
+                                                            <td>{{ fabricante.numTlf }}</td>
+                                                            <td>{{ fabricante.web }}</td>
+                                                            <td>{{ fabricante.pais }}</td>
+                                                            <td>
+                                                               <!-- Botón para modificar -->
+                                                               <button class="btn btn-warning" data-toggle="modal" data-target="#modalModificar" 
+                                                                  data-id="{{ fabricante.id }}" 
+                                                                  data-nombre="{{ fabricante.nombre }}" 
+                                                                  data-descripcion="{{ fabricante.descripcion }}" 
+                                                                  data-email="{{ fabricante.email }}" 
+                                                                  data-numTlf="{{ fabricante.numTlf }}" 
+                                                                  data-web="{{ fabricante.web }}" 
+                                                                  data-pais="{{ fabricante.pais }}">
+                                                               Modificar
+                                                               </button>
+                                                               <!-- Botón para eliminar -->
+                                                               <button class="btn btn-danger" data-toggle="modal" data-target="#modalEliminar" 
+                                                                  data-id="{{ fabricante.id }}" 
+                                                                  data-nombre="{{ fabricante.nombre }}">
+                                                               Eliminar
+                                                               </button>
+                                                            </td>
+                                                         </tr>
+                                                         {% empty %}
+                                                         <tr>
+                                                            <td colspan="8" class="text-center">No hay fabricantes disponibles</td>
+                                                         </tr>
+                                                         {% endfor %}
+                                                      </tbody>
+                                                   </table>
+                                                </div>
+                                             </div>
+                                          </div>
+                                          <!-- Fin de la tabla de fabricantes -->
+                                          <button class="btn-cart welcome-add-cart welcome-more-info animated fadeInDown" 
+                                             style="opacity: 0; margin-top: -10px;" 
+                                             data-toggle="modal" 
+                                             data-target="#modalAñadir">
+                                          Añadir Fabricante
+                                          </button>                 
+                                       </div>
+                                    </div>
                                  </div>
-                             </div>
+                              </div>
                            </div>
                         </div>
                      </div>
@@ -162,83 +250,178 @@
                </div>
             </div>
          </div>
-      </div>
-   </div>
-</section>
-<!-- Informacion general End -->
-
-<!-- Modal de Modificación -->
-<div class="modal fade" id="modalModificar" tabindex="-1" role="dialog" aria-labelledby="modalModificarLabel" aria-hidden="true">
-   <div class="modal-dialog" role="document">
-      <div class="modal-content">
-         <div class="modal-header">
-            <h5 class="modal-title" id="modalModificarLabel">Modificar Usuario</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
+      </section>
+      <!-- Informacion general End -->
+      <!-- Modal para agregar un nuevo producto -->
+      <div class="modal fade" id="modalAñadir" tabindex="-1" role="dialog" aria-labelledby="modalNuevoProductoLabel" aria-hidden="true">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title" id="modalNuevoProductoLabel">Nuevo Producto</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                  </button>
+               </div>
+               <div class="modal-body">
+                  <form method="POST" action="{% url 'crear_producto' %}">
+                     {% csrf_token %}
+                     <div class="form-group">
+                        <label for="nombre">Nombre del Producto</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required>
+                     </div>
+                     <div class="form-group">
+                        <label for="descripcion">Descripción</label>
+                        <textarea class="form-control" id="descripcion" name="descripcion" rows="4" required></textarea>
+                     </div>
+                     <div class="form-group">
+                        <label for="precio">Precio</label>
+                        <input type="number" class="form-control" id="precio" name="precio" step="0.01" required>
+                     </div>
+                     <div class="form-group">
+                        <label for="cantidad_en_stock">Cantidad en Stock</label>
+                        <input type="number" class="form-control" id="cantidad_en_stock" name="cantidad_en_stock" required>
+                     </div>
+                     <div class="form-group">
+                        <label for="categoria">Categoría</label>
+                        <input type="text" class="form-control" id="categoria" name="categoria" required>
+                     </div>
+                     <div class="form-group">
+                        <label for="destacado">Destacado</label>
+                        <select class="form-control" id="destacado" name="destacado">
+                           <option value="True">Sí</option>
+                           <option value="False">No</option>
+                        </select>
+                     </div>
+                     <div class="form-group">
+                        <label for="agotado">Agotado</label>
+                        <select class="form-control" id="agotado" name="agotado">
+                           <option value="True">Sí</option>
+                           <option value="False">No</option>
+                        </select>
+                     </div>
+                     <div class="form-group">
+                        <label for="foto">Foto del Producto</label>
+                        <input type="url" class="form-control" id="foto" name="foto" placeholder="URL de la foto" required>
+                     </div>
+                     <button type="submit" class="btn btn-primary">Agregar Producto</button>
+                  </form>
+               </div>
+            </div>
          </div>
-         <div class="modal-body">
-            <form id="formModificar" method="POST" action="{% url 'actualizar_usuario' %}">
-               {% csrf_token %}
-               <input type="hidden" id="usuario_id" name="usuario_id" value="{{ user.id }}">
-               <div class="form-group">
-                  <label for="username">Username</label>
-                  <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}">
+      </div>
+      <!-- Modal de Modificación de Producto -->
+      <div class="modal fade" id="modalModificar" tabindex="-1" role="dialog" aria-labelledby="modalModificarLabel" aria-hidden="true">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title" id="modalModificarLabel">Modificar Producto</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                  </button>
                </div>
-               <div class="form-group">
-                  <label for="first_name">First Name</label>
-                  <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}">
+               <div class="modal-body">
+                  <form id="formModificar" method="POST" action="{% url 'actualizar_producto' %}">
+                     {% csrf_token %}
+                     <input type="hidden" id="producto_id" name="producto_id" value="">
+                     <div class="form-group">
+                        <label for="nombre">Nombre del Producto</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required>
+                     </div>
+                     <div class="form-group">
+                        <label for="descripcion">Descripción</label>
+                        <textarea class="form-control" id="descripcion" name="descripcion" rows="4" required></textarea>
+                     </div>
+                     <div class="form-group">
+                        <label for="precio">Precio</label>
+                        <input type="number" class="form-control" id="precio" name="precio" step="0.01" required>
+                     </div>
+                     <div class="form-group">
+                        <label for="cantidad_en_stock">Cantidad en Stock</label>
+                        <input type="number" class="form-control" id="cantidad_en_stock" name="cantidad_en_stock" required>
+                     </div>
+                     <div class="form-group">
+                        <label for="categoria">Categoría</label>
+                        <input type="text" class="form-control" id="categoria" name="categoria" required>
+                     </div>
+                     <div class="form-group">
+                        <label for="destacado">Destacado</label>
+                        <select class="form-control" id="destacado" name="destacado">
+                           <option value="True">Sí</option>
+                           <option value="False">No</option>
+                        </select>
+                     </div>
+                     <div class="form-group">
+                        <label for="agotado">Agotado</label>
+                        <select class="form-control" id="agotado" name="agotado">
+                           <option value="True">Sí</option>
+                           <option value="False">No</option>
+                        </select>
+                     </div>
+                     <div class="form-group">
+                        <label for="foto">Foto del Producto</label>
+                        <input type="url" class="form-control" id="foto" name="foto" placeholder="URL de la foto">
+                     </div>
+                     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                  </form>
                </div>
-               <div class="form-group">
-                  <label for="last_name">Last Name</label>
-                  <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}">
-               </div>
-               <div class="form-group">
-                  <label for="email">Email</label>
-                  <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}">
-               </div>
-               <button type="submit" class="btn btn-primary">Guardar cambios</button>
-            </form>
+            </div>
          </div>
       </div>
+      <!-- Mensajes emergentes -->
+<!-- Mensajes emergentes -->
+{% if messages %}
+<div id="message-container">
+   {% for message in messages %}
+   <div class="popup-message {% if message.tags %}{{ message.tags }}{% endif %}">
+      {{ message }}
+      <span class="close-btn" onclick="this.parentElement.style.display='none'">X</span>
    </div>
+   {% endfor %}
 </div>
-  
-<!-- Modal de Cambio de Contraseña -->
-<div class="modal fade" id="modalCambiarContrasena" tabindex="-1" role="dialog" aria-labelledby="modalCambiarContrasenaLabel" aria-hidden="true">
-   <div class="modal-dialog" role="document">
-      <div class="modal-content">
-         <div class="modal-header">
-            <h5 class="modal-title" id="modalCambiarContrasenaLabel">Cambiar Contraseña</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
-         </div>
-         <div class="modal-body">
-            <form id="formCambiarContrasea" method="POST" action="{% url 'cambiar_contraseña' %}">
-               {% csrf_token %}
-               <div class="form-group">
-                  <label for="old_password">Contraseña Actual</label>
-                  <input type="password" class="form-control" id="old_password" name="old_password" required>
-               </div>
-               <div class="form-group">
-                  <label for="new_password">Nueva Contraseña</label>
-                  <input type="password" class="form-control" id="new_password" name="new_password" required>
-               </div>
-               <button type="submit" class="btn btn-warning">Actualizar Contraseña</button>
-            </form>
-         </div>
-      </div>
-   </div>
-</div>
-
-<!-- SCRIPTS -->
-<script src="{% static 'js/jquery-1.10.2.js' %}"></script>
-<script src="{% static 'js/bootstrap.min.js' %}"></script>
-<script src="{% static 'js/jquery.metisMenu.js' %}"></script>
-<script src="{% static 'js/morris/raphael-2.1.0.min.js' %}"></script>
-<script src="{% static 'js/morris/morris.js' %}"></script>
-<script src="{% static 'js/custom.js' %}"></script>
-
-</body>
+{% endif %}
+<script>
+   // Mostrar los mensajes emergentes al cargar la página
+   window.onload = function() {
+       let messages = document.querySelectorAll('.popup-message');
+       messages.forEach(function(message) {
+           message.style.display = 'block';
+           setTimeout(function() {
+               message.style.display = 'none';
+           }, 5000); // Ocultar después de 5 segundos
+       });
+   }
+</script>
+      <!-- SCRIPTS -->
+      <script>
+         $('#modalModificar').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Botón que activó el modal
+            var productoId = button.data('id');
+            var nombre = button.data('nombre');
+            var descripcion = button.data('descripcion');
+            var precio = button.data('precio');
+            var cantidadEnStock = button.data('cantidad');
+            var categoria = button.data('categoria');
+            var destacado = button.data('destacado');
+            var agotado = button.data('agotado');
+            var foto = button.data('foto');
+         
+            var modal = $(this);
+            modal.find('#producto_id').val(productoId);
+            modal.find('#nombre').val(nombre);
+            modal.find('#descripcion').val(descripcion);
+            modal.find('#precio').val(precio);
+            modal.find('#cantidad_en_stock').val(cantidadEnStock);
+            modal.find('#categoria').val(categoria);
+            modal.find('#destacado').val(destacado);
+            modal.find('#agotado').val(agotado);
+            modal.find('#foto').val(foto);
+         });
+      </script>
+      <script src="{% static 'js/jquery-1.10.2.js' %}"></script>
+      <script src="{% static 'js/bootstrap.min.js' %}"></script>
+      <script src="{% static 'js/jquery.metisMenu.js' %}"></script>
+      <script src="{% static 'js/morris/raphael-2.1.0.min.js' %}"></script>
+      <script src="{% static 'js/morris/morris.js' %}"></script>
+      <script src="{% static 'js/custom.js' %}"></script>
+   </body>
 </html>

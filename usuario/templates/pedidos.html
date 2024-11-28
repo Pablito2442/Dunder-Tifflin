@@ -48,7 +48,6 @@
                         <ul class="nav" id="main-menu">
                            <li><a href="{% url 'panel_usuario' %}"><i class="fa fa fa-3x"></i> Información General </a></li>
                            <li><a href="{% url 'panel_usuario_pedidos' %}"><i class="fa fa fa-3x"></i> Gestión de los pedidos </a></li>
-                           <li><a href="{% url 'panel_usuario_pagos' %}"><i class="fa fa fa-3x"></i> Gestión de Pagos </a></li>
                         </ul>
                      </div>
                   </nav>
@@ -61,7 +60,6 @@
                         <ul class="nav" id="main-menu">
                            <li><a href="{% url 'panel_administracion_productos' %}">Administrar Productos</a></li>
                            <li><a href="{% url 'panel_administracion_usuarios' %}">Administrar Usuario</a></li>
-                           <li><a href="{% url 'panel_administracion_pagos' %}">Administrar Pagos</a></li>
                            <li><a href="{% url 'panel_administracion_pedidos' %}">Administrar Pedidos</a></li>
                            {% endif %}
                         </ul>
@@ -204,64 +202,60 @@
       </section>
       <!-- Información de los pedidos realizados End -->
       <!-- Modal de Modificación -->
-<div class="modal fade" id="modalModificar" tabindex="-1" role="dialog" aria-labelledby="modalModificarLabel" aria-hidden="true">
-   <div class="modal-dialog" role="document">
-      <div class="modal-content">
-         <div class="modal-header">
-            <h5 class="modal-title" id="modalModificarLabel">Modificar Último Pedido</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-               <span aria-hidden="true">&times;</span>
-            </button>
-         </div>
-         <div class="modal-body">
-            <!-- Formulario para modificar el pedido -->
-            <form action="{% if ultimo_pedido.id %}{% url 'actualizar_pedido' ultimo_pedido.id %}{% else %}#{% endif %}" method="POST">
-               {% csrf_token %}
-               <input type="hidden" id="pedido_id" name="pedido_id" value="{{ ultimo_pedido.id }}">
-
-               <!-- Modificación del correo -->
-               <div class="form-group">
-                  <label for="correo_cliente">Correo Electrónico</label>
-                  <input type="email" class="form-control" id="correo_cliente" name="correo_cliente" value="{{ ultimo_pedido.correo_cliente }}" required>
+      <div class="modal fade" id="modalModificar" tabindex="-1" role="dialog" aria-labelledby="modalModificarLabel" aria-hidden="true">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title" id="modalModificarLabel">Modificar Último Pedido</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                  </button>
                </div>
-
-               <!-- Modificación de la dirección de envío -->
-               <div class="form-group">
-                  <label for="direccion_envio">Dirección de Envío</label>
-                  <input type="text" class="form-control" id="direccion_envio" name="direccion_envio" value="{{ ultimo_pedido.direccion_envio }}" required>
+               <div class="modal-body">
+                  <!-- Formulario para modificar el pedido -->
+                  <form action="{% if ultimo_pedido.id %}{% url 'actualizar_pedido' ultimo_pedido.id %}{% else %}#{% endif %}" method="POST">
+                     {% csrf_token %}
+                     <input type="hidden" id="pedido_id" name="pedido_id" value="{{ ultimo_pedido.id }}">
+                     <!-- Modificación del correo -->
+                     <div class="form-group">
+                        <label for="correo_cliente">Correo Electrónico</label>
+                        <input type="email" class="form-control" id="correo_cliente" name="correo_cliente" value="{{ ultimo_pedido.correo_cliente }}" required>
+                     </div>
+                     <!-- Modificación de la dirección de envío -->
+                     <div class="form-group">
+                        <label for="direccion_envio">Dirección de Envío</label>
+                        <input type="text" class="form-control" id="direccion_envio" name="direccion_envio" value="{{ ultimo_pedido.direccion_envio }}" required>
+                     </div>
+                     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                  </form>
                </div>
-
-               <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-            </form>
+            </div>
          </div>
       </div>
-   </div>
-</div>
-
       <!-- Mensajes emergentes -->
-<!-- Mensajes emergentes -->
-{% if messages %}
-<div id="message-container">
-   {% for message in messages %}
-   <div class="popup-message {% if message.tags %}{{ message.tags }}{% endif %}">
-      {{ message }}
-      <span class="close-btn" onclick="this.parentElement.style.display='none'">X</span>
-   </div>
-   {% endfor %}
-</div>
-{% endif %}
-<script>
-   // Mostrar los mensajes emergentes al cargar la página
-   window.onload = function() {
-       let messages = document.querySelectorAll('.popup-message');
-       messages.forEach(function(message) {
-           message.style.display = 'block';
-           setTimeout(function() {
-               message.style.display = 'none';
-           }, 5000); // Ocultar después de 5 segundos
-       });
-   }
-</script>
+      <!-- Mensajes emergentes -->
+      {% if messages %}
+      <div id="message-container">
+         {% for message in messages %}
+         <div class="popup-message {% if message.tags %}{{ message.tags }}{% endif %}">
+            {{ message }}
+            <span class="close-btn" onclick="this.parentElement.style.display='none'">X</span>
+         </div>
+         {% endfor %}
+      </div>
+      {% endif %}
+      <script>
+         // Mostrar los mensajes emergentes al cargar la página
+         window.onload = function() {
+             let messages = document.querySelectorAll('.popup-message');
+             messages.forEach(function(message) {
+                 message.style.display = 'block';
+                 setTimeout(function() {
+                     message.style.display = 'none';
+                 }, 5000); // Ocultar después de 5 segundos
+             });
+         }
+      </script>
       <!-- SCRIPTS -->
       <script src="{% static 'js/jquery-1.10.2.js' %}"></script>
       <script src="{% static 'js/bootstrap.min.js' %}"></script>

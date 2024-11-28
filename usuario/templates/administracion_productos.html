@@ -48,7 +48,6 @@
                         <ul class="nav" id="main-menu">
                            <li><a href="{% url 'panel_usuario' %}"><i class="fa fa fa-3x"></i> Información General </a></li>
                            <li><a href="{% url 'panel_usuario_pedidos' %}"><i class="fa fa fa-3x"></i> Gestión de los pedidos </a></li>
-                           <li><a href="{% url 'panel_usuario_pagos' %}"><i class="fa fa fa-3x"></i> Gestión de Pagos </a></li>
                         </ul>
                      </div>
                   </nav>
@@ -61,7 +60,6 @@
                         <ul class="nav" id="main-menu">
                            <li><a href="{% url 'panel_administracion_productos' %}">Administrar Productos</a></li>
                            <li><a href="{% url 'panel_administracion_usuarios' %}">Administrar Usuario</a></li>
-                           <li><a href="{% url 'panel_administracion_pagos' %}">Administrar Pagos</a></li>
                            <li><a href="{% url 'panel_administracion_pedidos' %}">Administrar Pedidos</a></li>
                            {% endif %}
                         </ul>
@@ -132,24 +130,21 @@
                                                             <td>{{ producto.fabricante_id }}</td>
                                                             <td>
                                                                <!-- Botón para modificar -->
-                                                               <button class="btn btn-warning" data-toggle="modal" data-target="#modalModificar" 
+                                                               <button class="btn btn-warning" data-toggle="modal" data-target="#modalModificarProducto" 
                                                                   data-id="{{ producto.id }}" 
                                                                   data-nombre="{{ producto.nombre }}" 
                                                                   data-descripcion="{{ producto.descripcion }}" 
                                                                   data-precio="{{ producto.precio }}" 
-                                                                  data-cantidad="{{ producto.cantidad_en_stock }}" 
+                                                                  data-cantidad-en-stock="{{ producto.cantidad_en_stock }}" 
                                                                   data-categoria="{{ producto.categoria }}" 
                                                                   data-destacado="{{ producto.destacado }}" 
                                                                   data-agotado="{{ producto.agotado }}" 
-                                                                  data-foto="{{ producto.foto }}" 
-                                                                  data-fecha-actualizacion="{{ producto.fecha_actualizacion }}">
+                                                                  data-foto="{{ producto.foto }}" >
                                                                Modificar
                                                                </button>
                                                                <!-- Botón para eliminar -->
-                                                               <button class="btn btn-danger" data-toggle="modal" data-target="#modalEliminar" 
-                                                                  data-id="{{ producto.id }}" 
-                                                                  data-nombre="{{ producto.nombre }}">
-                                                               Eliminar
+                                                               <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalEliminarProducto" data-id="{{ producto.id }}">
+                                                               Eliminar Producto
                                                                </button>
                                                             </td>
                                                          </tr>
@@ -167,7 +162,7 @@
                                           <button class="btn-cart welcome-add-cart welcome-more-info animated fadeInDown" 
                                              style="opacity: 0; margin-top: -10px;" 
                                              data-toggle="modal" 
-                                             data-target="#modalAñadir">
+                                             data-target="#modalAñadirProducto">
                                           Añadir Producto
                                           </button>                 
                                        </div>
@@ -204,7 +199,7 @@
                                                             <td>{{ fabricante.pais }}</td>
                                                             <td>
                                                                <!-- Botón para modificar -->
-                                                               <button class="btn btn-warning" data-toggle="modal" data-target="#modalModificar" 
+                                                               <button class="btn btn-warning" data-toggle="modal" data-target="#modalModificarFabricante" 
                                                                   data-id="{{ fabricante.id }}" 
                                                                   data-nombre="{{ fabricante.nombre }}" 
                                                                   data-descripcion="{{ fabricante.descripcion }}" 
@@ -215,9 +210,8 @@
                                                                Modificar
                                                                </button>
                                                                <!-- Botón para eliminar -->
-                                                               <button class="btn btn-danger" data-toggle="modal" data-target="#modalEliminar" 
-                                                                  data-id="{{ fabricante.id }}" 
-                                                                  data-nombre="{{ fabricante.nombre }}">
+                                                               <button class="btn btn-danger" data-toggle="modal" data-target="#modalEliminarFabricante" 
+                                                                  data-id="{{ fabricante.id }}" >
                                                                Eliminar
                                                                </button>
                                                             </td>
@@ -236,8 +230,64 @@
                                           <button class="btn-cart welcome-add-cart welcome-more-info animated fadeInDown" 
                                              style="opacity: 0; margin-top: -10px;" 
                                              data-toggle="modal" 
-                                             data-target="#modalAñadir">
+                                             data-target="#modalAñadirFabricante">
                                           Añadir Fabricante
+                                          </button>                 
+                                       </div>
+                                       <div class="col-md-12">
+                                          <!-- Tabla de fabricantes -->
+                                          <div class="panel panel-default">
+                                             <div class="panel-heading">
+                                                Tabla de Categorias
+                                             </div>
+                                             <div class="panel-body">
+                                                <div class="table-responsive">
+                                                   <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                                      <thead>
+                                                         <tr>
+                                                            <th>ID</th>
+                                                            <th>Nombre</th>
+                                                            <th>Slug</th>
+                                                            <th>Acciones</th>
+                                                         </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                         {% for categoria in categorias %}
+                                                         <tr class="odd gradeX">
+                                                            <td>{{ categoria.id }}</td>
+                                                            <td>{{ categoria.nombre }}</td>
+                                                            <td>{{ categoria.slug }}</td>
+                                                            <td>
+                                                               <!-- Botón para modificar -->
+                                                               <button class="btn btn-warning" data-toggle="modal" data-target="#modalModificarCategoria" 
+                                                                  data-id="{{ categoria.id }}" 
+                                                                  data-nombre="{{ categoria.nombre }}" 
+                                                                  data-slug="{{ categoria.slug }}" >
+                                                               Modificar
+                                                               </button>
+                                                               <!-- Botón para eliminar -->
+                                                               <button class="btn btn-danger" data-toggle="modal" data-target="#modalEliminarCategoria" 
+                                                                  data-id="{{ categoria.id }}" >
+                                                               Eliminar
+                                                               </button>
+                                                            </td>
+                                                         </tr>
+                                                         {% empty %}
+                                                         <tr>
+                                                            <td colspan="8" class="text-center">No hay fabricantes disponibles</td>
+                                                         </tr>
+                                                         {% endfor %}
+                                                      </tbody>
+                                                   </table>
+                                                </div>
+                                             </div>
+                                          </div>
+                                          <!-- Fin de la tabla de fabricantes -->
+                                          <button class="btn-cart welcome-add-cart welcome-more-info animated fadeInDown" 
+                                             style="opacity: 0; margin-top: -10px;" 
+                                             data-toggle="modal" 
+                                             data-target="#modalAñadirCategoria">
+                                          Añadir Categoria
                                           </button>                 
                                        </div>
                                     </div>
@@ -253,7 +303,7 @@
       </section>
       <!-- Informacion general End -->
       <!-- Modal para agregar un nuevo producto -->
-      <div class="modal fade" id="modalAñadir" tabindex="-1" role="dialog" aria-labelledby="modalNuevoProductoLabel" aria-hidden="true">
+      <div class="modal fade" id="modalAñadirProducto" tabindex="-1" role="dialog" aria-labelledby="modalNuevoProductoLabel" aria-hidden="true">
          <div class="modal-dialog" role="document">
             <div class="modal-content">
                <div class="modal-header">
@@ -310,11 +360,11 @@
          </div>
       </div>
       <!-- Modal de Modificación de Producto -->
-      <div class="modal fade" id="modalModificar" tabindex="-1" role="dialog" aria-labelledby="modalModificarLabel" aria-hidden="true">
+      <div class="modal fade" id="modalModificarProducto" tabindex="-1" role="dialog" aria-labelledby="modalModificarProductoLabel" aria-hidden="true">
          <div class="modal-dialog" role="document">
             <div class="modal-content">
                <div class="modal-header">
-                  <h5 class="modal-title" id="modalModificarLabel">Modificar Producto</h5>
+                  <h5 class="modal-title" id="modalModificarProductoLabel">Modificar Producto</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                   </button>
@@ -367,61 +417,327 @@
             </div>
          </div>
       </div>
+      <!-- Modal de Eliminación de Detalle -->
+      <div class="modal fade" id="modalEliminarProducto" tabindex="-1" role="dialog" aria-labelledby="modalEliminarProductoLabel" aria-hidden="true">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title" id="modalEliminarProductoLabel">Eliminar Detalle de Pedido</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                  </button>
+               </div>
+               <div class="modal-body">
+                  <p>¿Estás seguro de que deseas eliminar este detalle?</p>
+                  <form id="formEliminarDetalle" method="POST" action="{% url 'eliminar_producto' %}">
+                     {% csrf_token %}
+                     <input type="hidden" id="producto_id_eliminar" name="id">
+                     <button type="submit" class="btn btn-danger">Eliminar</button>
+                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- Final primeros modals -->
+      <!-- Modal para agregar un nuevo producto -->
+      <div class="modal fade" id="modalAñadirFabricante" tabindex="-1" role="dialog" aria-labelledby="modalAñadirFabricanteLabel" aria-hidden="true">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title" id="modalAñadirFabricanteLabel">Nuevo Producto</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                  </button>
+               </div>
+               <div class="modal-body">
+                  <form id="formModificarFabricante" method="POST" action="{% url 'crear_fabricante' %}">
+                     {% csrf_token %}
+                     <input type="hidden" id="fabricante_id" name="fabricante_id" value="">
+                     <div class="form-group">
+                        <label for="nombre">Nombre del Fabricante</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required>
+                     </div>
+                     <div class="form-group">
+                        <label for="descripcion">Descripción</label>
+                        <textarea class="form-control" id="descripcion" name="descripcion" rows="4" required></textarea>
+                     </div>
+                     <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                     </div>
+                     <div class="form-group">
+                        <label for="numTlf">Teléfono</label>
+                        <input type="text" class="form-control" id="numTlf" name="numTlf" required>
+                     </div>
+                     <div class="form-group">
+                        <label for="web">Sitio Web</label>
+                        <input type="url" class="form-control" id="web" name="web">
+                     </div>
+                     <div class="form-group">
+                        <label for="pais">País</label>
+                        <input type="text" class="form-control" id="pais" name="pais" required>
+                     </div>
+                     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- Modal de Modificación de Fabricante -->
+      <div class="modal fade" id="modalModificarFabricante" tabindex="-1" role="dialog" aria-labelledby="modalModificarFabricanteLabel" aria-hidden="true">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title" id="modalModificarFabricanteLabel">Modificar Fabricante</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                  </button>
+               </div>
+               <div class="modal-body">
+                  <form id="formModificarFabricante" method="POST" action="{% url 'actualizar_fabricante' %}">
+                     {% csrf_token %}
+                     <input type="hidden" id="fabricante_id" name="fabricante_id" value="">
+                     <div class="form-group">
+                        <label for="nombre">Nombre del Fabricante</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required>
+                     </div>
+                     <div class="form-group">
+                        <label for="descripcion">Descripción</label>
+                        <textarea class="form-control" id="descripcion" name="descripcion" rows="4" required></textarea>
+                     </div>
+                     <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                     </div>
+                     <div class="form-group">
+                        <label for="numTlf">Teléfono</label>
+                        <input type="text" class="form-control" id="numTlf" name="numTlf" required>
+                     </div>
+                     <div class="form-group">
+                        <label for="web">Sitio Web</label>
+                        <input type="url" class="form-control" id="web" name="web">
+                     </div>
+                     <div class="form-group">
+                        <label for="pais">País</label>
+                        <input type="text" class="form-control" id="pais" name="pais" required>
+                     </div>
+                     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- Modal de Eliminación de Fabricante -->
+      <div class="modal fade" id="modalEliminarFabricante" tabindex="-1" role="dialog" aria-labelledby="modalEliminarFabricanteLabel" aria-hidden="true">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title" id="modalEliminarFabricanteLabel">Eliminar Fabricante</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                  </button>
+               </div>
+               <div class="modal-body">
+                  <p>¿Estás seguro de que deseas eliminar este fabricante?</p>
+                  <form id="formEliminarFabricante" method="POST" action="{% url 'eliminar_fabricante' %}">
+                     {% csrf_token %}
+                     <input type="hidden" id="fabricante_id_eliminar" name="id">
+                     <button type="submit" class="btn btn-danger">Eliminar</button>
+                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- Modal para agregar un nueva Categoria -->
+      <div class="modal fade" id="modalAñadirCategoria" tabindex="-1" role="dialog" aria-labelledby="modalAñadirCategoriaLabel" aria-hidden="true">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title" id="modalAñadirCategoriaLabel">Nuevo Producto</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                  </button>
+               </div>
+               <div class="modal-body">
+                  <form id="formModificarCategoria" method="POST" action="{% url 'crear_categoria' %}">
+                     {% csrf_token %}
+                     <input type="hidden" id="categoria_id" name="categoria_id" value="">
+                     <div class="form-group">
+                        <label for="nombre">Nombre de la Categoría</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required>
+                     </div>
+                     <div class="form-group">
+                        <label for="slug">Slug</label>
+                        <input type="text" class="form-control" id="slug" name="slug" required>
+                     </div>
+                     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- Modal de Modificación de Categoría -->
+      <div class="modal fade" id="modalModificarCategoria" tabindex="-1" role="dialog" aria-labelledby="modalModificarCategoriaLabel" aria-hidden="true">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title" id="modalModificarCategoriaLabel">Modificar Categoría</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                  </button>
+               </div>
+               <div class="modal-body">
+                  <form id="formModificarCategoria" method="POST" action="{% url 'actualizar_categoria' %}">
+                     {% csrf_token %}
+                     <input type="hidden" id="categoria_id" name="categoria_id" value="">
+                     <div class="form-group">
+                        <label for="nombre">Nombre de la Categoría</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required>
+                     </div>
+                     <div class="form-group">
+                        <label for="slug">Slug</label>
+                        <input type="text" class="form-control" id="slug" name="slug" required>
+                     </div>
+                     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- Modal de Eliminación de Categoría -->
+      <div class="modal fade" id="modalEliminarCategoria" tabindex="-1" role="dialog" aria-labelledby="modalEliminarCategoriaLabel" aria-hidden="true">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title" id="modalEliminarCategoriaLabel">Eliminar Categoría</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                  </button>
+               </div>
+               <div class="modal-body">
+                  <p>¿Estás seguro de que deseas eliminar esta categoría?</p>
+                  <form id="formEliminarCategoria" method="POST" action="{% url 'eliminar_categoria' %}">
+                     {% csrf_token %}
+                     <input type="hidden" id="categoria_id_eliminar" name="id">
+                     <button type="submit" class="btn btn-danger">Eliminar</button>
+                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
       <!-- Mensajes emergentes -->
-<!-- Mensajes emergentes -->
-{% if messages %}
-<div id="message-container">
-   {% for message in messages %}
-   <div class="popup-message {% if message.tags %}{{ message.tags }}{% endif %}">
-      {{ message }}
-      <span class="close-btn" onclick="this.parentElement.style.display='none'">X</span>
-   </div>
-   {% endfor %}
-</div>
-{% endif %}
-<script>
-   // Mostrar los mensajes emergentes al cargar la página
-   window.onload = function() {
-       let messages = document.querySelectorAll('.popup-message');
-       messages.forEach(function(message) {
-           message.style.display = 'block';
-           setTimeout(function() {
-               message.style.display = 'none';
-           }, 5000); // Ocultar después de 5 segundos
-       });
-   }
-</script>
-      <!-- SCRIPTS -->
+      {% if messages %}
+      <div id="message-container">
+         {% for message in messages %}
+         <div class="popup-message {% if message.tags %}{{ message.tags }}{% endif %}">
+            {{ message }}
+            <span class="close-btn" onclick="this.parentElement.style.display='none'">X</span>
+         </div>
+         {% endfor %}
+      </div>
+      {% endif %}
       <script>
-         $('#modalModificar').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget); // Botón que activó el modal
-            var productoId = button.data('id');
+         // Mostrar los mensajes emergentes al cargar la página
+         window.onload = function() {
+            let messages = document.querySelectorAll('.popup-message');
+            messages.forEach(function(message) {
+               message.style.display = 'block';
+               setTimeout(function() {
+                     message.style.display = 'none';
+               }, 5000); // Ocultar después de 5 segundos
+            });
+         }
+      </script>
+      <!-- Scripts -->
+      <script src="{% static 'js/jquery-1.10.2.js' %}"></script>
+      <script src="{% static 'js/bootstrap.min.js' %}"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap-switch@3.4.0/dist/js/bootstrap-switch.min.js"></script>
+      <script>
+         $('#modalModificarProducto').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget); // El botón que abrió el modal
+            var id = button.data('id');
             var nombre = button.data('nombre');
             var descripcion = button.data('descripcion');
             var precio = button.data('precio');
-            var cantidadEnStock = button.data('cantidad');
+            var cantidad_en_stock = button.data('cantidad-en-stock');
             var categoria = button.data('categoria');
             var destacado = button.data('destacado');
             var agotado = button.data('agotado');
             var foto = button.data('foto');
          
             var modal = $(this);
-            modal.find('#producto_id').val(productoId);
+            modal.find('#producto_id').val(id);
             modal.find('#nombre').val(nombre);
             modal.find('#descripcion').val(descripcion);
             modal.find('#precio').val(precio);
-            modal.find('#cantidad_en_stock').val(cantidadEnStock);
+            modal.find('#cantidad_en_stock').val(cantidad_en_stock);
             modal.find('#categoria').val(categoria);
             modal.find('#destacado').val(destacado);
             modal.find('#agotado').val(agotado);
             modal.find('#foto').val(foto);
          });
-      </script>
-      <script src="{% static 'js/jquery-1.10.2.js' %}"></script>
-      <script src="{% static 'js/bootstrap.min.js' %}"></script>
-      <script src="{% static 'js/jquery.metisMenu.js' %}"></script>
-      <script src="{% static 'js/morris/raphael-2.1.0.min.js' %}"></script>
-      <script src="{% static 'js/morris/morris.js' %}"></script>
-      <script src="{% static 'js/custom.js' %}"></script>
+         
+         $('#modalEliminarProducto').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget); // Botón que abrió el modal
+            var id = button.data('id'); // Obtener el id del producto
+            console.log('ID del producto a eliminar:', id); // Ver en consola el id
+            
+            var modal = $(this);
+            modal.find('#producto_id_eliminar').val(id); // Asignar el id al campo oculto
+         });
+         
+         $('#modalModificarFabricante').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget); // El botón que abrió el modal
+            var id = button.data('id');
+            var nombre = button.data('nombre');
+            var descripcion = button.data('descripcion');
+            var email = button.data('email');
+            var numTlf = button.data('numTlf');
+            var web = button.data('web');
+            var pais = button.data('pais');
+         
+            var modal = $(this);
+            modal.find('#fabricante_id').val(id);
+            modal.find('#nombre').val(nombre);
+            modal.find('#descripcion').val(descripcion);
+            modal.find('#email').val(email);
+            modal.find('#numTlf').val(numTlf);
+            modal.find('#web').val(web);
+            modal.find('#pais').val(pais);
+         });
+         
+         $('#modalEliminarFabricante').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget); // Botón que abrió el modal
+            var id = button.data('id'); // Obtener el id del fabricante
+            
+            var modal = $(this);
+            modal.find('#fabricante_id_eliminar').val(id); // Asignar el id al campo oculto
+         });
+         
+         $('#modalModificarCategoria').on('show.bs.modal', function(event) {
+         var button = $(event.relatedTarget); // El botón que abrió el modal
+         var id = button.data('id');
+         var nombre = button.data('nombre');
+         var slug = button.data('slug');
+         
+         var modal = $(this);
+         modal.find('#categoria_id').val(id);
+         modal.find('#nombre').val(nombre);
+         modal.find('#slug').val(slug);
+         });
+         
+         $('#modalEliminarCategoria').on('show.bs.modal', function(event) {
+         var button = $(event.relatedTarget); // El botón que abrió el modal
+         var id = button.data('id'); // Obtener el id de la categoría
+         
+         var modal = $(this);
+         modal.find('#categoria_id_eliminar').val(id); // Asignar el id al campo oculto
+         });
+         
+         
+      </script>      
    </body>
 </html>

@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 from django.views.generic import RedirectView 
 
 urlpatterns = [
@@ -14,5 +16,5 @@ urlpatterns = [
         
     path('productos/', include('producto.urls')),  # Rutas de productos
     path('carrito/', include('carrito.urls')),  # Rutas de carrito
-    path('pedidos/', include('pedido.urls')),  # Rutas de pedidos
-]
+    path('pedidos/', include('pedido.urls')),  # Rutas de pedidos    
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

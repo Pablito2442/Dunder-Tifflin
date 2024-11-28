@@ -6,3 +6,6 @@ def inicio(request):
     # Obtener productos destacados
     productos_destacados = Producto.objects.filter(destacado=True)
     return render(request, 'inicio.html', {'productos_destacados': productos_destacados})
+
+def contacto(request):
+    return render(request, 'contacto.html')

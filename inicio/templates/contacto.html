@@ -1,0 +1,85 @@
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="en">
+   <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
+      <title>Contacto - Dunder Tifflin</title>
+      <link rel="shortcut icon" type="image/icon" href="{% static 'logo/favicon.png' %}">
+      <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+      <link rel="stylesheet" href="{% static 'css/linearicons.css' %}">
+      <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+      <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+      <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+      <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+      <link rel="stylesheet" href="{% static 'css/bootsnav.css' %}">
+      <link rel="stylesheet" href="{% static 'css/style.css' %}">
+      <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+      <style>
+         /* Evitar que el texto se capitalice */
+         body {
+            text-transform: none; /* Asegura que el texto no se capitalice automáticamente */
+         }
+
+         h2, h3, p {
+            text-transform: none; /* Aplica esta propiedad a los encabezados y párrafos si es necesario */
+         }
+      </style>
+   </head>
+
+   <body>
+      {% include 'navbar_inicio.html' %}
+
+      <!-- Contenedor principal con margen superior adicional -->
+      <div class="container" style="margin-top: 100px;"> <!-- Añadido margen-top de 100px -->
+
+        <!-- Sección de Contacto -->
+        <section class="contact-section" style="padding: 20px 0;">
+            <h2>Contáctanos</h2>
+            <p>Si tienes alguna pregunta, duda o necesitas más información, no dudes en ponerte en contacto con nosotros. Estaremos encantados de ayudarte.</p>
+            <p><strong>Email de contacto:</strong> dundertifflin@gmail.com</p>
+         </section>
+         
+         <!-- Sección de Política de gastos de envío -->
+         <section class="policy-section" style="padding: 20px 0;">
+            <h3>Política de gastos de envío</h3>
+            <p>En Dunder Tifflin, ofrecemos envíos gratuitos en todos los pedidos superiores a 60€. Los pedidos inferiores a esa cantidad tendrán un cargo de envío adicional de 6,99€. Los envíos se realizan dentro de un plazo de 20-30 días hábiles.</p>
+         </section>
+
+         <!-- Sección de Términos y condiciones -->
+         <section class="terms-section" style="padding: 20px 0; background-color: #f8f8f8;">
+            <h3>Términos y Condiciones</h3>
+            <p>Al realizar una compra en Dunder Tifflin, aceptas nuestros términos y condiciones. Te recomendamos leer cuidadosamente los siguientes puntos antes de realizar cualquier compra:</p>
+            <ul>
+               <li>-Los precios están sujetos a cambios sin previo aviso.</li>
+               <li>-Los productos pueden variar ligeramente respecto a las imágenes presentadas en el sitio.</li>
+               <li>-Para más detalles sobre devoluciones y reembolsos, consulta nuestra política de devoluciones.</li>
+            </ul>
+         </section>
+
+         <!-- Sección de Política de privacidad -->
+         <section class="privacy-policy-section" style="padding: 20px 0;">
+            <h3>Política de Privacidad</h3>
+            <p>Tu privacidad es importante para nosotros. En Dunder Tifflin, nos comprometemos a proteger tu información personal y solo utilizaremos tus datos para procesar tu pedido de acuerdo con nuestra política de privacidad.</p>
+            <p>Nunca compartimos tu información con terceros, a excepción de los servicios necesarios para completar tu compra, como las empresas de envío y procesadores de pago.</p>
+         </section>
+      </div>
+
+      <!-- Footer -->
+      <footer>
+         <div class="container text-center">
+            <p>&copy; 2024 Dunder Tifflin. Todos los derechos reservados.</p>
+         </div>
+      </footer>
+
+      <script src="{% static 'js/jquery.js' %}"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+      <script src="{% static 'js/bootstrap.min.js' %}"></script>
+      <script src="{% static 'js/bootsnav.js' %}"></script>
+      <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+      <script src="{% static 'js/custom.js' %}"></script>
+   </body>
+</html>

@@ -4,8 +4,8 @@ from django.http import JsonResponse
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth import update_session_auth_hash
-from pedido.models import Pedido
-from producto.models import Producto
+from pedido.models import DetallePedido, Pedido
+from producto.models import Fabricante, Producto
 
 #
 # Vistas y Botones de la vista de index
@@ -56,12 +56,12 @@ def cambiar_contraseña(request):
         # Verificar si la contraseña actual es correcta
         if not check_password(current_password, user.password):
             messages.error(request, 'La contraseña actual es incorrecta.')
-            return redirect('panel_usuario')  # Redirige a la página de información del usuario
+            return redirect('panel_usuario')  # Redirige si la contraseña actual es incorrecta
 
-        # Verificar si las contraseñas nuevas coinciden
+        # Verificar si las contraseñas nuevas no coinciden
         if new_password != confirm_new_password:
-            messages.error(request, 'Las contraseñas no coinciden.')
-            return redirect('panel_usuario')  # Redirige a la página de información del usuario
+            messages.error(request, 'Las contraseñas nuevas no coinciden.')
+            return redirect('panel_usuario')  # Redirige si la contraseña actual es incorrecta
 
         # Cambiar la contraseña
         user.set_password(new_password)  # Establecer la nueva contraseña
@@ -83,10 +83,31 @@ def cambiar_contraseña(request):
 #
 
 def panel_pedidos(request):
-    pedidos = Pedido.objects.filter(cliente_id=request.user)
-    return render(request, 'pedidos.html', {'pedidos': pedidos})
+    # Obtener el último pedido realizado por el usuario
+    ultimo_pedido = Pedido.objects.filter(cliente=request.user).last()
+    # Obtener todos los pedidos realizados por el usuario
+    pedidos = Pedido.objects.filter(cliente=request.user).order_by('-fecha')
+    detalles = DetallePedido.objects.all()
+    
+    for detalle in detalles:
+        detalle.total = detalle.cantidad * detalle.precio_unitario  # Calcula el total por cada detalle
+    
+    return render(request, 'pedidos.html', {
+        'ultimo_pedido': ultimo_pedido,
+        'pedidos': pedidos,
+        'detalles' : detalles
+    })
 
-#
+def actualizar_pedido(request, pedido_id):
+    if request.method == "POST":
+        pedido = get_object_or_404(Pedido, id=pedido_id)
+        pedido.correo_cliente = request.POST.get('correo_cliente', pedido.correo_cliente)
+        pedido.direccion_envio = request.POST.get('direccion_envio', pedido.direccion_envio)
+        pedido.save()
+        messages.success(request, "¡El pedido se actualizó correctamente!")
+        return redirect('panel_usuario_pedidos')
+    
+#    
 # Vistas y Botones de la vista de pagos
 #
 
@@ -102,9 +123,34 @@ def panel_pagos(request):
 
 def panel_tablas_productos_administracion(request):
     productos = Producto.objects.all()
-    return render(request, 'administracion_productos.html', {'productos': productos})
+    fabricantes = Fabricante.objects.all()
 
-def agregar_producto(request):
+    # Renderizar la plantilla con los datos
+    return render(request, 'administracion_productos.html', {
+        'productos': productos,
+        'fabricantes': fabricantes,
+    })
+
+def eliminar_producto(request, producto_id):
+    producto = get_object_or_404(Producto, id=producto_id)
+    producto.delete()
+    return redirect('gestionar_productos')
+
+def actualizar_producto(request):
+    if request.method == 'POST':
+        producto_id = request.POST['producto_id']
+        producto = get_object_or_404(Producto, id=producto_id)
+        producto.nombre = request.POST['nombre']
+        producto.descripcion = request.POST['descripcion']
+        producto.precio = request.POST['precio']
+        producto.cantidad_en_stock = request.POST['cantidad_en_stock']
+        producto.categoria = request.POST['categoria']
+        producto.destacado = request.POST['destacado'] == 'True'
+        producto.agotado = request.POST['agotado'] == 'True'
+        producto.save()
+        return redirect('gestionar_productos')
+
+def crear_producto(request):
     if request.method == "POST":
         nombre = request.POST.get('nombre')
         descripcion = request.POST.get('descripcion')
@@ -200,8 +246,90 @@ def anadir_usuario(request):
 #
 
 def panel_tablas_pedidos_administracion(request):
-    return render(request, 'administracion_pedidos.html')
+    # Obtener todos los pedidos realizados por el usuario
+    pedidos = Pedido.objects.all()
+    detalles = DetallePedido.objects.all().order_by('-pedido_id')
+    
+    return render(request, 'administracion_pedidos.html', {
+        'pedidos': pedidos,
+        'detalles' : detalles
+    })
 
+def modificar_pedidos(request):
+    if request.method == 'POST':
+        pedido_id = request.POST.get('pedido_id')
+        try:
+            pedido = get_object_or_404(Pedido, id=pedido_id)
+
+            # Actualizar los campos del pedido
+            pedido.correo_cliente = request.POST.get('correo_cliente', '').strip()
+            pedido.estado = request.POST.get('estado', '').strip()
+            pedido.direccion_envio = request.POST.get('direccion_envio', '').strip()
+            pedido.metodo_pago = request.POST.get('metodo_pago', '').strip()
+
+            pedido.save()
+
+            messages.success(request, "Pedido modificado correctamente.")
+        except Pedido.DoesNotExist:
+            messages.error(request, "Pedido no encontrado.")
+    return redirect('panel_administracion_pedidos')
+
+def eliminar_pedidos(request):
+    if request.method == 'POST':
+        pedido_id = request.POST.get('pedido_id')
+        if pedido_id:
+            pedido = get_object_or_404(Pedido, id=pedido_id)
+            pedido.delete()
+            messages.success(request, "Pedido eliminado correctamente.")
+        else:
+            messages.error(request, "ID del pedido no proporcionado.")
+    return redirect('panel_administracion_pedidos')
+
+def modificar_detalles_pedidos(request):
+    if request.method == 'POST':
+        detalle_id = request.POST.get('detalle_id')
+        try:
+            # Buscar el detalle del pedido que se quiere modificar
+            detalle = get_object_or_404(DetallePedido, id=detalle_id)
+
+            # Actualizar los campos del detalle
+            detalle.cantidad = request.POST.get('cantidad')
+            detalle.precio_unitario = request.POST.get('precio_unitario')
+            detalle.id_producto = request.POST.get('id_producto')
+
+            # Guardar los cambios en el detalle
+            detalle.save()
+
+            # Recalcular el total del pedido
+            pedido = detalle.pedido  # Suponiendo que hay una relación entre DetallePedido y Pedido
+            total_pedido = sum(detalle.cantidad * detalle.precio_unitario for detalle in DetallePedido.objects.filter(pedido_id=pedido))
+
+            # Actualizar el total del pedido
+            pedido.total = total_pedido
+            pedido.save()
+
+            # Mensaje de éxito
+            messages.success(request, "Detalle del pedido actualizado correctamente.")
+        except DetallePedido.DoesNotExist:
+            messages.error(request, "Detalle del pedido no encontrado.")
+    return redirect('panel_administracion_pedidos')  # Redirige a la vista de administración de pedidos
+
+
+def eliminar_detalles_pedidos(request):
+    if request.method == 'POST':
+        detalle_id = request.POST.get('detalle_id')
+        try:
+            # Buscar el detalle del pedido a eliminar
+            detalle = get_object_or_404(DetallePedido, id=detalle_id)
+
+            # Eliminar el detalle
+            detalle.delete()
+
+            # Mensaje de éxito
+            messages.success(request, "Detalle del pedido eliminado correctamente.")
+        except DetallePedido.DoesNotExist:
+            messages.error(request, "Detalle del pedido no encontrado.")
+    return redirect('panel_administracion_pedidos')  # Redirige a la vista de administración de pedidos
 
 #
 # Vistas y Botones de la vista de administracion pagos

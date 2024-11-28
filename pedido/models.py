@@ -10,7 +10,7 @@ class Pedido(models.Model):
         ('entregado', 'Entregado'),
         ('cancelado', 'Cancelado'),
     ]
-
+    
     cliente = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     correo_cliente = models.EmailField(blank=True, null=True)  # Correo para usuarios no registrados
     fecha = models.DateTimeField(auto_now_add=True)

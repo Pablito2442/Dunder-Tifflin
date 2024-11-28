@@ -29,10 +29,11 @@ urlpatterns = [
     
     # Rutas para el panel de pedidos
     path('pedidos/', views.panel_pedidos, name='panel_usuario_pedidos'),
+    path('actualizar/<int:pedido_id>/', views.actualizar_pedido, name='actualizar_pedido'),
+    path('detalle_pedido/', views.panel_pedidos, name='detalle_pedido'),
     
     # Rutas para el panel de pagos
     path('pagos/', views.panel_pagos, name='panel_usuario_pagos'),
-    
     
     # Rutas para el panel de administración de usuarios
     path('administracion_usuarios/', views.panel_tablas_usuarios_administracion, name='panel_administracion_usuarios'),
@@ -42,10 +43,17 @@ urlpatterns = [
     
     # Rutas para el panel de administracion de productos
     path('administracion_productos/', views.panel_tablas_productos_administracion, name='panel_administracion_productos'),
-    path('agregar_producto/', views.agregar_producto, name='agregar_producto'),
+    path('actualizar_producto/', views.actualizar_producto, name='actualizar_producto'),
+    path('crear_producto/', views.crear_producto, name='crear_producto'),
     
+    # Rutas para el panel de administracion de pedidos
     path('administracion_pedidos/', views.panel_tablas_pedidos_administracion, name='panel_administracion_pedidos'),
+    path('modificar_pedido/', views.modificar_pedidos, name='modificar_pedido'),
+    path('eliminar_pedido/', views.eliminar_pedidos, name='eliminar_pedido'),
+    path('modificar_detalles_pedidos/', views.modificar_detalles_pedidos, name='modificar_detalles_pedidos'),
+    path('eliminar_detalles_pedidos/', views.eliminar_detalles_pedidos, name='eliminar_detalles_pedidos'),
     
+    # Rutas para el panel de administracion de pagos
     path('administracion_pagos/', views.panel_tablas_pagos_administracion, name='panel_administracion_pagos'),
     
 ]

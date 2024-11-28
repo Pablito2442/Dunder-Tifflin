@@ -31,91 +31,86 @@
       <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
    </head>
    <body>
-		<!--welcome-hero start -->
-		<header id="home" class="welcome-hero">
-
-			{% include 'navbar_inicio.html' %}
-
-		</header><!--/.welcome-hero-->
-		<!--welcome-hero end -->
-
+      <!--welcome-hero start -->
+      <header id="home" class="welcome-hero">
+         {% include 'navbar_inicio.html' %}
+      </header>
+      <!--/.welcome-hero-->
+      <!--welcome-hero end -->
       <!-- Informacion general Start -->
-<section id="blog" class="blog" style="margin-top: 50px;">
-   <div class="container">
-      <div class="row">
-         <!-- Sidebar (Nav) -->
-         <div class="col-md-3" style="margin-top: 50px;">
-            <nav class="navbar-default navbar-side" role="navigation">
-               <div class="sidebar-collapse">
-                  <ul class="nav" id="main-menu">
-                     <li><a href="{% url 'panel_usuario' %}"><i class="fa fa fa-3x"></i> Información General </a></li>
-                     <li><a href="{% url 'panel_usuario_pedidos' %}"><i class="fa fa fa-3x"></i> Gestión de los pedidos </a></li>
-                     <li><a href="{% url 'panel_usuario_pagos' %}"><i class="fa fa fa-3x"></i> Gestión de Pagos </a></li> 
-                  </ul>
-               </div>
-            </nav>
-
-            <nav class="navbar-default navbar-side" role="navigation">
-               <div class="sidebar-collapse">
-                  {% if user.is_staff %}
-                  <p class="animated fadeInUp" style="opacity: 0; margin-top: 20px;">
-                     <strong>Opciones para el adminitrador:</strong>
-                  </p>
-                  <ul class="nav" id="main-menu">
+      <section id="blog" class="blog" style="margin-top: 70px;">
+         <div class="container">
+            <div class="row">
+               <!-- Sidebar (Nav) -->
+               <div class="col-md-3" style="margin-top: 50px;">
+                  <nav class="navbar-default navbar-side" role="navigation">
+                     <div class="sidebar-collapse">
+                        <ul class="nav" id="main-menu">
+                           <li><a href="{% url 'panel_usuario' %}"><i class="fa fa fa-3x"></i> Información General </a></li>
+                           <li><a href="{% url 'panel_usuario_pedidos' %}"><i class="fa fa fa-3x"></i> Gestión de los pedidos </a></li>
+                           <li><a href="{% url 'panel_usuario_pagos' %}"><i class="fa fa fa-3x"></i> Gestión de Pagos </a></li>
+                        </ul>
+                     </div>
+                  </nav>
+                  <nav class="navbar-default navbar-side" role="navigation">
+                     <div class="sidebar-collapse">
+                        {% if user.is_staff %}
+                        <p class="animated fadeInUp" style="opacity: 0; margin-top: 20px;">
+                           <strong>Opciones para el adminitrador:</strong>
+                        </p>
+                        <ul class="nav" id="main-menu">
                            <li><a href="{% url 'panel_administracion_productos' %}">Administrar Productos</a></li>
                            <li><a href="{% url 'panel_administracion_usuarios' %}">Administrar Usuario</a></li>
                            <li><a href="{% url 'panel_administracion_pagos' %}">Administrar Pagos</a></li>
                            <li><a href="{% url 'panel_administracion_pedidos' %}">Administrar Pedidos</a></li>
-                     {% endif %}
-                  </ul>
+                           {% endif %}
+                        </ul>
+                     </div>
+                  </nav>
                </div>
-            </nav>
-
-
-         </div>
-         <!-- Main Content (User Info) -->
-         <div class="col-md-9">
-            <div id="page-wrapper">
-               <div id="page-inner">
-                  <div class="row">
-                     <div class="col-md-12">
-                        <div class="single-blog">
-                           <div class="welcome-hero-txt">
-                              <h4 class="animated fadeInUp" style="opacity: 0; margin-left: -300px;">¡Bienvenido, {{ user.username }}!</h4>
-                              <h2 class="animated fadeInUp" style="opacity: 0;">Información del Usuario</h2>
-                              <p class="animated fadeInUp" style="opacity: 0;">
-                                 <strong>Nombre Completo:</strong> {{ user.first_name }} {{ user.last_name }}
-                              </p>
-                              <p class="animated fadeInUp" style="opacity: 0;">
-                                 <strong>Correo Electrónico:</strong> {{ user.email }}
-                              </p>
-                              <p class="animated fadeInUp" style="opacity: 0;">
-                                 <strong>Fecha de Registro:</strong> {{ user.date_joined|date:"d M Y" }}
-                              </p>
-                              <p class="animated fadeInUp" style="opacity: 0;">
-                                 <strong>Último Acceso:</strong> {{ user.last_login|date:"d M Y H:i" }}
-                              </p>
-                              <button class="btn-cart welcome-add-cart welcome-more-info animated fadeInDown" 
-                              style="opacity: 0; margin-top: -10px;" 
-                              data-toggle="modal" 
-                              data-target="#modalModificar">
-                              Modificar Información
-                              </button>
-                              
-                              <button class="btn-cart welcome-add-cart welcome-more-info animated fadeInDown" 
-                                    style="opacity: 0; margin-top: -10px;" 
-                                    data-toggle="modal" 
-                                    data-target="#modalCambiarContrasena">
-                                 Cambiar Contraseña
-                              </button>
-         
-                              <form action="{% url 'logout' %}" method="POST" id="logout-form" style="display: inline;">
-                                 {% csrf_token %}
-                                 <button type="submit" class="btn-cart welcome-add-cart welcome-more-info animated fadeInDown"
-                                       style="opacity: 1; margin-top: -10px;">
-                                    Cerrar Sesion
-                                 </button>
-                              </form>             
+               <!-- Main Content (User Info) -->
+               <div class="col-md-9">
+                  <div id="page-wrapper">
+                     <div id="page-inner">
+                        <div class="row">
+                           <div class="col-md-12">
+                              <div class="single-blog">
+                                 <div class="welcome-hero-txt">
+                                    <h4 class="animated fadeInUp" style="opacity: 0; margin-left: -300px;">¡Bienvenido, {{ user.username }}!</h4>
+                                    <h2 class="animated fadeInUp" style="opacity: 0;">Información del Usuario</h2>
+                                    <p class="animated fadeInUp" style="opacity: 0;">
+                                       <strong>Nombre Completo:</strong> {{ user.first_name }} {{ user.last_name }}
+                                    </p>
+                                    <p class="animated fadeInUp" style="opacity: 0;">
+                                       <strong>Correo Electrónico:</strong> {{ user.email }}
+                                    </p>
+                                    <p class="animated fadeInUp" style="opacity: 0;">
+                                       <strong>Fecha de Registro:</strong> {{ user.date_joined|date:"d M Y" }}
+                                    </p>
+                                    <p class="animated fadeInUp" style="opacity: 0;">
+                                       <strong>Último Acceso:</strong> {{ user.last_login|date:"d M Y H:i" }}
+                                    </p>
+                                    <button class="btn-cart welcome-add-cart welcome-more-info animated fadeInDown" 
+                                       style="opacity: 0; margin-top: -10px;" 
+                                       data-toggle="modal" 
+                                       data-target="#modalModificar">
+                                    Modificar Información
+                                    </button>
+                                    <button class="btn-cart welcome-add-cart welcome-more-info animated fadeInDown" 
+                                       style="opacity: 0; margin-top: -10px;" 
+                                       data-toggle="modal" 
+                                       data-target="#modalCambiarContrasena">
+                                    Cambiar Contraseña
+                                    </button>
+                                    <form action="{% url 'logout' %}" method="POST" id="logout-form" style="display: inline;">
+                                       {% csrf_token %}
+                                       <button type="submit" class="btn-cart welcome-add-cart welcome-more-info animated fadeInDown"
+                                          style="opacity: 1; margin-top: -10px;">
+                                       Cerrar Sesion
+                                       </button>
+                                    </form>
+                                 </div>
+                              </div>
                            </div>
                         </div>
                      </div>
@@ -123,68 +118,82 @@
                </div>
             </div>
          </div>
-      </div>
-   </div>
-</section>
-<!-- Informacion general End -->
-
-<!-- Modal de Modificación -->
-<div class="modal fade" id="modalModificar" tabindex="-1" role="dialog" aria-labelledby="modalModificarLabel" aria-hidden="true">
-   <div class="modal-dialog" role="document">
-      <div class="modal-content">
-         <div class="modal-header">
-            <h5 class="modal-title" id="modalModificarLabel">Modificar Usuario</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
+      </section>
+      <!-- Informacion general End -->
+      <!-- Modal de Modificación -->
+      <div class="modal fade" id="modalModificar" tabindex="-1" role="dialog" aria-labelledby="modalModificarLabel" aria-hidden="true">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title" id="modalModificarLabel">Modificar Usuario</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                  </button>
+               </div>
+               <div class="modal-body">
+                  <form id="formModificar" method="POST" action="{% url 'actualizar_usuario' %}">
+                     {% csrf_token %}
+                     <input type="hidden" id="usuario_id" name="usuario_id" value="{{ user.id }}">
+                     <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}">
+                     </div>
+                     <div class="form-group">
+                        <label for="first_name">First Name</label>
+                        <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}">
+                     </div>
+                     <div class="form-group">
+                        <label for="last_name">Last Name</label>
+                        <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}">
+                     </div>
+                     <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}">
+                     </div>
+                     <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                  </form>
+               </div>
+            </div>
          </div>
-         <div class="modal-body">
-            <form id="formModificar" method="POST" action="{% url 'actualizar_usuario' %}">
-               {% csrf_token %}
-               <input type="hidden" id="usuario_id" name="usuario_id" value="{{ user.id }}">
-               <div class="form-group">
-                  <label for="username">Username</label>
-                  <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}">
-               </div>
-               <div class="form-group">
-                  <label for="first_name">First Name</label>
-                  <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}">
-               </div>
-               <div class="form-group">
-                  <label for="last_name">Last Name</label>
-                  <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}">
-               </div>
-               <div class="form-group">
-                  <label for="email">Email</label>
-                  <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}">
-               </div>
-               <button type="submit" class="btn btn-primary">Guardar cambios</button>
-            </form>
-         </div>
       </div>
-   </div>
-</div>
-  
-<!-- Modal de Cambio de Contraseña -->
+      <!-- Modal de Cambio de Contraseña -->
 <div class="modal fade" id="modalCambiarContrasena" tabindex="-1" role="dialog" aria-labelledby="modalCambiarContrasenaLabel" aria-hidden="true">
    <div class="modal-dialog" role="document">
       <div class="modal-content">
          <div class="modal-header">
             <h5 class="modal-title" id="modalCambiarContrasenaLabel">Cambiar Contraseña</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
+               <span aria-hidden="true">&times;</span>
             </button>
          </div>
          <div class="modal-body">
+            <!-- Mostrar errores de validación (si existen) -->
+            {% if form.errors %}
+            <div class="alert alert-danger">
+               <ul>
+                  {% for field in form %}
+                     {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                     {% endfor %}
+                  {% endfor %}
+               </ul>
+            </div>
+            {% endif %}
+            
+            <!-- Formulario de cambio de contraseña -->
             <form id="formCambiarContrasea" method="POST" action="{% url 'cambiar_contraseña' %}">
                {% csrf_token %}
                <div class="form-group">
                   <label for="old_password">Contraseña Actual</label>
-                  <input type="password" class="form-control" id="old_password" name="old_password" required>
+                  <input type="password" class="form-control" id="current_password" name="current_password" required>
                </div>
                <div class="form-group">
                   <label for="new_password">Nueva Contraseña</label>
                   <input type="password" class="form-control" id="new_password" name="new_password" required>
+               </div>
+               <div class="form-group">
+                  <label for="confirm_password">Confirmar Nueva Contraseña</label>
+                  <input type="password" class="form-control" id="confirm_new_password" name="confirm_new_password" required>
                </div>
                <button type="submit" class="btn btn-warning">Actualizar Contraseña</button>
             </form>
@@ -192,14 +201,36 @@
       </div>
    </div>
 </div>
+<!-- Mensajes emergentes -->
+{% if messages %}
+<div id="message-container">
+   {% for message in messages %}
+   <div class="popup-message {% if message.tags %}{{ message.tags }}{% endif %}">
+      {{ message }}
+      <span class="close-btn" onclick="this.parentElement.style.display='none'">X</span>
+   </div>
+   {% endfor %}
+</div>
+{% endif %}
+<script>
+   // Mostrar los mensajes emergentes al cargar la página
+   window.onload = function() {
+       let messages = document.querySelectorAll('.popup-message');
+       messages.forEach(function(message) {
+           message.style.display = 'block';
+           setTimeout(function() {
+               message.style.display = 'none';
+           }, 5000); // Ocultar después de 5 segundos
+       });
+   }
+</script>
 
-<!-- SCRIPTS -->
-<script src="{% static 'js/jquery-1.10.2.js' %}"></script>
-<script src="{% static 'js/bootstrap.min.js' %}"></script>
-<script src="{% static 'js/jquery.metisMenu.js' %}"></script>
-<script src="{% static 'js/morris/raphael-2.1.0.min.js' %}"></script>
-<script src="{% static 'js/morris/morris.js' %}"></script>
-<script src="{% static 'js/custom.js' %}"></script>
-
-</body>
+      <!-- SCRIPTS -->
+      <script src="{% static 'js/jquery-1.10.2.js' %}"></script>
+      <script src="{% static 'js/bootstrap.min.js' %}"></script>
+      <script src="{% static 'js/jquery.metisMenu.js' %}"></script>
+      <script src="{% static 'js/morris/raphael-2.1.0.min.js' %}"></script>
+      <script src="{% static 'js/morris/morris.js' %}"></script>
+      <script src="{% static 'js/custom.js' %}"></script>
+   </body>
 </html>

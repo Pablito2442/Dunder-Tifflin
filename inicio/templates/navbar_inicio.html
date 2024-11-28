@@ -41,7 +41,7 @@
 									</li><!--/.nav-logging-->
 							
 									<li class="dropdown">
-										<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+										<a href="{% url 'ver_carrito' %}" class="dropdown-toggle" data-toggle="dropdown">
 											<span class="lnr lnr-cart"></span>
 										</a>        
 									</li><!--/.dropdown-->
@@ -62,11 +62,9 @@
 				            <!-- Collect the nav links, forms, and other content for toggling -->
 				            <div class="collapse navbar-collapse menu-ui-design" id="navbar-menu">
 				                <ul class="nav navbar-nav navbar-center" data-in="fadeInDown" data-out="fadeOutUp">
-				                    <li class=" scroll active"><a href="#home">home</a></li>
-				                    <li class="scroll"><a href="#new-arrivals">new arrival</a></li>
-				                    <li class="scroll"><a href="#feature">features</a></li>
-				                    <li class="scroll"><a href="#blog">blog</a></li>
-				                    <li class="scroll"><a href="#newsletter">contact</a></li>
+				                    <li class="active"><a href="{% url 'inicio' %}">Inicio</a></li>
+				                    <li class="active"><a href="{% url 'catalogo' %}">Catálogo</a></li>
+				                    <li class="active"><a href="{% url 'inicio' %}">Contáctanos</a></li>
 				                </ul><!--/.nav -->
 				            </div><!-- /.navbar-collapse -->
 				        </div><!--/.container-->

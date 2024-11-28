@@ -37,9 +37,8 @@
       </header>
       <!--/.welcome-hero-->
       <!--welcome-hero end -->
-
       <!-- Informacion del pedido Start -->
-      <section id="blog" class="blog" style="margin-top: 50px;">
+      <section id="blog" class="blog" style="margin-top: 70px;">
          <div class="container">
             <div class="row">
                <!-- Sidebar (Nav) -->
@@ -49,11 +48,10 @@
                         <ul class="nav" id="main-menu">
                            <li><a href="{% url 'panel_usuario' %}"><i class="fa fa fa-3x"></i> Información General </a></li>
                            <li><a href="{% url 'panel_usuario_pedidos' %}"><i class="fa fa fa-3x"></i> Gestión de los pedidos </a></li>
-                           <li><a href="{% url 'panel_usuario_pagos' %}"><i class="fa fa fa-3x"></i> Gestión de Pagos </a></li> 
+                           <li><a href="{% url 'panel_usuario_pagos' %}"><i class="fa fa fa-3x"></i> Gestión de Pagos </a></li>
                         </ul>
                      </div>
                   </nav>
-      
                   <nav class="navbar-default navbar-side" role="navigation">
                      <div class="sidebar-collapse">
                         {% if user.is_staff %}
@@ -61,10 +59,10 @@
                            <strong>Opciones para el adminitrador:</strong>
                         </p>
                         <ul class="nav" id="main-menu">
-                                 <li><a href="{% url 'panel_administracion_productos' %}">Administrar Productos</a></li>
-                                 <li><a href="{% url 'panel_administracion_usuarios' %}">Administrar Usuario</a></li>
-                                 <li><a href="{% url 'panel_administracion_pagos' %}">Administrar Pagos</a></li>
-                                 <li><a href="{% url 'panel_administracion_pedidos' %}">Administrar Pedidos</a></li>
+                           <li><a href="{% url 'panel_administracion_productos' %}">Administrar Productos</a></li>
+                           <li><a href="{% url 'panel_administracion_usuarios' %}">Administrar Usuario</a></li>
+                           <li><a href="{% url 'panel_administracion_pagos' %}">Administrar Pagos</a></li>
+                           <li><a href="{% url 'panel_administracion_pedidos' %}">Administrar Pedidos</a></li>
                            {% endif %}
                         </ul>
                      </div>
@@ -80,29 +78,29 @@
                                  <div class="welcome-hero-txt">
                                     <h4 class="animated fadeInUp" style="opacity: 0; margin-left: -300px;">¡Bienvenido, {{ user.username }}!</h4>
                                     <h2 class="animated fadeInUp" style="opacity: 0;">Información de tus Pedidos</h2>
-                                    <h3 class="animated fadeInUp" style="opacity: 0; font-size: 26px;">Ultimo Pedido</h3>
+                                    <h3 class="animated fadeInUp" style="opacity: 0; font-size: 26px;">Último Pedido</h3>
                                     <p class="animated fadeInUp" style="opacity: 0;">
-                                       <strong>Correo Electrónico de seguimiento:</strong> {{ pedido.correo_cliente }}
+                                       <strong>Correo Electrónico de seguimiento:</strong> {{ ultimo_pedido.correo_cliente }}
                                     </p>
                                     <p class="animated fadeInUp" style="opacity: 0;">
-                                       <strong>Fecha de Pedido:</strong> {{ pedido.fecha|date:"d M Y" }}
+                                       <strong>Fecha de Pedido:</strong> {{ ultimo_pedido.fecha|date:"d M Y" }}
                                     </p>
                                     <p class="animated fadeInUp" style="opacity: 0;">
-                                       <strong>Estado:</strong> {{ pedido.estado }}
+                                       <strong>Estado:</strong> {{ ultimo_pedido.estado }}
                                     </p>
                                     <p class="animated fadeInUp" style="opacity: 0;">
-                                       <strong>Direccion de Envio:</strong> {{ pedido.direccion_envio }}
+                                       <strong>Dirección de Envío:</strong> {{ ultimo_pedido.direccion_envio }}
                                     </p>
                                     <p class="animated fadeInUp" style="opacity: 0;">
-                                       <strong>Método de Pago:</strong> {{ pedido.metodo_pago }}
+                                       <strong>Método de Pago:</strong> {{ ultimo_pedido.metodo_pago }}
                                     </p>
                                     <p class="animated fadeInUp" style="opacity: 0;">
-                                       <strong>Cantidad Total:</strong> {{ pedido.total}}
+                                       <strong>Cantidad Total:</strong> ${{ ultimo_pedido.total }}
                                     </p>
                                     <button class="btn-cart welcome-add-cart welcome-more-info animated fadeInDown" 
-                                    style="opacity: 0; margin-top: -10px;" 
-                                    data-toggle="modal" 
-                                    data-target="#modalModificar">
+                                       style="opacity: 0; margin-top: -10px;" 
+                                       data-toggle="modal" 
+                                       data-target="#modalModificar">
                                     Modificar Información
                                     </button>									 
                                  </div>
@@ -116,51 +114,86 @@
          </div>
       </section>
       <!-- Informacion de los pedidos relizados End -->
-
-<!-- Información del pedido Start -->
-<section id="blog" class="blog" style="margin-top: -150px;">
-   <div class="container">
-      <div class="row">
-         <!-- Main Content (pedido Info) -->
-         <div class="col-md-9">
-            <div id="page-wrapper">
-               <div id="page-inner">
-                  <div class="row">
-                     <div class="col-md-12">
-                        <div class="single-blog">
-                           <div class="welcome-hero-txt">
-                              <h3 class="animated fadeInUp" style="opacity: 0; font-size: 26px;">Registro de Pedidos</h3>
-                              
-                              <!-- Tabla con todos los pedidos de esta persona -->
-                              <table class="table table-bordered table-hover">
-                                 <thead>
-                                    <tr>
-                                       <th>#</th>
-                                       <th>Fecha</th>
-                                       <th>Estado</th>
-                                       <th>Total</th>
-                                       <th>Detalles</th>
-                                    </tr>
-                                 </thead>
-                                 <tbody>
-                                    {% for pedido in pedidos %}
-                                    <tr>
-                                       <td>{{ pedido.id }}</td>
-                                       <td>{{ pedido.fecha|date:"d M Y" }}</td>
-                                       <td>{{ pedido.estado }}</td>
-                                       <td>${{ pedido.total }}</td>
-                                       <td>
-                                          <a href="{% url 'detalle_pedido' pedido.id %}" class="btn btn-info btn-sm">Ver Detalles</a>
-                                       </td>
-                                    </tr>
-                                    {% empty %}
-                                    <tr>
-                                       <td colspan="5" class="text-center">No tienes pedidos registrados aún.</td>
-                                    </tr>
-                                    {% endfor %}
-                                 </tbody>
-                              </table>
-                              
+      <!-- Información del pedido Start -->
+      <section id="blog" class="blog" style="margin-top: -150px;">
+         <div class="container">
+            <div class="row">
+               <!-- Main Content (pedido Info) -->
+               <div class="col-md-9">
+                  <div id="page-wrapper">
+                     <div id="page-inner">
+                        <div class="row">
+                           <div class="col-md-12">
+                              <div class="single-blog">
+                                 <div class="welcome-hero-txt">
+                                    <h3 class="animated fadeInUp" style="opacity: 0; font-size: 26px;">Registro de Pedidos</h3>
+                                    <!-- Tabla con todos los pedidos de esta persona -->
+                                    <table class="table table-bordered table-hover">
+                                       <thead>
+                                          <tr>
+                                             <th>Correo Electronico</th>
+                                             <th>Fecha</th>
+                                             <th>Estado</th>
+                                             <th>Dirección de Envio</th>
+                                             <th>Método de Pago</th>
+                                             <th>Total</th>
+                                             <th>Detalles de Productos</th>
+                                          </tr>
+                                       </thead>
+                                       <tbody>
+                                          {% for pedido in pedidos %}
+                                          <tr>
+                                             <td>{{ pedido.correo_cliente }}</td>
+                                             <td>{{ pedido.fecha|date:"d M Y" }}</td>
+                                             <td>{{ pedido.estado }}</td>
+                                             <td>{{ pedido.direccion_envio }}</td>
+                                             <td>{{ pedido.metodo_pago }}</td>
+                                             <td>{{ pedido.total }}</td>
+                                             <td>
+                                                <!-- Botón que abre el modal -->
+                                                <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modalDetallePedido{{ pedido.id }}">
+                                                Ver Detalles
+                                                </button>	
+                                             </td>
+                                          </tr>
+                                          <!-- Modal para cada pedido -->
+                                          <div class="modal fade" id="modalDetallePedido{{ pedido.id }}" tabindex="-1" role="dialog" aria-labelledby="modalDetallePedidoLabel{{ pedido.id }}" aria-hidden="true">
+                                             <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                   <div class="modal-header">
+                                                      <h5 class="modal-title" id="modalDetallePedidoLabel{{ pedido.id }}">Detalles del Pedido #{{ pedido.id }}</h5>
+                                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                      <span aria-hidden="true">&times;</span>
+                                                      </button>
+                                                   </div>
+                                                   <div class="modal-body">
+                                                      {% for detalle in detalles %}
+                                                      {% if pedido.id == detalle.pedido_id %}
+                                                      <p><strong>Producto adquirido:</strong> {{ detalle.producto.nombre }}</p>
+                                                      <p><strong>Cantidad:</strong> {{ detalle.cantidad }}</p>
+                                                      <p><strong>Precio Unitario:</strong> ${{ detalle.precio_unitario }}</p>
+                                                      <p><strong>Cantidad Total:</strong> ${{ detalle.total }}</p>
+                                                      <hr>
+                                                      {% endif %}
+                                                      {% empty %}
+                                                      <p>No hay detalles disponibles para este pedido.</p>
+                                                      {% endfor %}
+                                                   </div>
+                                                   <div class="modal-footer">
+                                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                          {% empty %}
+                                          <tr>
+                                             <td colspan="5" class="text-center">No tienes pedidos registrados aún.</td>
+                                          </tr>
+                                          {% endfor %}
+                                       </tbody>
+                                    </table>
+                                 </div>
+                              </div>
                            </div>
                         </div>
                      </div>
@@ -168,51 +201,73 @@
                </div>
             </div>
          </div>
-      </div>
-   </div>
-</section>
-<!-- Información de los pedidos realizados End -->
-
-
-    <!-- Modal de Modificación -->
-    <div class="modal fade" id="modalModificar" tabindex="-1" role="dialog" aria-labelledby="modalModificarLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-         <div class="modal-content">
-            <div class="modal-header">
-               <h5 class="modal-title" id="modalModificarLabel">Modificar Pedido</h5>
-               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      </section>
+      <!-- Información de los pedidos realizados End -->
+      <!-- Modal de Modificación -->
+<div class="modal fade" id="modalModificar" tabindex="-1" role="dialog" aria-labelledby="modalModificarLabel" aria-hidden="true">
+   <div class="modal-dialog" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="modalModificarLabel">Modificar Último Pedido</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                <span aria-hidden="true">&times;</span>
-               </button>
-            </div>
-            <div class="modal-body">
-               <form id="formModificar" method="POST" action="{% url 'actualizar_usuario' %}">
-                  {% csrf_token %}
-                  <input type="hidden" id="usuario_id" name="usuario_id" value="{{ pedido.id }}">
+            </button>
+         </div>
+         <div class="modal-body">
+            <!-- Formulario para modificar el pedido -->
+            <form action="{% if ultimo_pedido.id %}{% url 'actualizar_pedido' ultimo_pedido.id %}{% else %}#{% endif %}" method="POST">
+               {% csrf_token %}
+               <input type="hidden" id="pedido_id" name="pedido_id" value="{{ ultimo_pedido.id }}">
 
-                  <!-- Modificación del correo -->
-                  <div class="form-group">
-                     <label for="correo_cliente">Correo Electrónico</label>
-                     <input type="email" class="form-control" id="correo_cliente" name="correo_cliente" value="{{ pedido.correo_cliente }}">
-                  </div>
+               <!-- Modificación del correo -->
+               <div class="form-group">
+                  <label for="correo_cliente">Correo Electrónico</label>
+                  <input type="email" class="form-control" id="correo_cliente" name="correo_cliente" value="{{ ultimo_pedido.correo_cliente }}" required>
+               </div>
 
-                  <!-- Modificación de la dirección de envío -->
-                  <div class="form-group">
-                     <label for="direccion_envio">Dirección de Envío</label>
-                     <input type="text" class="form-control" id="direccion_envio" name="direccion_envio" value="{{ pedido.direccion_envio }}">
-                  </div>
+               <!-- Modificación de la dirección de envío -->
+               <div class="form-group">
+                  <label for="direccion_envio">Dirección de Envío</label>
+                  <input type="text" class="form-control" id="direccion_envio" name="direccion_envio" value="{{ ultimo_pedido.direccion_envio }}" required>
+               </div>
 
-                  <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-               </form>
-            </div>
+               <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            </form>
          </div>
       </div>
    </div>
-<!-- SCRIPTS -->
-<script src="{% static 'js/jquery-1.10.2.js' %}"></script>
-<script src="{% static 'js/bootstrap.min.js' %}"></script>
-<script src="{% static 'js/jquery.metisMenu.js' %}"></script>
-<script src="{% static 'js/morris/raphael-2.1.0.min.js' %}"></script>
-<script src="{% static 'js/morris/morris.js' %}"></script>
-<script src="{% static 'js/custom.js' %}"></script>
-</body>
+</div>
+
+      <!-- Mensajes emergentes -->
+<!-- Mensajes emergentes -->
+{% if messages %}
+<div id="message-container">
+   {% for message in messages %}
+   <div class="popup-message {% if message.tags %}{{ message.tags }}{% endif %}">
+      {{ message }}
+      <span class="close-btn" onclick="this.parentElement.style.display='none'">X</span>
+   </div>
+   {% endfor %}
+</div>
+{% endif %}
+<script>
+   // Mostrar los mensajes emergentes al cargar la página
+   window.onload = function() {
+       let messages = document.querySelectorAll('.popup-message');
+       messages.forEach(function(message) {
+           message.style.display = 'block';
+           setTimeout(function() {
+               message.style.display = 'none';
+           }, 5000); // Ocultar después de 5 segundos
+       });
+   }
+</script>
+      <!-- SCRIPTS -->
+      <script src="{% static 'js/jquery-1.10.2.js' %}"></script>
+      <script src="{% static 'js/bootstrap.min.js' %}"></script>
+      <script src="{% static 'js/jquery.metisMenu.js' %}"></script>
+      <script src="{% static 'js/morris/raphael-2.1.0.min.js' %}"></script>
+      <script src="{% static 'js/morris/morris.js' %}"></script>
+      <script src="{% static 'js/custom.js' %}"></script>
+   </body>
 </html>

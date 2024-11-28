@@ -5,3 +5,4 @@ py .\manage.py makemigrations login
 py .\manage.py makemigrations pedido
 py .\manage.py makemigrations producto
 py .\manage.py makemigrations usuario
+py .\manage.py migrate

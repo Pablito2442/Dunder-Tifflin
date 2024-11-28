@@ -95,7 +95,10 @@
                                                             <th>Estado</th>
                                                             <th>Dirección Envío</th>
                                                             <th>Método de Pago</th>
+                                                            <th>Subtotal</th>
+                                                            <th>Gastos de Envio</th>
                                                             <th>Total</th>
+                                                            <th>Código de Seguimiento</th>
                                                             <th>Acciones</th>
                                                          </tr>
                                                       </thead>
@@ -108,7 +111,10 @@
                                                             <td>{{ pedido.estado }}</td>
                                                             <td>{{ pedido.direccion_envio }}</td>
                                                             <td>{{ pedido.metodo_pago }}</td>
+                                                            <td>{{ pedido.subtotal }}</td>
+                                                            <td>{{ pedido.gastos_envio }}</td>
                                                             <td>{{ pedido.total }}</td>
+                                                            <td>{{ pedido.codigo_seguimiento }}</td> <!-- Mostrar el código de seguimiento -->
                                                             <td>
                                                                <!-- Botón para abrir el modal de modificar Pedido -->
                                                                <button class="btn btn-warning" data-toggle="modal" data-target="#modalModificarPedido" 

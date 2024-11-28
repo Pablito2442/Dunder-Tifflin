@@ -5,76 +5,17 @@
 				    <nav class="navbar navbar-default bootsnav  navbar-sticky navbar-scrollspy"  data-minus-value-desktop="70" data-minus-value-mobile="55" data-speed="1000">
 
 				        <!-- Start Top Search -->
-				        <!-- Barra de búsqueda con botón de filtro -->
 						<div class="top-search">
 							<div class="container">
-								<form id="search-form">
+								<form action="{% url 'search_results' %}" method="get" id="search-form">
 									<div class="input-group">
-										<!-- Campo de Búsqueda -->
-										<input type="text" class="form-control" id="search-input" placeholder="Buscar producto...">
-
-										<!-- Botón para abrir la ventana modal de filtros 
-										<div class="input-group-btn">
-											<button class="btn btn-default" type="button" data-toggle="modal" data-target="#filterModal">
-												Filtrar
-											</button>
-										</div>-->
+										<span class="input-group-addon"><i class="fa fa-search"></i></span>
+										<input type="text" name="q" class="form-control" placeholder="Search" id="search-input" required>
+										<span class="input-group-addon close-search" id="close-search"><i class="fa fa-times"></i></span>
 									</div>
 								</form>
 							</div>
 						</div>
-
-						<!-- Modal sin fondo gris -->
-						<div id="filterModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-							<div class="modal-dialog" role="document">
-								<div class="modal-content">
-									<div class="modal-header">
-										<h5 class="modal-title" id="filterModalLabel">Filtros de búsqueda</h5>
-										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-											<span aria-hidden="true">&times;</span>
-										</button>
-									</div>
-									<div class="modal-body">
-										<!-- Filtro de Categorías -->
-										<div class="form-group">
-											<label for="filter-category">Categoría</label>
-											<select class="form-control" id="filter-category">
-												<option value="">Todas las Categorías</option>
-												<option value="electronics">Electrónica</option>
-												<option value="books">Libros</option>
-												<option value="clothing">Ropa</option>
-											</select>
-										</div>
-
-										<!-- Rango de Precios -->
-										<div class="form-group">
-											<label for="min-price">Precio Mínimo</label>
-											<input type="number" class="form-control" id="min-price" placeholder="Precio mínimo">
-										</div>
-										<div class="form-group">
-											<label for="max-price">Precio Máximo</label>
-											<input type="number" class="form-control" id="max-price" placeholder="Precio máximo">
-										</div>
-
-										<!-- Checkbox de Stock -->
-										<div class="form-group">
-											<label>
-												<input type="checkbox" id="in-stock-only">
-												Solo en Stock
-											</label>
-										</div>
-									</div>
-									<div class="modal-footer">
-										<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-										<button type="button" class="btn btn-primary" id="filter-button">Aplicar Filtros</button>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<!-- Contenedor para los resultados -->
-						<div id="search-results"></div>
-						
 				        <!-- End Top Search -->
 
 				        <div class="container">            
@@ -134,3 +75,22 @@
 
 			</div><!-- /.top-area-->
 			<!-- top-area End -->
+			<script>
+				// Constantes de escucha
+				const searchInput = document.getElementById('search-input');
+				const searchForm = document.getElementById('search-form');
+				const closeSearchIcon = document.getElementById('close-search');
+			
+				// Buscar al darle al ENTER
+				searchInput.addEventListener('keydown', function(event) {
+					if (event.key === 'Enter') {
+						event.preventDefault();
+						searchForm.submit();
+					}
+				});
+			
+				// Al clickar la X se borra lo escrito
+				closeSearchIcon.addEventListener('click', function() {
+					searchInput.value = '';
+				});
+			</script>

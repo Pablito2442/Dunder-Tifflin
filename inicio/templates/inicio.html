@@ -6,264 +6,81 @@
       <meta charset="utf-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1">
-      <!--font-family-->
       <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
-      <!-- title of site -->
       <title>Dunder Tifflin</title>
-      <!-- For favicon png -->
       <link rel="shortcut icon" type="image/icon" href="{% static 'logo/favicon.png' %}">
-      <!--font-awesome.min.css-->
       <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
-      <!--linear icon css-->
       <link rel="stylesheet" href="{% static 'css/linearicons.css' %}">
-      <!--animate.css-->
       <link rel="stylesheet" href="{% static 'css/animate.css' %}">
-      <!--owl.carousel.css-->
       <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
       <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
-      <!--bootstrap.min.css-->
       <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-      <!-- bootsnav -->
       <link rel="stylesheet" href="{% static 'css/bootsnav.css' %}">
-      <!--style.css-->
       <link rel="stylesheet" href="{% static 'css/style.css' %}">
-      <!--responsive.css-->
       <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
    </head>
-	
-	<body>
-		<!--welcome-hero start -->
-		<header id="home" class="welcome-hero">
+   
+   <body>
+      <header id="home" class="welcome-hero">
+         <div id="header-carousel" class="carousel slide carousel-fade" data-ride="carousel">
+            <ol class="carousel-indicators">
+               <li data-target="#header-carousel" data-slide-to="0" class="active"><span class="small-circle"></span></li>
+               <li data-target="#header-carousel" data-slide-to="1"><span class="small-circle"></span></li>
+               <li data-target="#header-carousel" data-slide-to="2"><span class="small-circle"></span></li>
+            </ol>
+            
+            <div class="carousel-inner" role="listbox">
+               {% for producto in productos_destacados %}
+               <div class="item {% if forloop.first %}active{% endif %}">
+                  <div class="single-slide-item">
+                     <div class="container">
+                        <div class="welcome-hero-content">
+                           <div class="row">
+                              <div class="col-sm-7">
+                                 <div class="single-welcome-hero">
+                                    <div class="welcome-hero-txt">
+                                       <h4>Great Design Collection</h4>
+                                       <h2>{{ producto.nombre }}</h2>
+                                       <p>{{ producto.descripcion }}</p>
+                                       <div class="packages-price">
+                                          <p>${{ producto.precio }}</p>
+                                       </div>
+                                       <button class="btn-cart welcome-add-cart" onclick="window.location.href='#'">
+                                          <span class="lnr lnr-plus-circle"></span> add <span>to</span> cart
+                                       </button>
+                                       <button class="btn-cart welcome-add-cart welcome-more-info" onclick="window.location.href='#'">
+                                          Más informacion
+                                       </button>
+                                    </div><!--/.welcome-hero-txt-->
+                                 </div><!--/.single-welcome-hero-->
+                              </div><!--/.col-->
+                              <div class="col-sm-5">
+                                 <div class="single-welcome-hero">
+                                    <div class="welcome-hero-img">
+                                       <img src="{{ producto.imagen.url }}" alt="slider image">
+                                    </div><!--/.welcome-hero-txt-->
+                                 </div><!--/.single-welcome-hero-->
+                              </div><!--/.col-->
+                           </div><!--/.row-->
+                        </div><!--/.welcome-hero-content-->
+                     </div><!-- /.container-->
+                  </div><!-- /.single-slide-item-->
+               </div><!-- /.item -->
+               {% endfor %}
+            </div><!-- /.carousel-inner -->
+         </div><!--/#header-carousel-->
+         
+         {% include 'navbar_inicio.html' %}
+      </header><!--/.welcome-hero-->
+      
+      <!-- blog, footer, etc. -->
 
-			<div id="header-carousel" class="carousel slide carousel-fade" data-ride="carousel">
-				<!--/.carousel-indicator -->
-				 <ol class="carousel-indicators">
-					<li data-target="#header-carousel" data-slide-to="0" class="active"><span class="small-circle"></span></li>
-					<li data-target="#header-carousel" data-slide-to="1"><span class="small-circle"></span></li>
-					<li data-target="#header-carousel" data-slide-to="2"><span class="small-circle"></span></li>
-				</ol><!-- /ol-->
-				<!--/.carousel-indicator -->
-
-				<!--/.carousel-inner -->
-				<div class="carousel-inner" role="listbox">
-					<!-- .item -->
-					<div class="item active">
-						<div class="single-slide-item slide1">
-							<div class="container">
-								<div class="welcome-hero-content">
-									<div class="row">
-										<div class="col-sm-7">
-											<div class="single-welcome-hero">
-												<div class="welcome-hero-txt">
-													<h4>great design collection</h4>
-													<h2>cloth covered accent chair</h2>
-													<p>
-														Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiuiana smod tempor  ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip. 
-													</p>
-													<div class="packages-price">
-														<p>
-															$ 399.00
-															<del>$ 499.00</del>
-														</p>
-													</div>
-													<button class="btn-cart welcome-add-cart" onclick="window.location.href='#'">
-														<span class="lnr lnr-plus-circle"></span>
-														add <span>to</span> cart
-													</button>
-													<button class="btn-cart welcome-add-cart welcome-more-info" onclick="window.location.href='#'">
-														more info
-													</button>
-												</div><!--/.welcome-hero-txt-->
-											</div><!--/.single-welcome-hero-->
-										</div><!--/.col-->
-										<div class="col-sm-5">
-											<div class="single-welcome-hero">
-												<div class="welcome-hero-img">
-													<img src="{% static 'images/slider/slider1.png' %}" alt="slider image">
-												</div><!--/.welcome-hero-txt-->
-											</div><!--/.single-welcome-hero-->
-										</div><!--/.col-->
-									</div><!--/.row-->
-								</div><!--/.welcome-hero-content-->
-							</div><!-- /.container-->
-						</div><!-- /.single-slide-item-->
-
-					</div><!-- /.item .active-->
-
-					<div class="item">
-						<div class="single-slide-item slide2">
-							<div class="container">
-								<div class="welcome-hero-content">
-									<div class="row">
-										<div class="col-sm-7">
-											<div class="single-welcome-hero">
-												<div class="welcome-hero-txt">
-													<h4>great design collection</h4>
-													<h2>mapple wood accent chair</h2>
-													<p>
-														Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiuiana smod tempor  ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip. 
-													</p>
-													<div class="packages-price">
-														<p>
-															$ 199.00
-															<del>$ 299.00</del>
-														</p>
-													</div>
-													<button class="btn-cart welcome-add-cart" onclick="window.location.href='#'">
-														<span class="lnr lnr-plus-circle"></span>
-														add <span>to</span> cart
-													</button>
-													<button class="btn-cart welcome-add-cart welcome-more-info" onclick="window.location.href='#'">
-														more info
-													</button>
-												</div><!--/.welcome-hero-txt-->
-											</div><!--/.single-welcome-hero-->
-										</div><!--/.col-->
-										<div class="col-sm-5">
-											<div class="single-welcome-hero">
-												<div class="welcome-hero-img">
-													<img src="{% static 'images/slider/slider2.png' %}" alt="slider image">
-												</div><!--/.welcome-hero-txt-->
-											</div><!--/.single-welcome-hero-->
-										</div><!--/.col-->
-									</div><!--/.row-->
-								</div><!--/.welcome-hero-content-->
-							</div><!-- /.container-->
-						</div><!-- /.single-slide-item-->
-
-					</div><!-- /.item .active-->
-
-					<div class="item">
-						<div class="single-slide-item slide3">
-							<div class="container">
-								<div class="welcome-hero-content">
-									<div class="row">
-										<div class="col-sm-7">
-											<div class="single-welcome-hero">
-												<div class="welcome-hero-txt">
-													<h4>great design collection</h4>
-													<h2>valvet accent arm chair</h2>
-													<p>
-														Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiuiana smod tempor  ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip. 
-													</p>
-													<div class="packages-price">
-														<p>
-															$ 299.00
-															<del>$ 399.00</del>
-														</p>
-													</div>
-													<button class="btn-cart welcome-add-cart" onclick="window.location.href='#'">
-														<span class="lnr lnr-plus-circle"></span>
-														add <span>to</span> cart
-													</button>
-													<button class="btn-cart welcome-add-cart welcome-more-info" onclick="window.location.href='#'">
-														more info
-													</button>
-												</div><!--/.welcome-hero-txt-->
-											</div><!--/.single-welcome-hero-->
-										</div><!--/.col-->
-										<div class="col-sm-5">
-											<div class="single-welcome-hero">
-												<div class="welcome-hero-img">
-													<img src="{% static 'images/slider/slider3.png' %}" alt="slider image">
-												</div><!--/.welcome-hero-txt-->
-											</div><!--/.single-welcome-hero-->
-										</div><!--/.col-->
-									</div><!--/.row-->
-								</div><!--/.welcome-hero-content-->
-							</div><!-- /.container-->
-						</div><!-- /.single-slide-item-->
-						
-					</div><!-- /.item .active-->
-				</div><!-- /.carousel-inner-->
-
-			</div><!--/#header-carousel-->
-
-			{% include 'navbar_inicio.html' %}
-
-		</header><!--/.welcome-hero-->
-		<!--welcome-hero end -->
-
-		<!--blog start -->
-		<section id="blog" class="blog">
-			<div class="container">
-				<div class="section-header">
-					<h2>latest blog</h2>
-				</div><!--/.section-header-->
-				<div class="blog-content">
-					<div class="row">
-						<div class="col-sm-4">
-							<div class="single-blog">
-								<div class="single-blog-img">
-									<img src="{% static 'images/blog/b1.jpg' %}" alt="blog image">
-									<div class="single-blog-img-overlay"></div>
-								</div>
-								<div class="single-blog-txt">
-									<h2><a href="#">Why Brands are Looking at Local Language</a></h2>
-									<h3>By <a href="#">Robert Norby</a> / 18th March 2018</h3>
-									<p>
-										Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.... 
-									</p>
-								</div>
-							</div>
-							
-						</div>
-						<div class="col-sm-4">
-							<div class="single-blog">
-								<div class="single-blog-img">
-									<img src="{% static 'images/blog/b2.jpg' %}" alt="blog image">
-									<div class="single-blog-img-overlay"></div>
-								</div>
-								<div class="single-blog-txt">
-									<h2><a href="#">Why Brands are Looking at Local Language</a></h2>
-									<h3>By <a href="#">Robert Norby</a> / 18th March 2018</h3>
-									<p>
-										Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.... 
-									</p>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="single-blog">
-								<div class="single-blog-img">
-									<img src="{% static 'images/blog/b3.jpg' %}" alt="blog image">
-									<div class="single-blog-img-overlay"></div>
-								</div>
-								<div class="single-blog-txt">
-									<h2><a href="#">Why Brands are Looking at Local Language</a></h2>
-									<h3>By <a href="#">Robert Norby</a> / 18th March 2018</h3>
-									<p>
-										Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.... 
-									</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div><!--/.container-->
-			
-		</section><!--/.blog-->
-		<!--blog end -->
-
-		<script src="{% static 'js/jquery.js' %}"></script>
-
-		<!--modernizr.min.js-->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
-		
-		<!--bootstrap.min.js-->
-		<script src="{% static 'js/bootstrap.min.js' %}"></script>
-		
-		<!-- bootsnav js -->
-		<script src="{% static 'js/bootsnav.js' %}"></script>
-		
-		<!--owl.carousel.js-->
-		<script src="{% static 'js/owl.carousel.min.js' %}"></script>
-		
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
-		
-		<!--Custom JS-->
-		<script src="{% static 'js/custom.js' %}"></script>
-        
-    </body>
-	
+      <script src="{% static 'js/jquery.js' %}"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+      <script src="{% static 'js/bootstrap.min.js' %}"></script>
+      <script src="{% static 'js/bootsnav.js' %}"></script>
+      <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+      <script src="{% static 'js/custom.js' %}"></script>
+   </body>
 </html>

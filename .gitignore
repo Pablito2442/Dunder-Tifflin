@@ -2,3 +2,4 @@
 **/migrations/
 venv/
 launch.json
+db.squlite3

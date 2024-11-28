@@ -215,7 +215,7 @@
          </div>
          <div class="modal-body">
             <!-- Formulario para modificar el pedido -->
-            <form action="{% url 'actualizar_pedido' ultimo_pedido.id %}" method="POST">
+            <form action="{% if ultimo_pedido.id %}{% url 'actualizar_pedido' ultimo_pedido.id %}{% else %}#{% endif %}" method="POST">
                {% csrf_token %}
                <input type="hidden" id="pedido_id" name="pedido_id" value="{{ ultimo_pedido.id }}">
 

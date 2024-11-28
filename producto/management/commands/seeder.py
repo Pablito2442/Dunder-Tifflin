@@ -37,17 +37,17 @@ def seed():
                                 web="https://jpierremeubles.fr", pais=Country.FRANCE) # Meubles no está mal escrito, es muebles en francés
 
     Producto.objects.create(nombre="Silla gamer", descripcion="Silla hecha para pasar varias horas jugando a videojuegos",
-                            precio=200, cantidad_en_stock=500, categoria = Categorias.sillas,
+                            precio=200, cantidad_en_stock=10, categoria = Categorias.sillas,
                             fabricante= Fabricantes.pepe, destacado=False, agotado=False,
                             fecha_creacion= date('2024-11-25'),fecha_actualizacion= date('2024-11-27'),
                             foto= "images/silla_gamer.jpg")
     Producto.objects.create(nombre="Lámpara de cristal", descripcion="Lámpara muy elegante hecha parcialmente de vidreo",
-                            precio=140, cantidad_en_stock=200, categoria = Categorias.iluminacion,
+                            precio=140, cantidad_en_stock=10, categoria = Categorias.iluminacion,
                             fabricante= Fabricantes.pierre, destacado=False, agotado=False,
                             fecha_creacion= date('2024-11-23') ,fecha_actualizacion= date('2024-11-27'),
                             foto="images/lampara_de_cristal.jpg")
     Producto.objects.create(nombre="Sillón gris", descripcion="Sillón perfecto para cualquier salón",
-                            precio=40, cantidad_en_stock=2000, categoria = Categorias.sillas,
+                            precio=40, cantidad_en_stock=10, categoria = Categorias.sillas,
                             fabricante= Fabricantes.joe, destacado=False, agotado=False,
                             fecha_creacion= date('2024-11-24') ,fecha_actualizacion= date('2024-11-27'),
                             foto="images/sillon_gris.jpg")

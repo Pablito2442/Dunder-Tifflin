@@ -1,4 +1,4 @@
-from pyexpat.errors import messages
+from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 import producto
 from producto.models import Producto
@@ -51,16 +51,22 @@ def ver_carrito(request):
     
 def incrementar_cantidad(request, producto_id):
     carrito = request.session.get('carrito', {})
-    producto = get_object_or_404(Producto, id=producto_id)  # Obtener instancia del producto
+    producto = get_object_or_404(Producto, id=producto_id)
 
+    # Verificar si el producto está en el carrito
     if str(producto_id) in carrito:
-        if producto.cantidad_en_stock >= carrito[str(producto_id)]['cantidad'] + 1:
+        # Comprobar si hay stock suficiente antes de incrementar
+        if producto.cantidad_en_stock > carrito[str(producto_id)]['cantidad']:
             carrito[str(producto_id)]['cantidad'] += 1
         else:
-            messages.error(request, "No hay suficiente stock disponible para este producto.")
+            # Si no hay suficiente stock, redirigir al carrito con un mensaje de error
+            request.session['error_carrito']
+            messages.error(request, f"No hay suficiente stock para {producto.nombre}.")
     else:
-        messages.error(request, "El producto no está en el carrito.")
+        # Si el producto no está en el carrito, redirigir al carrito con un mensaje de error
+        request.session['error_carrito'] = f"El producto {producto.nombre} no está en el carrito."
 
+    # Guardar el carrito actualizado en la sesión
     request.session['carrito'] = carrito
     return redirect('ver_carrito')
 

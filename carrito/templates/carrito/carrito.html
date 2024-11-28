@@ -1,154 +1,158 @@
 {% load static %}
 <!doctype html>
 <html class="no-js" lang="en">
-    <head>
-        <!-- meta data -->
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <!--font-family-->
-        <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
+<head>
+    <!-- Meta data -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <!-- title of site -->
-        <title>Furniture</title>
+    <!-- Font-family -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
 
-        <!-- For favicon png -->
-        <link rel="shortcut icon" type="image/icon" href="{% static 'logo/favicon.png' %}">
+    <!-- Title -->
+    <title>Furniture</title>
 
-        <!--font-awesome.min.css-->
-        <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/icon" href="{% static 'logo/favicon.png' %}">
 
-        <!--linear icon css-->
-        <link rel="stylesheet" href="{% static 'css/linearicons.css' %}">
+    <!-- Styles -->
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/linearicons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootsnav.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+</head>
 
-        <!--animate.css-->
-        <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+<body>
+    <!--[if lte IE 9]>
+        <p class="browserupgrade">
+            You are using an <strong>outdated</strong> browser. Please 
+            <a href="https://browsehappy.com/">upgrade your browser</a> 
+            to improve your experience and security.
+        </p>
+    <![endif]-->
 
-        <!--owl.carousel.css-->
-        <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
-        <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
-        
-        <!--bootstrap.min.css-->
-        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-        
-        <!-- bootsnav -->
-        <link rel="stylesheet" href="{% static 'css/bootsnav.css' %}">  
-        
-        <!--style.css-->
-        <link rel="stylesheet" href="{% static 'css/style.css' %}">
-        
-        <!--responsive.css-->
-        <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
-        
-        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-        
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-            <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-        <![endif]-->
-    </head>
+    <!-- Welcome Hero -->
+    <header id="home" class="welcome-hero">
+        {% include 'navbar_inicio.html' %}
+    </header>
 
-    <body>
-        <!--[if lte IE 9]>
-            <p class="browserupgrade">
-                You are using an <strong>outdated</strong> browser. Please 
-                <a href="https://browsehappy.com/">upgrade your browser</a> 
-                to improve your experience and security.
-            </p>
-        <![endif]-->
-    
-        <!--welcome-hero start -->
-        <header id="home" class="welcome-hero">
-            {% include 'navbar_inicio.html' %}
-        </header>
-
-        <!--welcome-hero end -->
-        <section id="blog" class="blog" style="margin-top: 70px;">
-                {% if carrito%}
-                    <div class="container">
-                        <div class="section-header">
-                            <h2>Carrito de Compras</h2>
-                        </div>
-                        <br><br>
-                        <div class="cart-summary bg-light p-4 mb-4">
-                            <h1 class="text-primary">Resumen del Carrito:</h1>
-                            <br>
-                            <p><strong>Total de Productos:</strong> {{ carrito|length }}</p>
-                            <p><strong>Total (sin gastos de envío):</strong> €{{ total|floatformat:2 }}</p>
-                            <p><strong>Gastos de Envío:</strong> €{{ gastos_envio|floatformat:2 }}</p>
-                            <p><strong>Total (con gastos de envío):</strong> €{{ total_con_envio|floatformat:2 }}</p>
-                        </div>
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped text-center">
-                        <thead class="table-primary">
-                            <tr>
-                                <th>Producto</th>
-                                <th>Cantidad</th>
-                                <th>Precio</th>
-                                <th>Subtotal</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for key, item in carrito.items %}
-                            <tr>
-                                <td>{{ item.nombre }}</td>
-                                <td>
-                                    <a href="{% url 'reducir_cantidad' key %}" class="btn btn-sm btn-outline-primary">-</a>
-                                    {{ item.cantidad }}
-                                    <a href="{% url 'incrementar_cantidad' key %}" class="btn btn-sm btn-outline-primary">+</a>
-                                </td>
-                                <td>€{{ item.precio|floatformat:2 }}</td>
-                                {% load custom_filters %}
-                                <td>€{{ item.cantidad|floatformat:2|multiply:item.precio }}</td>
-                                <td>
-                                    <a href="{% url 'eliminar_producto_carrito' key %}" class="btn btn-sm btn-danger">
-                                        Eliminar
-                                    </a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-    
-                <div class="cart-summary bg-light p-4 my-4">
-                    <p><strong>Total (sin gastos de envío):</strong> €{{ total|floatformat:2 }}</p>
-                    <p><strong>Gastos de Envío:</strong> €{{ gastos_envio|floatformat:2 }}</p>
-                    <p><strong>Total (con gastos de envío):</strong> €{{ total_con_envio|floatformat:2 }}</p>
-                </div>
-    
-                <div class="actions text-center">
-                    <a href="{% url 'finalizar_pedido' %}" class="btn btn-success btn-lg mx-2">
-                        Finalizar Compra
-                    </a>
-                    <a href="{% url 'vaciar_carrito' %}" class="btn btn-warning btn-lg mx-2">
-                        Vaciar Carrito
-                    </a>
-                    <a href="{% url 'catalogo' %}" class="btn btn-primary btn-lg mt-4">
-                        Volver al Catálogo
-                    </a>
-                </div>
-                {% else %}
-                <div class="empty-cart text-center">
-                    <p>El carrito está vacío.</p>
-                    <a href="{% url 'catalogo' %}" class="btn btn-primary btn-lg mt-4">
-                        Volver al Catálogo
-                    </a>
-                </div>
-                {% endif %}
+    <!-- Carrito -->
+    <section id="blog" class="blog" style="margin-top: 70px;">
+        <div class="container">
+            {% if carrito %}
+            <div class="section-header">
+                <h2>Carrito de Compras</h2>
             </div>
-        </section>
-      <!-- blog, footer, etc. -->
+            <br><br>
+            <div class="cart-summary bg-light p-4 mb-4">
+                <h1 class="text-primary">Resumen del Carrito:</h1>
+                <br>
+                <p><strong>Total de Productos:</strong> {{ carrito|length }}</p>
+                <p><strong>Total (sin gastos de envío):</strong> €{{ total|floatformat:2 }}</p>
+                <p><strong>Gastos de Envío:</strong> €{{ gastos_envio|floatformat:2 }}</p>
+                <p><strong>Total (con gastos de envío):</strong> €{{ total_con_envio|floatformat:2 }}</p>
+            </div>
 
-      <script src="{% static 'js/jquery.js' %}"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
-      <script src="{% static 'js/bootstrap.min.js' %}"></script>
-      <script src="{% static 'js/bootsnav.js' %}"></script>
-      <script src="{% static 'js/owl.carousel.min.js' %}"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
-      <script src="{% static 'js/custom.js' %}"></script>
-   </body>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped text-center">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>Subtotal</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for key, item in carrito.items %}
+                        <tr>
+                            <td>{{ item.nombre }}</td>
+                            <td>
+                                <a href="{% url 'reducir_cantidad' key %}" class="btn btn-sm btn-outline-primary">-</a>
+                                {{ item.cantidad }}
+                                <a href="{% url 'incrementar_cantidad' key %}" class="btn btn-sm btn-outline-primary">+</a>
+                            </td>
+                            <td>€{{ item.precio|floatformat:2 }}</td>
+                            {% load custom_filters %}
+                            <td>€{{ item.cantidad|floatformat:2|multiply:item.precio }}</td>
+                            <td>
+                                <a href="{% url 'eliminar_producto_carrito' key %}" class="btn btn-sm btn-danger">
+                                    Eliminar
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="cart-summary bg-light p-4 my-4">
+                <p><strong>Total (sin gastos de envío):</strong> €{{ total|floatformat:2 }}</p>
+                <p><strong>Gastos de Envío:</strong> €{{ gastos_envio|floatformat:2 }}</p>
+                <p><strong>Total (con gastos de envío):</strong> €{{ total_con_envio|floatformat:2 }}</p>
+            </div>
+
+            <div class="actions text-center">
+                <a href="{% url 'finalizar_pedido' %}" class="btn btn-success btn-lg mx-2">
+                    Finalizar Compra
+                </a>
+                <a href="{% url 'vaciar_carrito' %}" class="btn btn-warning btn-lg mx-2">
+                    Vaciar Carrito
+                </a>
+                <a href="{% url 'catalogo' %}" class="btn btn-primary btn-lg mt-4">
+                    Volver al Catálogo
+                </a>
+            </div>
+            {% else %}
+            <div class="empty-cart text-center">
+                <p>El carrito está vacío.</p>
+                <a href="{% url 'catalogo' %}" class="btn btn-primary btn-lg mt-4">
+                    Volver al Catálogo
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    {% if messages %}
+      <div id="message-container">
+         {% for message in messages %}
+         <div class="popup-message {% if message.tags %}{{ message.tags }}{% endif %}">
+            {{ message }}
+            <span class="close-btn" onclick="this.parentElement.style.display='none'">X</span>
+         </div>
+         {% endfor %}
+      </div>
+      {% endif %}
+      <script>
+         // Mostrar los mensajes emergentes al cargar la página
+         window.onload = function() {
+             let messages = document.querySelectorAll('.popup-message');
+             messages.forEach(function(message) {
+                 message.style.display = 'block';
+                 setTimeout(function() {
+                     message.style.display = 'none';
+                 }, 5000); // Ocultar después de 5 segundos
+             });
+         }
+      </script>
+
+    <!-- Scripts -->
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/bootsnav.js' %}"></script>
+    <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+</body>
+
 </html>

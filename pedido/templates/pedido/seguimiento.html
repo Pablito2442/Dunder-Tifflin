@@ -5,7 +5,6 @@
 <p>Fecha: {{ pedido.fecha }}</p>
 <p>Dirección de Envío: {{ pedido.direccion_envio }}</p>
 <p>Método de Pago: {{ pedido.metodo_pago }}</p>
-<p>Total: €{{ pedido.total }}</p>
 
 <h3>Detalles del Pedido</h3>
 <table>
@@ -18,7 +17,7 @@
         </tr>
     </thead>
     <tbody>
-        {% for detalle in pedido.detalles.all %}
+        {% for detalle in pedido.detalles.all %}      
         <tr>
             <td>{{ detalle.producto.nombre }}</td>
             <td>{{ detalle.cantidad }}</td>
@@ -29,4 +28,8 @@
     </tbody>
 </table>
 
-<a href="{% url 'catalogo' %}">Volver al Catálogo</a>
+<p><strong>Subtotal:</strong> €{{ pedido.subtotal|floatformat:2 }}</p>
+<p><strong>Gastos de Envío:</strong> €{{ pedido.gastos_envio|floatformat:2 }}</p>
+<p><strong>Total (con Envío):</strong> €{{ pedido.total|floatformat:2 }}</p>
+
+<a href="{% url 'catalogo' %}" class="btn btn-primary">Volver al Catálogo</a>

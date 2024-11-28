@@ -16,24 +16,30 @@
         <tr>
             <td>{{ item.nombre }}</td>
             <td>
-                <a href="{% url 'reducir_cantidad' key %}">-</a>
+                <a href="{% url 'reducir_cantidad' key %}" class="btn">-</a>
                 {{ item.cantidad }}
-                <a href="{% url 'incrementar_cantidad' key %}">+</a>
+                <a href="{% url 'incrementar_cantidad' key %}" class="btn">+</a>
             </td>
-            <td>€{{ item.precio }}</td>
+            <td>€{{ item.precio|floatformat:2 }}</td>
             {% load custom_filters %}
             <td>€{{ item.cantidad|floatformat:2|multiply:item.precio }}</td>
             <td>
-                <!--<a href="{@% url 'eliminar_carrito' key %}">Eliminar</a>-->
+                <a href="{% url 'eliminar_producto_carrito' key %}" class="btn btn-danger">Eliminar</a>
             </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
-<p>Total: €{{ total }}</p>
-<a href="{% url 'finalizar_pedido' %}">Finalizar Compra</a>
-<a href="{% url 'vaciar_carrito' %}">Vaciar Carrito</a>
+
+<p><strong>Total (sin gastos de envío):</strong> €{{ total|floatformat:2 }}</p>
+<p><strong>Gastos de Envío:</strong> €{{ gastos_envio|floatformat:2 }}</p>
+<p><strong>Total (con gastos de envío):</strong> €{{ total_con_envio|floatformat:2 }}</p>
+
+<div class="actions">
+    <a href="{% url 'finalizar_pedido' %}" class="btn btn-success">Finalizar Compra</a>
+    <a href="{% url 'vaciar_carrito' %}" class="btn btn-warning">Vaciar Carrito</a>
+</div>
 {% else %}
 <p>El carrito está vacío.</p>
-<a href="{% url 'catalogo' %}">Volver al Catálogo</a>
+<a href="{% url 'catalogo' %}" class="btn btn-primary">Volver al Catálogo</a>
 {% endif %}

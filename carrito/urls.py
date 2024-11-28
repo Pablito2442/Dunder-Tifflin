@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    path('eliminar/<int:producto_id>/', views.eliminar_producto_carrito, name='eliminar_producto_carrito'),
     path('', views.ver_carrito, name='ver_carrito'),  # Ver el carrito
     path('agregar/<int:producto_id>/', views.agregar_carrito, name='agregar_carrito'),  # Agregar producto al carrito
     path('incrementar/<int:producto_id>/', views.incrementar_cantidad, name='incrementar_cantidad'),  # Incrementar cantidad

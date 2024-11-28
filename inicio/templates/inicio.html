@@ -21,7 +21,7 @@
    
    <body>
       <header id="home" class="welcome-hero">
-         <div id="header-carousel" class="carousel slide carousel-fade" data-ride="carousel">
+         <div id="header-carousel" class="carousel slide carousel-fade" data-ride="carousel" data-interval="4000">
             <!-- Generar los indicadores dinámicamente -->
             <ol class="carousel-indicators">
                {% for producto in productos_destacados %}
@@ -49,7 +49,7 @@
                                           <button class="btn-cart welcome-add-cart" onclick="window.location.href='{% url 'agregar_carrito' producto.id %}'">
                                              <span class="lnr lnr-plus-circle"></span> Añadir <span>al</span> carrito
                                          </button>                                         
-                                          <button class="btn-cart welcome-add-cart welcome-more-info" onclick="window.location.href='#'">
+                                          <button class="btn-cart welcome-add-cart welcome-more-info" onclick="window.location.href='{% url 'ficha_producto' producto.id %}'">
                                              Más información
                                           </button>
                                        </div><!--/.welcome-hero-txt-->

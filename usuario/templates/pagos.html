@@ -39,7 +39,7 @@
       <!--welcome-hero end -->
 
       <!-- Informacion del pedido Start -->
-      <section id="blog" class="blog" style="margin-top: 50px;">
+      <section id="blog" class="blog" style="margin-top: 70px;">
          <div class="container">
             <div class="row">
                <!-- Sidebar (Nav) -->
@@ -171,6 +171,29 @@
          </div>
       </div>
    </div>
+<!-- Mensajes emergentes -->
+{% if messages %}
+<div id="message-container">
+   {% for message in messages %}
+   <div class="popup-message {% if message.tags %}{{ message.tags }}{% endif %}">
+      {{ message }}
+      <span class="close-btn" onclick="this.parentElement.style.display='none'">X</span>
+   </div>
+   {% endfor %}
+</div>
+{% endif %}
+<script>
+   // Mostrar los mensajes emergentes al cargar la página
+   window.onload = function() {
+       let messages = document.querySelectorAll('.popup-message');
+       messages.forEach(function(message) {
+           message.style.display = 'block';
+           setTimeout(function() {
+               message.style.display = 'none';
+           }, 5000); // Ocultar después de 5 segundos
+       });
+   }
+</script>
 <!-- SCRIPTS -->
 <script src="{% static 'js/jquery-1.10.2.js' %}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>

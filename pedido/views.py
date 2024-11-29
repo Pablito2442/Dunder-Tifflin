@@ -1,3 +1,4 @@
+import uuid
 import braintree
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
@@ -17,9 +18,10 @@ gateway = braintree.BraintreeGateway(
     )
 )
 
-# Seguimiento de un pedido por su ID
-def seguimiento_pedido(request, pedido_id):
-    pedido = get_object_or_404(Pedido, id=pedido_id)
+# Seguimiento de un pedido por su código de seguimiento
+def seguimiento_pedido(request, codigo_seguimiento):
+    # Busca el pedido utilizando el código de seguimiento
+    pedido = get_object_or_404(Pedido, codigo_seguimiento=codigo_seguimiento)
     return render(request, 'pedido/seguimiento.html', {'pedido': pedido})
 
 
@@ -101,6 +103,7 @@ def finalizar_pedido(request):
                 return redirect('finalizar_pedido')
 
         # Guardar pedido y sus detalles
+        pedido.codigo_seguimiento=uuid.uuid4().hex[:8]
         pedido.save()
         DetallePedido.objects.bulk_create(detalles_pedido)
         Producto.objects.bulk_update(productos_modificados, ['cantidad_en_stock', 'agotado'])
@@ -111,8 +114,8 @@ def finalizar_pedido(request):
         # Vaciar el carrito
         request.session['carrito'] = {}
 
-        messages.success(request, f"Pedido #{pedido.id} creado con éxito.")
-        return redirect('seguimiento_pedido', pedido_id=pedido.id)
+        messages.success(request, f"Pedido #{pedido.codigo_seguimiento} creado con éxito.")
+        return redirect('seguimiento_pedido', pedido.codigo_seguimiento)
 
     client_token = gateway.client_token.generate({})
     error = request.GET.get('transaction_error', None)
@@ -125,7 +128,7 @@ def enviar_correo_confirmacion(pedido):
     Envía un correo de confirmación al cliente con los detalles del pedido.
     """
     base_url = "http://127.0.0.1:8000"  # Cambiar por el dominio en producción
-    enlace_seguimiento = f"{base_url}{reverse('seguimiento_pedido', args=[pedido.id])}"
+    enlace_seguimiento = f"{base_url}{reverse('seguimiento_pedido', args=[pedido.codigo_seguimiento])}"
 
     detalles = pedido.detalles.all()
     mensaje = f"""
@@ -133,7 +136,6 @@ def enviar_correo_confirmacion(pedido):
 
     Gracias por tu compra. Aquí están los detalles de tu pedido:
 
-    Pedido ID: {pedido.id}
     Estado: {pedido.estado}
     Dirección de Envío: {pedido.direccion_envio}
     Método de Pago: {pedido.metodo_pago}
@@ -154,7 +156,7 @@ def enviar_correo_confirmacion(pedido):
 
     destinatario = pedido.correo_cliente
     send_mail(
-        subject=f"Confirmación de tu Pedido #{pedido.id}",
+        subject=f"Confirmación de tu Pedido #{pedido.codigo_seguimiento}",
         message=mensaje,
         from_email=settings.EMAIL_HOST_USER,
         recipient_list=[destinatario],

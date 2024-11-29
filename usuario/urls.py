@@ -32,9 +32,6 @@ urlpatterns = [
     path('actualizar/<int:pedido_id>/', views.actualizar_pedido, name='actualizar_pedido'),
     path('detalle_pedido/', views.panel_pedidos, name='detalle_pedido'),
     
-    # Rutas para el panel de pagos
-    path('pagos/', views.panel_pagos, name='panel_usuario_pagos'),
-    
     # Rutas para el panel de administración de usuarios
     path('administracion_usuarios/', views.panel_tablas_usuarios_administracion, name='panel_administracion_usuarios'),
     path('modificar_usuario/', views.modificar_usuario_administrados, name='modificar_usuario'),
@@ -44,7 +41,16 @@ urlpatterns = [
     # Rutas para el panel de administracion de productos
     path('administracion_productos/', views.panel_tablas_productos_administracion, name='panel_administracion_productos'),
     path('actualizar_producto/', views.actualizar_producto, name='actualizar_producto'),
+    path('eliminar_producto/', views.eliminar_producto, name='eliminar_producto'),
     path('crear_producto/', views.crear_producto, name='crear_producto'),
+    
+    path('actualizar_fabricante/', views.actualizar_fabricante, name='actualizar_fabricante'),
+    path('eliminar_fabricante/', views.eliminar_fabricante, name='eliminar_fabricante'),
+    path('crear_fabricante/', views.crear_fabricante, name='crear_fabricante'),
+    
+    path('actualizar_categoria/', views.actualizar_categoria, name='actualizar_categoria'),
+    path('eliminar_categoria/', views.eliminar_categoria, name='eliminar_categoria'),
+    path('crear_categoria/', views.crear_categoria, name='crear_categoria'),
     
     # Rutas para el panel de administracion de pedidos
     path('administracion_pedidos/', views.panel_tablas_pedidos_administracion, name='panel_administracion_pedidos'),
@@ -52,8 +58,5 @@ urlpatterns = [
     path('eliminar_pedido/', views.eliminar_pedidos, name='eliminar_pedido'),
     path('modificar_detalles_pedidos/', views.modificar_detalles_pedidos, name='modificar_detalles_pedidos'),
     path('eliminar_detalles_pedidos/', views.eliminar_detalles_pedidos, name='eliminar_detalles_pedidos'),
-    
-    # Rutas para el panel de administracion de pagos
-    path('administracion_pagos/', views.panel_tablas_pagos_administracion, name='panel_administracion_pagos'),
     
 ]

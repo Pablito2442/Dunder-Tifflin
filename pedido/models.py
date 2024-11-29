@@ -20,6 +20,7 @@ class Pedido(models.Model):
     gastos_envio = models.DecimalField(max_digits=6, decimal_places=2, default=0.00)  # Nuevo campo para gastos de envío
     metodo_pago = models.CharField(max_length=50, default='contrareembolso')  # Ejemplo: contrareembolso, tarjeta
     total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    codigo_seguimiento = models.CharField(max_length=8, unique=True, editable=False, default='')
 
     def calcular_subtotal(self):
         """
@@ -50,4 +51,4 @@ class DetallePedido(models.Model):
         return self.cantidad * self.precio_unitario
 
     def __str__(self):
-        return f"{self.cantidad} x {self.producto.nombre} (Pedido #{self.pedido.id})"
+        return f"{self.cantidad} x {self.producto.nombre} (Pedido #{self.pedido.codigo_seguimiento})"

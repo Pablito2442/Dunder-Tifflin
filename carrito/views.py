@@ -60,7 +60,6 @@ def incrementar_cantidad(request, producto_id):
             carrito[str(producto_id)]['cantidad'] += 1
         else:
             # Si no hay suficiente stock, redirigir al carrito con un mensaje de error
-            request.session['error_carrito']
             messages.error(request, f"No hay suficiente stock para {producto.nombre}.")
     else:
         # Si el producto no está en el carrito, redirigir al carrito con un mensaje de error

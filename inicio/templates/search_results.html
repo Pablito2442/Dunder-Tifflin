@@ -64,7 +64,46 @@
 				opacity:0;
 				visibility:hidden;
 			}
+			.select-container {
+				margin: 20px 0;
+				display: flex;
+				gap: 15px; /* Adds space between the two dropdowns */
+				justify-content: center; /* Centers the dropdowns */
+			}
 
+			/* Style for individual select elements */
+			select {
+				padding: 10px 15px;  /* Adds padding inside the dropdown */
+				font-size: 16px;     /* Makes the font size larger */
+				border: 2px solid #ccc; /* Light grey border */
+				border-radius: 5px;   /* Rounded corners */
+				background-color: #f8f8f8;  /* Light background color */
+				color: #333;         /* Dark text color */
+				outline: none;       /* Removes the default outline on focus */
+				transition: border-color 0.3s; /* Smooth border color transition on focus */
+			}
+
+			/* Change border color when the select element is focused */
+			select:focus {
+				border-color: #0066cc; /* Blue border on focus */
+				background-color: #ffffff; /* White background on focus */
+			}
+
+			/* Style the options inside the select */
+			select option {
+				padding: 10px;
+				font-size: 16px;
+			}
+
+			/* Optional: Style for a "disabled" select element */
+			select:disabled {
+				background-color: #e0e0e0; /* Light grey for disabled select */
+				color: #999999; /* Light text for disabled option */
+				cursor: not-allowed; /* Shows a "not allowed" cursor */
+			}
+			select:hover {
+				border-color: #0055cc; /* Slightly darker blue on hover */
+			}
 		</style>
 	</head>
    
@@ -78,6 +117,22 @@
 				<div class="section-header">
                     <br>
 					<h2>Resultados de búsqueda:</h2>
+					<!-- Dropdown for selecting Categoria -->
+					<div class="select-container">
+						<select id="categoria-dropdown" onchange="updateFilters()">
+							<option value="">-- Filtrar por Categoria --</option>
+							{% for categoria in categorias %}
+								<option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
+							{% endfor %}
+						</select>
+						<!-- Dropdown for selecting Fabricante -->
+						<select id="fabricante-dropdown" onchange="updateFilters()">
+							<option value="">-- Filtrar por Fabricante --</option>
+							{% for fabricante in fabricantes %}
+								<option value="{{ fabricante.id }}">{{ fabricante.nombre }}</option>
+							{% endfor %}
+						</select>
+					</div>
 				</div><!--/.section-header-->
 				<div class="new-arrivals-content">
 					<div class="row">
@@ -195,7 +250,40 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
 		<!--Custom JS-->
 		<script src="{% static 'js/custom.js' %}"></script>
-        
+	
+		<script>
+		// Filtrado
+			const queryParam = new URLSearchParams(window.location.search).get('q');
+			const selectedCategoria = document.getElementById('categoria-dropdown');
+			const selectedFabricante = document.getElementById('fabricante-dropdown');
+			function updateFilters() {
+				const categoriaId = document.getElementById('categoria-dropdown').value;
+				const fabricanteId = document.getElementById('fabricante-dropdown').value;
+				// Build the query string with selected values
+				let newUrl = '/inicio/search/?';
+
+				// Add the current query parameter (q) if it exists
+				if (queryParam) {
+					newUrl += `q=${encodeURIComponent(queryParam)}&`;
+				}
+
+				// Add the selected category ID if it exists
+				if (categoriaId) {
+					newUrl += `categoria_id=${categoriaId}&`;
+				}
+
+				// Add the selected manufacturer ID if it exists
+				if (fabricanteId) {
+					newUrl += `fabricante_id=${fabricanteId}&`;
+				}
+
+				// Remove the trailing '&' if present
+				newUrl = newUrl.endsWith('&') ? newUrl.slice(0, -1) : newUrl;
+
+				// Redirect the page to the new URL
+				window.location.href = newUrl;
+			}
+		</script>
     </body>
 	
 </html>

@@ -2,10 +2,13 @@ from django.shortcuts import render, get_object_or_404
 from .models import Producto, Categoria, Fabricante
 
 # Listar productos por categoría o fabricante
-def listar_productos(request, categoria_id=None, fabricante_id=None):
+def listar_productos(request):
     categorias = Categoria.objects.all()
     fabricantes = Fabricante.objects.all()
     productos = Producto.objects.filter(agotado=False, cantidad_en_stock__gt=0)  # Solo productos disponibles
+
+    categoria_id = request.GET.get('categoria_id')
+    fabricante_id = request.GET.get('fabricante_id')
 
     if categoria_id:
         productos = productos.filter(categoria_id=categoria_id)
@@ -17,8 +20,8 @@ def listar_productos(request, categoria_id=None, fabricante_id=None):
         'productos': productos,
         'categorias': categorias,
         'fabricantes': fabricantes,
-        'categoria_actual': categoria_id,
-        'fabricante_actual': fabricante_id,
+        'categoria_id': categoria_id,
+        'fabricante_id': fabricante_id,
     })
 
 # Ficha de producto

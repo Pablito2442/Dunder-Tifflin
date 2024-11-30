@@ -60,7 +60,7 @@ class Producto(models.Model):
     agotado = models.BooleanField(default=False)  # Para marcar productos sin disponibilidad explícitamente
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     fecha_actualizacion = models.DateTimeField(auto_now=True)
-    foto = models.ImageField(upload_to='images/')
+    foto = models.ImageField(upload_to='productos/', blank=True, null=True)
 
     def __str__(self):
         return self.nombre

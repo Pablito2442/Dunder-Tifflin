@@ -5,7 +5,11 @@ from django.contrib import messages
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth import update_session_auth_hash
 from pedido.models import DetallePedido, Pedido
+from producto.countries import Country
 from producto.models import Fabricante, Producto, Categoria
+from django.core.files.storage import FileSystemStorage
+import os
+from django.conf import settings
 
 #
 # Vistas y Botones de la vista de index
@@ -116,12 +120,14 @@ def panel_tablas_productos_administracion(request):
     productos = Producto.objects.all().order_by('-id')
     fabricantes = Fabricante.objects.all().order_by('-id')
     categorias = Categoria.objects.all().order_by('-id')
+    country_choices = Country.choices
 
     # Renderizar la plantilla con los datos
     return render(request, 'administracion_productos.html', {
         'productos': productos,
         'fabricantes': fabricantes,
         'categorias': categorias,
+        'country_choices': country_choices,
     })
 
 def eliminar_producto(request):
@@ -142,20 +148,46 @@ def actualizar_producto(request):
         if producto_id:
             # Obtener el producto a modificar
             producto = get_object_or_404(Producto, id=producto_id)
-            
+
             # Obtener los nuevos datos del formulario
             producto.nombre = request.POST.get('nombre')
             producto.descripcion = request.POST.get('descripcion')
             producto.precio = request.POST.get('precio')
             producto.cantidad_en_stock = request.POST.get('cantidad_en_stock')
-            producto.categoria = request.POST.get('categoria')
-            producto.destacado = request.POST.get('destacado') == 'True'  # Convertir a booleano
-            producto.agotado = request.POST.get('agotado') == 'True'  # Convertir a booleano
-            producto.foto = request.POST.get('foto')
-            
+
+            # Obtener las instancias de Categoria y Fabricante (por su ID)
+            categoria_id = request.POST.get('categoria')
+            fabricante_id = request.POST.get('fabricante')
+
+            # Buscar las instancias correspondientes
+            if categoria_id:
+                producto.categoria = get_object_or_404(Categoria, id=categoria_id)
+
+            if fabricante_id:
+                producto.fabricante_id = get_object_or_404(Fabricante, id=fabricante_id)
+
+            # Convertir los valores de destacado y agotado a booleanos
+            producto.destacado = request.POST.get('destacado') == 'True'
+            producto.agotado = request.POST.get('agotado') == 'True'
+
+            # Manejar la foto (si hay una nueva)
+            if 'foto' in request.FILES:
+                foto = request.FILES['foto']
+                print(f"Archivo recibido: {foto.name}")  # Verifica que el archivo se ha recibido correctamente
+
+                # Crear un objeto FileSystemStorage para guardar en la carpeta 'media/productos/'
+                fs = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'images'))
+
+                # Guardar la imagen con un nombre único (puedes usar el nombre original o generar uno único)
+                filename = fs.save(foto.name, foto)
+
+                # Solo guardar el nombre del archivo en el modelo
+                producto.foto = 'images/' + filename
+
             # Guardar los cambios en la base de datos
             producto.save()
-            
+
+            # Mostrar un mensaje de éxito
             messages.success(request, "Producto actualizado correctamente.")
         else:
             messages.error(request, "ID del producto no proporcionado.")
@@ -167,26 +199,60 @@ def crear_producto(request):
         nombre = request.POST.get('nombre')
         descripcion = request.POST.get('descripcion')
         precio = request.POST.get('precio')
+        cantidad_en_stock = request.POST.get('cantidad_en_stock')
+        categoria_id = request.POST.get('categoria')
+        fabricante_id = request.POST.get('fabricante')
+        destacado = request.POST.get('destacado') == 'True'
+        agotado = request.POST.get('agotado') == 'True'
         
         # Validación básica
-        if not nombre or not descripcion or not precio:
+        if not nombre or not descripcion or not precio or not cantidad_en_stock:
             messages.error(request, "Todos los campos son obligatorios.")
-            return redirect('panel_administracion_productos')  # Cambia por el nombre correcto de tu URL
+            return redirect('panel_administracion_productos')
         
         try:
             # Intentar convertir el precio a un número flotante
             precio = float(precio)
-            
+            cantidad_en_stock = int(cantidad_en_stock)
+
+            # Recuperar la categoría y el fabricante
+            categoria = Categoria.objects.get(id=categoria_id)
+            fabricante = Fabricante.objects.get(id=fabricante_id)
+
+            # Procesar la imagen si existe
+            foto = request.FILES.get('foto')
+            if foto:
+                fs = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'images'))
+                filename = fs.save(foto.name, foto)
+            else:
+                foto_url = None  # No hay foto, o puedes poner una foto por defecto
+
             # Crear y guardar el nuevo producto
-            nuevo_producto = Producto(nombre=nombre, descripcion=descripcion, precio=precio)
+            nuevo_producto = Producto(
+                nombre=nombre,
+                descripcion=descripcion,
+                precio=precio,
+                cantidad_en_stock=cantidad_en_stock,
+                categoria=categoria,
+                fabricante=fabricante,
+                destacado=destacado,
+                agotado=agotado,
+                foto='images/' + filename
+            )
             nuevo_producto.save()
-            
+
             # Mostrar un mensaje de éxito
             messages.success(request, "Producto agregado correctamente.")
         except ValueError:
-            messages.error(request, "El precio debe ser un número válido.")
+            messages.error(request, "El precio y la cantidad deben ser números válidos.")
+        except Categoria.DoesNotExist:
+            messages.error(request, "La categoría seleccionada no existe.")
+        except Fabricante.DoesNotExist:
+            messages.error(request, "El fabricante seleccionado no existe.")
+        except Exception as e:
+            messages.error(request, f"Ocurrió un error: {e}")
         
-        return redirect('panel_administracion_productos')  # Cambia por el nombre correcto de tu URL
+        return redirect('panel_administracion_productos')
     
     # Si el método no es POST, redirige al listado
     return redirect('panel_administracion_productos')

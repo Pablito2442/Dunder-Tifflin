@@ -125,8 +125,12 @@
                                                                {% endif %}
                                                             </td>
                                                             <td>
-                                                               <img src="{{ producto.foto }}" alt="Foto de {{ producto.nombre }}" width="50">
-                                                            </td>
+                                                               {% if producto.foto %}
+                                                                  <img src="{{ producto.foto.url }}" width="50">
+                                                               {% else %}
+                                                                  <span>No hay imagen</span>
+                                                               {% endif %}
+                                                            </td>                                                            
                                                             <td>{{ producto.fabricante_id }}</td>
                                                             <td>
                                                                <!-- Botón para modificar -->
@@ -136,11 +140,16 @@
                                                                   data-descripcion="{{ producto.descripcion }}" 
                                                                   data-precio="{{ producto.precio }}" 
                                                                   data-cantidad-en-stock="{{ producto.cantidad_en_stock }}" 
-                                                                  data-categoria="{{ producto.categoria }}" 
+                                                                  data-categoria="{{ producto.categoria.id }}" 
+                                                                  data-fabricante-id="{{ producto.fabricante_id }}" 
                                                                   data-destacado="{{ producto.destacado }}" 
-                                                                  data-agotado="{{ producto.agotado }}" 
-                                                                  data-foto="{{ producto.foto }}" >
-                                                               Modificar
+                                                                  data-agotado="{{ producto.agotado }}"
+                                                                  {% if producto.foto %}
+                                                                     data-foto="{{ producto.foto.url }}"
+                                                                  {% else %}
+                                                                     data-foto="no-imagen" 
+                                                                  {% endif %}>
+                                                                  Modificar
                                                                </button>
                                                                <!-- Botón para eliminar -->
                                                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalEliminarProducto" data-id="{{ producto.id }}">
@@ -200,15 +209,15 @@
                                                             <td>
                                                                <!-- Botón para modificar -->
                                                                <button class="btn btn-warning" data-toggle="modal" data-target="#modalModificarFabricante" 
-                                                                  data-id="{{ fabricante.id }}" 
-                                                                  data-nombre="{{ fabricante.nombre }}" 
-                                                                  data-descripcion="{{ fabricante.descripcion }}" 
-                                                                  data-email="{{ fabricante.email }}" 
-                                                                  data-numTlf="{{ fabricante.numTlf }}" 
-                                                                  data-web="{{ fabricante.web }}" 
-                                                                  data-pais="{{ fabricante.pais }}">
-                                                               Modificar
-                                                               </button>
+                                                               data-id="{{ fabricante.id }}" 
+                                                               data-nombre="{{ fabricante.nombre }}" 
+                                                               data-descripcion="{{ fabricante.descripcion }}" 
+                                                               data-email="{{ fabricante.email }}" 
+                                                               data-numTlf="{{ fabricante.numTlf }}" 
+                                                               data-web="{{ fabricante.web }}" 
+                                                               data-pais="{{ fabricante.pais }}">
+                                                           Modificar
+                                                       </button>
                                                                <!-- Botón para eliminar -->
                                                                <button class="btn btn-danger" data-toggle="modal" data-target="#modalEliminarFabricante" 
                                                                   data-id="{{ fabricante.id }}" >
@@ -235,7 +244,7 @@
                                           </button>                 
                                        </div>
                                        <div class="col-md-12">
-                                          <!-- Tabla de fabricantes -->
+                                          <!-- Tabla de Categorias -->
                                           <div class="panel panel-default">
                                              <div class="panel-heading">
                                                 Tabla de Categorias
@@ -313,7 +322,7 @@
                   </button>
                </div>
                <div class="modal-body">
-                  <form method="POST" action="{% url 'crear_producto' %}">
+                  <form method="POST" action="{% url 'crear_producto' %}" enctype="multipart/form-data">
                      {% csrf_token %}
                      <div class="form-group">
                         <label for="nombre">Nombre del Producto</label>
@@ -333,7 +342,21 @@
                      </div>
                      <div class="form-group">
                         <label for="categoria">Categoría</label>
-                        <input type="text" class="form-control" id="categoria" name="categoria" required>
+                        <select class="form-control" id="categoria" name="categoria" required>
+                           <!-- Aquí van las categorías que vienen de la base de datos -->
+                           {% for categoria in categorias %}
+                              <option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
+                           {% endfor %}
+                        </select>
+                     </div>
+                     <div class="form-group">
+                        <label for="fabricante">Fabricante</label>
+                        <select class="form-control" id="fabricante" name="fabricante" required>
+                           <!-- Aquí van los fabricantes que vienen de la base de datos -->
+                           {% for fabricante in fabricantes %}
+                              <option value="{{ fabricante.id }}">{{ fabricante.nombre }}</option>
+                           {% endfor %}
+                        </select>
                      </div>
                      <div class="form-group">
                         <label for="destacado">Destacado</label>
@@ -351,8 +374,12 @@
                      </div>
                      <div class="form-group">
                         <label for="foto">Foto del Producto</label>
-                        <input type="url" class="form-control" id="foto" name="foto" placeholder="URL de la foto" required>
-                     </div>
+                        <input type="file" id="foto" name="foto" accept="image/*" class="form-control" onchange="previewImage(event)">
+                        <!-- Contenedor de la vista previa de la imagen -->
+                        <div id="foto-preview-container" style="margin-top: 10px; display: none;">
+                            <img id="foto-preview" src="" alt="Vista previa de la imagen" class="img-fluid" style="max-width: 100%; height: auto;" />
+                        </div>
+                     </div>   
                      <button type="submit" class="btn btn-primary">Agregar Producto</button>
                   </form>
                </div>
@@ -370,7 +397,7 @@
                   </button>
                </div>
                <div class="modal-body">
-                  <form id="formModificar" method="POST" action="{% url 'actualizar_producto' %}">
+                  <form id="formModificar" method="POST" action="{% url 'actualizar_producto' %}" enctype="multipart/form-data">
                      {% csrf_token %}
                      <input type="hidden" id="producto_id" name="producto_id" value="">
                      <div class="form-group">
@@ -391,7 +418,21 @@
                      </div>
                      <div class="form-group">
                         <label for="categoria">Categoría</label>
-                        <input type="text" class="form-control" id="categoria" name="categoria" required>
+                        <select class="form-control" id="categoria" name="categoria" required>
+                           <!-- Aquí van las categorías que vienen de la base de datos -->
+                           {% for categoria in categorias %}
+                              <option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
+                           {% endfor %}
+                        </select>
+                     </div>
+                     <div class="form-group">
+                        <label for="fabricante">Fabricante</label>
+                        <select class="form-control" id="fabricante" name="fabricante" required>
+                           <!-- Aquí van los fabricantes que vienen de la base de datos -->
+                           {% for fabricante in fabricantes %}
+                              <option value="{{ fabricante.id }}">{{ fabricante.nombre }}</option>
+                           {% endfor %}
+                        </select>
                      </div>
                      <div class="form-group">
                         <label for="destacado">Destacado</label>
@@ -409,15 +450,20 @@
                      </div>
                      <div class="form-group">
                         <label for="foto">Foto del Producto</label>
-                        <input type="url" class="form-control" id="foto" name="foto" placeholder="URL de la foto">
-                     </div>
+                        <input type="file" id="foto" name="foto" accept="image/*" class="form-control" onchange="previewImage(event)">
+                        <!-- Contenedor de la vista previa de la imagen -->
+                        <div id="foto-preview-container" style="margin-top: 10px; display: none;">
+                            <img id="foto-preview" src="" alt="Vista previa de la imagen" class="img-fluid" style="max-width: 100%; height: auto;" />
+                        </div>
+                    </div>                    
                      <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                   </form>
                </div>
             </div>
          </div>
       </div>
-      <!-- Modal de Eliminación de Detalle -->
+      
+      <!-- Modal de Eliminación de Producto -->
       <div class="modal fade" id="modalEliminarProducto" tabindex="-1" role="dialog" aria-labelledby="modalEliminarProductoLabel" aria-hidden="true">
          <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -440,7 +486,7 @@
          </div>
       </div>
       <!-- Final primeros modals -->
-      <!-- Modal para agregar un nuevo producto -->
+      <!-- Modal para agregar un nuevo Fabricante -->
       <div class="modal fade" id="modalAñadirFabricante" tabindex="-1" role="dialog" aria-labelledby="modalAñadirFabricanteLabel" aria-hidden="true">
          <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -476,8 +522,12 @@
                      </div>
                      <div class="form-group">
                         <label for="pais">País</label>
-                        <input type="text" class="form-control" id="pais" name="pais" required>
-                     </div>
+                        <select class="form-control" id="pais" name="pais" required>
+                            {% for code, country in country_choices %}
+                                <option value="{{ code }}">{{ country }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>                                                        
                      <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                   </form>
                </div>
@@ -520,8 +570,12 @@
                      </div>
                      <div class="form-group">
                         <label for="pais">País</label>
-                        <input type="text" class="form-control" id="pais" name="pais" required>
-                     </div>
+                        <select class="form-control" id="pais" name="pais" required>
+                            {% for code, country in country_choices %}
+                                <option value="{{ code }}">{{ country }}</option>
+                            {% endfor %}
+                        </select>
+                     </div>   
                      <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                   </form>
                </div>
@@ -656,29 +710,65 @@
       <script src="{% static 'js/bootstrap.min.js' %}"></script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap-switch@3.4.0/dist/js/bootstrap-switch.min.js"></script>
       <script>
-         $('#modalModificarProducto').on('show.bs.modal', function(event) {
-            var button = $(event.relatedTarget); // El botón que abrió el modal
-            var id = button.data('id');
-            var nombre = button.data('nombre');
-            var descripcion = button.data('descripcion');
-            var precio = button.data('precio');
-            var cantidad_en_stock = button.data('cantidad-en-stock');
-            var categoria = button.data('categoria');
-            var destacado = button.data('destacado');
-            var agotado = button.data('agotado');
-            var foto = button.data('foto');
-         
-            var modal = $(this);
-            modal.find('#producto_id').val(id);
-            modal.find('#nombre').val(nombre);
-            modal.find('#descripcion').val(descripcion);
-            modal.find('#precio').val(precio);
-            modal.find('#cantidad_en_stock').val(cantidad_en_stock);
-            modal.find('#categoria').val(categoria);
-            modal.find('#destacado').val(destacado);
-            modal.find('#agotado').val(agotado);
-            modal.find('#foto').val(foto);
-         });
+         // Función para mostrar la vista previa de la imagen seleccionada
+         function previewImage(event) {
+             const file = event.target.files[0];
+             if (file) {
+                 const reader = new FileReader();
+                 reader.onload = function(e) {
+                     const imgPreview = document.getElementById('foto-preview');
+                     imgPreview.src = e.target.result;
+                     document.getElementById('foto-preview-container').style.display = 'block';
+                 };
+                 reader.readAsDataURL(file);
+             }
+         }
+     </script>   
+      <script>
+            $(document).ready(function() {
+               // Cuando se muestra el modal, se carga la información del producto
+               $('#modalModificarProducto').on('show.bs.modal', function(event) {
+                   var button = $(event.relatedTarget); // El botón que abrió el modal
+                   var id = button.data('id');
+                   var nombre = button.data('nombre');
+                   var descripcion = button.data('descripcion');
+                   var precio = button.data('precio');
+                   var cantidad_en_stock = button.data('cantidad-en-stock');
+                   var categoria = button.data('categoria'); // ID de la categoría
+                   var fabricante_id = button.data('fabricante-id'); // ID del fabricante
+                   var destacado = button.data('destacado');
+                   var agotado = button.data('agotado');
+                   var foto = button.data('foto'); // URL de la foto
+           
+                   var modal = $(this);
+           
+                   // Asignar valores al formulario del modal
+                   modal.find('#producto_id').val(id);
+                   modal.find('#nombre').val(nombre);
+                   modal.find('#descripcion').val(descripcion);
+                   modal.find('#precio').val(precio);
+                   modal.find('#cantidad_en_stock').val(cantidad_en_stock);
+                   modal.find('#destacado').val(destacado);
+                   modal.find('#agotado').val(agotado);
+           
+                   // Asignar el valor de la categoría y fabricante usando sus IDs
+                   modal.find('#categoria').val(categoria);
+                   modal.find('#fabricante').val(fabricante_id);
+
+                   // Si no hay foto, mostrar mensaje "No hay imagen"
+                   if (foto === 'no-imagen') {
+                       $('#foto-producto').text('No hay imagen'); // Colocar el mensaje en el modal
+                   } else {
+                     // Mostrar la foto en el preview, si existe
+                     if (foto) {
+                        modal.find('#foto-preview').attr('src', foto); // Asignar la URL de la imagen al preview
+                        modal.find('#foto-preview-container').show(); // Mostrar el contenedor de la vista previa
+                     } else {
+                        modal.find('#foto-preview-container').hide(); // Ocultar el contenedor si no hay foto
+                     }
+                  }
+               });
+           });                                 
          
          $('#modalEliminarProducto').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget); // Botón que abrió el modal
@@ -695,7 +785,7 @@
             var nombre = button.data('nombre');
             var descripcion = button.data('descripcion');
             var email = button.data('email');
-            var numTlf = button.data('numTlf');
+            var numTlf = button.data('numtlf');
             var web = button.data('web');
             var pais = button.data('pais');
          

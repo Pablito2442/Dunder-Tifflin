@@ -1,0 +1,6 @@
+{% for message in messages %}
+    <div class="popup-message {% if message.tags %}{{ message.tags }}{% endif %}" style="display: block;">
+        {{ message }}
+        <span class="close-btn" onclick="this.parentElement.style.display='none'">X</span>
+    </div>
+{% endfor %}

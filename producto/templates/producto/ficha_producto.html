@@ -29,6 +29,49 @@
       <link rel="stylesheet" href="{% static 'css/style.css' %}">
       <!--responsive.css-->
       <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+
+        <style>
+        .cantidad_input {
+            width: 30px;
+            text-align: center;
+            border:1px solid #ddd;
+            border-radius:4px;
+            display: inline-block;
+            vertical-align: middle;}
+        .minus, .plus{
+            width:20px;
+            height:20px;
+            background:#f2f2f2;
+            border-radius:4px;
+            border:1px solid #ddd;
+            display: inline-block;
+            vertical-align: middle;
+            text-align: center;
+            user-select: none;
+        }
+        </style>
+        <script>
+			function decrease_counter(){
+				var input = document.getElementById('counter');
+				var count = parseInt(input.value) - 1;
+				input.value = count < 1 ? 1 : count;
+			};
+			function increase_counter() {
+				var input = document.getElementById('counter');
+				input.value = parseInt(input.value) + 1;
+			};
+			function agregar_carrito(url, id){
+				const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+				const counter = document.getElementById('counter')
+				fetch(url, {
+					method: "POST",
+					headers: {'X-CSRFToken': csrftoken, 'Content-Type': 'application/json'},
+					body: JSON.stringify({
+						cantidad: counter.value
+					})
+				})
+			}
+        </script>
    </head>
 	
 	<body>
@@ -71,12 +114,34 @@
                                             </h4>
                                         </div>
 
+                                        {%if producto.agotado == False and producto.cantidad_en_stock > 0 %}
+                                        <form id="counter_form" action="{% url 'agregar_carrito' producto.id %}" method="get">
+                                            <div style="float:right; margin-right: 20px; text-align: center;">
+                                                <span class="minus" onclick="decrease_counter()">-</span>
+                                                {% csrf_token %}
+                                                <input class="cantidad_input" type="text" value="1" id="counter" name="cantidad"/>
+                                                <span class="plus" onclick="increase_counter()">+</span>
+                                            </div>
+                                            <button id="submit_button">
+                                                <a class="btn-cart welcome-add-cart">
+                                                    <span class="lnr lnr-plus-circle"></span>
+                                                    Añadir <span>al</span> carrito
+                                                </a>
+                                            </button>
+                                        </form>
+                                        <script>
+                                            document.getElementById('submit_button')
+                                            .addEventListener('click', ()=>{
+                                                document.getElementById('counter_form').submit()
+                                            })
+                                        </script>
+                                        {% else %}
                                         <button>
-                                            <a href="{% url 'agregar_carrito' producto.id %}" class="btn-cart welcome-add-cart">
-                                                <span class="lnr lnr-plus-circle"></span>
-                                                Añadir <span>al</span> carrito
+                                            <a class="btn-cart welcome-add-cart" style="background: #616060; border: #616060; color:#fff">
+                                                Agotado
                                             </a>
                                         </button>
+                                        {% endif %}
                                     </div><!--/.welcome-hero-txt-->
                                 </div><!--/.single-welcome-hero-->
                             </div><!--/.col-->

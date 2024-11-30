@@ -51,6 +51,11 @@ def seed():
                             fabricante= Fabricantes.joe, destacado=False, agotado=False,
                             fecha_creacion= date('2024-11-24') ,fecha_actualizacion= date('2024-11-27'),
                             foto="images/sillon_gris.jpg")
+    Producto.objects.create(nombre="Flexo azúl", descripcion="Lámpara de sobremesa de color azúl",
+                            precio=15, cantidad_en_stock=0, categoria = Categorias.iluminacion,
+                            fabricante= Fabricantes.joe, destacado=False, agotado=False,
+                            fecha_creacion= date('2024-11-24') ,fecha_actualizacion= date('2024-11-27'),
+                            foto="images/flexo.jpg")
 
 def date(string):
     return dt.strptime(string, '%Y-%m-%d')

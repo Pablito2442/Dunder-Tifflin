@@ -1,10 +1,124 @@
-<h1>Search Results for: "{{ query }}"</h1>
-{% if results %}
-    <ul>
-    {% for result in results %}
-        <li>{{ result.nombre }}</li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No results found.</p>
-{% endif %}
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="en">
+	<head>
+		<!-- meta data -->
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!--font-family-->
+		<link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
+		<!-- title of site -->
+		<title>Dunder Tifflin</title>
+		<!-- For favicon png -->
+		<link rel="shortcut icon" type="image/icon" href="{% static 'logo/favicon.png' %}">
+		<!--font-awesome.min.css-->
+		<link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+		<!--linear icon css-->
+		<link rel="stylesheet" href="{% static 'css/linearicons.css' %}">
+		<!--animate.css-->
+		<link rel="stylesheet" href="{% static 'css/animate.css' %}">
+		<!--owl.carousel.css-->
+		<link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+		<link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+		<!--bootstrap.min.css-->
+		<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+		<!-- bootsnav -->
+		<link rel="stylesheet" href="{% static 'css/bootsnav.css' %}">  
+		<!--style.css-->
+		<link rel="stylesheet" href="{% static 'css/style.css' %}">
+		<!--responsive.css-->
+		<link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+	</head>
+   
+   <body>
+        <header id="home" class="welcome-hero">
+            {% include 'navbar_inicio.html' %}
+        </header><!--/.welcome-hero-->
+
+		<section id="new-arrivals" class="new-arrivals">
+			<div class="container">
+				<div class="section-header">
+                    <br>
+					<h2>Resultados de búsqueda:</h2>
+				</div><!--/.section-header-->
+				<div class="new-arrivals-content">
+					<div class="row">
+						{% if results %}
+							<ul>
+							{% for result in results %}
+								<div class="col-md-3 col-sm-4">
+									<div class="single-new-arrival">
+										<a href="{% url 'ficha_producto' result.id%}">
+											<div class="single-new-arrival-bg">
+												<img src="{{result.foto.url}}" alt="new-arrivals images">
+												<div class="single-new-arrival-bg-overlay"></div>
+												<a href="{% url 'agregar_carrito' result.id %}">
+													<div class="new-arrival-cart">
+														<p>
+															<span class="lnr lnr-cart"></span>
+															Añadir <span>al </span> carrito
+														</p>
+													</div>
+												</a>
+											</div>
+										</a>
+										<h4>
+											<a href="{% url 'ficha_producto' result.id%}">
+												{{ result.nombre }} 
+												<p font-weight: bold;>{{ result.descripcion }} </p>
+												<p font-weight: bold;> Quedan: {{ result.cantidad_en_stock }} en stock</p>
+											</a>
+										</h4>
+										<p class="arrival-product-price">{{result.precio}}€</p>
+									</div>
+								</div>
+							{% endfor %}
+							</ul>
+						{% else %}
+							<p>No results found.</p>
+						{% endif %}
+					</div>
+				</div>
+			</div><!--/.container-->
+		</section><!--/.new-arrivals-->
+
+        <!--footer start-->
+		<footer id="footer"  class="footer">
+			<div class="container">
+				<div class="hm-footer-copyright text-center">
+					<div class="footer-social">
+						<a href="#"><i class="fa fa-facebook"></i></a>	
+						<a href="#"><i class="fa fa-instagram"></i></a>
+						<a href="#"><i class="fa fa-linkedin"></i></a>
+						<a href="#"><i class="fa fa-pinterest"></i></a>
+						<a href="#"><i class="fa fa-behance"></i></a>	
+					</div>
+				</div><!--/.text-center-->
+			</div><!--/.container-->
+
+			<div id="scroll-Top">
+				<div class="return-to-top">
+					<i class="fa fa-angle-up " id="scroll-top" data-toggle="tooltip" data-placement="top" title="" data-original-title="Back to Top" aria-hidden="true"></i>
+				</div>
+			</div><!--/.scroll-Top-->
+        </footer><!--/.footer-->
+        </footer><!--/.footer-->
+		<!--footer end-->
+		<!-- Include all js compiled plugins (below), or include individual files as needed -->
+		<script src="{% static 'js/jquery.js' %}"></script>
+		<!--modernizr.min.js-->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+		<!--bootstrap.min.js-->
+		<script src="{% static 'js/bootstrap.min.js' %}"></script>
+		<!-- bootsnav js -->
+		<script src="{% static 'js/bootsnav.js' %}"></script>
+		<!--owl.carousel.js-->
+		<script src="{% static 'js/owl.carousel.min.js' %}"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+		<!--Custom JS-->
+		<script src="{% static 'js/custom.js' %}"></script>
+        
+    </body>
+	
+</html>

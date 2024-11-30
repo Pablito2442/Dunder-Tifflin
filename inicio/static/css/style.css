@@ -43,7 +43,7 @@ body{
 	font-size:16px;
 	color:#a09e9c;
 	background: #fff;
-    text-transform: capitalize;
+    text-transform: none;
     max-width:1920px;
     margin:0 auto;
 	overflow-x:hidden;
@@ -643,7 +643,27 @@ p.arrival-review span {margin-right: 15px;}
     font-weight: 400;
 }
 .single-new-arrival:hover h4 a{color:#e99c2e;}
-
+.result {
+    margin-bottom: 50px;
+    text-align: center;
+    height: 15%;
+    width: 15%;
+    object-fit: cover;
+}
+.result-image {
+    height: auto;
+    width: 30%;
+    object-fit: cover;
+}
+.result-bg {
+    position: relative;
+    max-height: 310px;
+    background: #f8f9fc;
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    overflow:hidden;
+}
 /*-------------------------------------
         6. Sofa-coolection
 --------------------------------------*/

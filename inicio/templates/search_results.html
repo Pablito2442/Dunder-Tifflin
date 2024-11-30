@@ -1,10 +1,201 @@
-<h1>Search Results for: "{{ query }}"</h1>
-{% if results %}
-    <ul>
-    {% for result in results %}
-        <li>{{ result.nombre }}</li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No results found.</p>
-{% endif %}
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="en">
+	<head>
+		<!-- meta data -->
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!--font-family-->
+		<link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
+		<!-- title of site -->
+		<title>Dunder Tifflin</title>
+		<!-- For favicon png -->
+		<link rel="shortcut icon" type="image/icon" href="{% static 'logo/favicon.png' %}">
+		<!--font-awesome.min.css-->
+		<link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+		<!--linear icon css-->
+		<link rel="stylesheet" href="{% static 'css/linearicons.css' %}">
+		<!--animate.css-->
+		<link rel="stylesheet" href="{% static 'css/animate.css' %}">
+		<!--owl.carousel.css-->
+		<link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+		<link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+		<!--bootstrap.min.css-->
+		<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+		<!-- bootsnav -->
+		<link rel="stylesheet" href="{% static 'css/bootsnav.css' %}">  
+		<!--style.css-->
+		<link rel="stylesheet" href="{% static 'css/style.css' %}">
+		<!--responsive.css-->
+		<link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+
+		<style>
+			.cantidad_input {
+				width: 30px;
+				text-align: center;
+				border:1px solid #ddd;
+				border-radius:4px;
+				display: inline-block;
+				vertical-align: middle;}
+			.minus, .plus{
+				width:20px;
+				height:20px;
+				background:#f2f2f2;
+				border-radius:4px;
+				border:1px solid #ddd;
+				display: inline-block;
+				vertical-align: middle;
+				text-align: center;
+				user-select: none;
+			}
+			.hidden-new-arrival-cart{
+				position: absolute;
+				bottom: -14px;
+				z-index: 0;
+				left: 0;
+				width: 100%;
+				height: 35px;
+				-webkit-transition: .3s linear;
+				-moz-transition: .3s linear;
+				-ms-transition: .3s linear;
+				-o-transition: .3s linear;
+				transition: .3s linear;
+				opacity:0;
+				visibility:hidden;
+			}
+
+		</style>
+	</head>
+   
+   <body>
+        <header id="home" class="welcome-hero">
+            {% include 'navbar_inicio.html' %}
+        </header><!--/.welcome-hero-->
+
+		<section id="new-arrivals" class="new-arrivals">
+			<div class="container">
+				<div class="section-header">
+                    <br>
+					<h2>Resultados de búsqueda:</h2>
+				</div><!--/.section-header-->
+				<div class="new-arrivals-content">
+					<div class="row">
+						{% if results %}
+							{% for result in results %}
+							<div class="col-md-3 col-sm-4">
+								<div class="single-new-arrival" onmouseleave="hideConfirmacion('{{result.id}}')">
+									
+									<div class="single-new-arrival-bg" >
+										<a href="{% url 'ficha_producto' result.id%}">
+											<img src="{{result.foto.url}}" alt="new-arrivals images">
+											<div class="single-new-arrival-bg-overlay"></div>
+										</a>
+										<div id="carrito{{result.id}}" class="new-arrival-cart">
+											<p onclick="agregar_carrito('{% url 'agregar_carrito' result.id %}', '{{result.id}}')">
+												<span class="lnr lnr-cart"></span>
+												Añadir <span>al </span> carrito
+											</p>
+	
+											<form id="counter_form" style="float:right; margin-right: 20px; text-align: center;">
+												<span class="minus" onclick="decrease_counter('{{result.id}}')">-</span>
+												{% csrf_token %}
+												<input class="cantidad_input" type="text" value="1" id="counter{{result.id}}"/>
+												<span class="plus" onclick="increase_counter('{{result.id}}')">+</span>
+											</form>
+										</div>
+	
+										<!--Confirmación de añadido al carrito--> 
+										<div id="confirmacion{{result.id}}" class="hidden-new-arrival-cart" style="background-color: #06ab1c; text-transform: none;">
+											<p style=" font-weight: bold;">Producto añadido al carrito</p>
+										</div>
+									</div>
+									<h4>
+										<a href="{% url 'ficha_producto' result.id%}">{{ result.nombre }} 
+											<p font-weight: bold;>{{ result.descripcion }} </p>
+											<p font-weight: bold;> Quedan: {{ result.cantidad_en_stock }} en stock</p>
+											<p class="arrival-product-price">{{result.precio}}€</p>
+										</a>
+									</h4>
+								</div>
+							</div>
+							{% endfor %}
+						{% else %}
+							<p>No results found.</p>
+						{% endif %}
+					</div>
+				</div>
+			</div><!--/.container-->
+		</section><!--/.new-arrivals-->
+
+        <!--footer start-->
+		<footer id="footer"  class="footer">
+			<div class="container">
+				<div class="hm-footer-copyright text-center">
+					<div class="footer-social">
+						<a href="#"><i class="fa fa-facebook"></i></a>	
+						<a href="#"><i class="fa fa-instagram"></i></a>
+						<a href="#"><i class="fa fa-linkedin"></i></a>
+						<a href="#"><i class="fa fa-pinterest"></i></a>
+						<a href="#"><i class="fa fa-behance"></i></a>	
+					</div>
+				</div><!--/.text-center-->
+			</div><!--/.container-->
+
+			<div id="scroll-Top">
+				<div class="return-to-top">
+					<i class="fa fa-angle-up " id="scroll-top" data-toggle="tooltip" data-placement="top" title="" data-original-title="Back to Top" aria-hidden="true"></i>
+				</div>
+			</div><!--/.scroll-Top-->
+        </footer><!--/.footer-->
+        </footer><!--/.footer-->
+		<!--footer end-->
+		<script>
+			function decrease_counter(id){
+				var input = document.getElementById('counter'+id);
+				var count = parseInt(input.value) - 1;
+				input.value = count < 1 ? 1 : count;
+			};
+			function increase_counter(id) {
+				var input = document.getElementById('counter'+id);
+				input.value = parseInt(input.value) + 1;
+			};
+			function agregar_carrito(url, id){
+				const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+				const counter = document.getElementById('counter'+id)
+				fetch(url, {
+					method: "POST",
+					headers: {'X-CSRFToken': csrftoken, 'Content-Type': 'application/json'},
+					body: JSON.stringify({
+						cantidad: counter.value
+					})
+				})
+				const pestaña_carrito = document.getElementById('carrito'+ id)
+				const pestaña_confirmacion = document.getElementById('confirmacion'+ id)
+				pestaña_carrito.classList.replace('new-arrival-cart','hidden-new-arrival-cart')
+				pestaña_confirmacion.classList.replace('hidden-new-arrival-cart','new-arrival-cart')
+			}
+			function hideConfirmacion(id){
+				const pestaña_carrito = document.getElementById('carrito'+ id)
+				const pestaña_confirmacion = document.getElementById('confirmacion'+ id)
+				pestaña_carrito.classList.replace('hidden-new-arrival-cart','new-arrival-cart')
+				pestaña_confirmacion.classList.replace('new-arrival-cart','hidden-new-arrival-cart')
+			}
+		</script>
+		<!-- Include all js compiled plugins (below), or include individual files as needed -->
+		<script src="{% static 'js/jquery.js' %}"></script>
+		<!--modernizr.min.js-->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+		<!--bootstrap.min.js-->
+		<script src="{% static 'js/bootstrap.min.js' %}"></script>
+		<!-- bootsnav js -->
+		<script src="{% static 'js/bootsnav.js' %}"></script>
+		<!--owl.carousel.js-->
+		<script src="{% static 'js/owl.carousel.min.js' %}"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+		<!--Custom JS-->
+		<script src="{% static 'js/custom.js' %}"></script>
+        
+    </body>
+	
+</html>

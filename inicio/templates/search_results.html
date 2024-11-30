@@ -29,6 +29,43 @@
 		<link rel="stylesheet" href="{% static 'css/style.css' %}">
 		<!--responsive.css-->
 		<link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+
+		<style>
+			.cantidad_input {
+				width: 30px;
+				text-align: center;
+				border:1px solid #ddd;
+				border-radius:4px;
+				display: inline-block;
+				vertical-align: middle;}
+			.minus, .plus{
+				width:20px;
+				height:20px;
+				background:#f2f2f2;
+				border-radius:4px;
+				border:1px solid #ddd;
+				display: inline-block;
+				vertical-align: middle;
+				text-align: center;
+				user-select: none;
+			}
+			.hidden-new-arrival-cart{
+				position: absolute;
+				bottom: -14px;
+				z-index: 0;
+				left: 0;
+				width: 100%;
+				height: 35px;
+				-webkit-transition: .3s linear;
+				-moz-transition: .3s linear;
+				-ms-transition: .3s linear;
+				-o-transition: .3s linear;
+				transition: .3s linear;
+				opacity:0;
+				visibility:hidden;
+			}
+
+		</style>
 	</head>
    
    <body>
@@ -45,36 +82,44 @@
 				<div class="new-arrivals-content">
 					<div class="row">
 						{% if results %}
-							<ul>
 							{% for result in results %}
-								<div class="col-md-3 col-sm-4">
-									<div class="single-new-arrival">
+							<div class="col-md-3 col-sm-4">
+								<div class="single-new-arrival" onmouseleave="hideConfirmacion('{{result.id}}')">
+									
+									<div class="single-new-arrival-bg" >
 										<a href="{% url 'ficha_producto' result.id%}">
-											<div class="single-new-arrival-bg">
-												<img src="{{result.foto.url}}" alt="new-arrivals images">
-												<div class="single-new-arrival-bg-overlay"></div>
-												<a href="{% url 'agregar_carrito' result.id %}">
-													<div class="new-arrival-cart">
-														<p>
-															<span class="lnr lnr-cart"></span>
-															Añadir <span>al </span> carrito
-														</p>
-													</div>
-												</a>
-											</div>
+											<img src="{{result.foto.url}}" alt="new-arrivals images">
+											<div class="single-new-arrival-bg-overlay"></div>
 										</a>
-										<h4>
-											<a href="{% url 'ficha_producto' result.id%}">
-												{{ result.nombre }} 
-												<p font-weight: bold;>{{ result.descripcion }} </p>
-												<p font-weight: bold;> Quedan: {{ result.cantidad_en_stock }} en stock</p>
-											</a>
-										</h4>
-										<p class="arrival-product-price">{{result.precio}}€</p>
+										<div id="carrito{{result.id}}" class="new-arrival-cart">
+											<p onclick="agregar_carrito('{% url 'agregar_carrito' result.id %}', '{{result.id}}')">
+												<span class="lnr lnr-cart"></span>
+												Añadir <span>al </span> carrito
+											</p>
+	
+											<form id="counter_form" style="float:right; margin-right: 20px; text-align: center;">
+												<span class="minus" onclick="decrease_counter('{{result.id}}')">-</span>
+												{% csrf_token %}
+												<input class="cantidad_input" type="text" value="1" id="counter{{result.id}}"/>
+												<span class="plus" onclick="increase_counter('{{result.id}}')">+</span>
+											</form>
+										</div>
+	
+										<!--Confirmación de añadido al carrito--> 
+										<div id="confirmacion{{result.id}}" class="hidden-new-arrival-cart" style="background-color: #06ab1c; text-transform: none;">
+											<p style=" font-weight: bold;">Producto añadido al carrito</p>
+										</div>
 									</div>
+									<h4>
+										<a href="{% url 'ficha_producto' result.id%}">{{ result.nombre }} 
+											<p font-weight: bold;>{{ result.descripcion }} </p>
+											<p font-weight: bold;> Quedan: {{ result.cantidad_en_stock }} en stock</p>
+											<p class="arrival-product-price">{{result.precio}}€</p>
+										</a>
+									</h4>
 								</div>
+							</div>
 							{% endfor %}
-							</ul>
 						{% else %}
 							<p>No results found.</p>
 						{% endif %}
@@ -105,6 +150,38 @@
         </footer><!--/.footer-->
         </footer><!--/.footer-->
 		<!--footer end-->
+		<script>
+			function decrease_counter(id){
+				var input = document.getElementById('counter'+id);
+				var count = parseInt(input.value) - 1;
+				input.value = count < 1 ? 1 : count;
+			};
+			function increase_counter(id) {
+				var input = document.getElementById('counter'+id);
+				input.value = parseInt(input.value) + 1;
+			};
+			function agregar_carrito(url, id){
+				const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+				const counter = document.getElementById('counter'+id)
+				fetch(url, {
+					method: "POST",
+					headers: {'X-CSRFToken': csrftoken, 'Content-Type': 'application/json'},
+					body: JSON.stringify({
+						cantidad: counter.value
+					})
+				})
+				const pestaña_carrito = document.getElementById('carrito'+ id)
+				const pestaña_confirmacion = document.getElementById('confirmacion'+ id)
+				pestaña_carrito.classList.replace('new-arrival-cart','hidden-new-arrival-cart')
+				pestaña_confirmacion.classList.replace('hidden-new-arrival-cart','new-arrival-cart')
+			}
+			function hideConfirmacion(id){
+				const pestaña_carrito = document.getElementById('carrito'+ id)
+				const pestaña_confirmacion = document.getElementById('confirmacion'+ id)
+				pestaña_carrito.classList.replace('hidden-new-arrival-cart','new-arrival-cart')
+				pestaña_confirmacion.classList.replace('new-arrival-cart','hidden-new-arrival-cart')
+			}
+		</script>
 		<!-- Include all js compiled plugins (below), or include individual files as needed -->
 		<script src="{% static 'js/jquery.js' %}"></script>
 		<!--modernizr.min.js-->

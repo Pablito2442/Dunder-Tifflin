@@ -2,6 +2,8 @@ import json
 from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template import RequestContext
+from django.template.loader import render_to_string
 import producto
 from producto.models import Producto
 from pedido.models import Pedido, DetallePedido
@@ -16,7 +18,9 @@ def agregar_carrito(request, producto_id):
         data = data.decode('utf-8')
         data = json.loads(data)
         cantidad = int(data.get('cantidad'))
-    else:
+    elif request.GET['cantidad']:
+        cantidad = int(request.GET['cantidad'])
+    else :
         cantidad = 1
 
     if producto.agotado or producto.cantidad_en_stock == 0:
@@ -41,8 +45,12 @@ def agregar_carrito(request, producto_id):
 
     request.session['carrito'] = carrito
 
-    if request.method == 'POST':
-        return JsonResponse({})
+    if request.method == 'POST' and messages.get_messages(request):
+        message_data = {'msg': render_to_string('producto/message.html', {}, request)}
+        return HttpResponse(
+            json.dumps(message_data, ensure_ascii=False),
+            status=403
+        )
     return redirect('ver_carrito')
 
 # Ver el contenido del carrito

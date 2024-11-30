@@ -84,6 +84,13 @@
 				opacity:0;
 				visibility:hidden;
 			}
+			.hidden-new-arrival-cart p {
+				float: left;
+				margin-left: 20px;
+				color: #fff;
+				font-size: 12px;
+				line-height: 3;
+			}
 
 		</style>
 		<script>
@@ -105,11 +112,19 @@
 					body: JSON.stringify({
 						cantidad: counter.value
 					})
+				}).then( (response)=>{
+					if (response.status == 200){
+						const pestaña_carrito = document.getElementById('carrito'+ id)
+						const pestaña_confirmacion = document.getElementById('confirmacion'+ id)
+						pestaña_carrito.classList.replace('new-arrival-cart','hidden-new-arrival-cart')
+						pestaña_confirmacion.classList.replace('hidden-new-arrival-cart','new-arrival-cart')
+					} else {
+						message_container = document.getElementById("message-container")
+						response.json().then((data)=>{
+							message_container.innerHTML = data['msg']
+						})
+					}
 				})
-				const pestaña_carrito = document.getElementById('carrito'+ id)
-				const pestaña_confirmacion = document.getElementById('confirmacion'+ id)
-				pestaña_carrito.classList.replace('new-arrival-cart','hidden-new-arrival-cart')
-				pestaña_confirmacion.classList.replace('hidden-new-arrival-cart','new-arrival-cart')
 			}
 			function hideConfirmacion(id){
 				const pestaña_carrito = document.getElementById('carrito'+ id)
@@ -175,6 +190,31 @@
 							</div>
 						</div>
                         {% endfor %}
+
+						<!--Producto agotados-->
+						{% for agotado in agotados%}
+                        <div class="col-md-3 col-sm-4">
+							<div class="single-new-arrival">
+								
+								<div class="single-new-arrival-bg" >
+									<a href="{% url 'ficha_producto' agotado.id%}">
+										<img src="{{agotado.foto.url}}" alt="new-arrivals images" style="filter: grayscale(1)">
+										<div class="single-new-arrival-bg-overlay"></div>
+									</a>
+									<div class="new-arrival-cart" style="bottom: 0px; visibility: visible; opacity: 1;">
+										<p>
+											Agotado
+										</p>
+									</div>
+								</div>
+								
+								<h4>
+									<a href="{% url 'ficha_producto' agotado.id%}">{{agotado.nombre}}</a>
+								</h4>
+								<p class="arrival-product-price">{{agotado.precio}}€</p>
+							</div>
+						</div>
+                        {% endfor %}
 					</div>
 				</div>
 			</div><!--/.container-->
@@ -182,6 +222,8 @@
 		</section><!--/.new-arrivals-->
 		<!--new-arrivals end -->
 
+		<div id="message-container">
+		</div>
 		
 		<!-- Include all js compiled plugins (below), or include individual files as needed -->
 

@@ -49,15 +49,78 @@
 			<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 			<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 		<![endif]-->
+
+		<style>
+			.cantidad_input {
+				width: 30px;
+				text-align: center;
+				border:1px solid #ddd;
+				border-radius:4px;
+				display: inline-block;
+				vertical-align: middle;}
+			.minus, .plus{
+				width:20px;
+				height:20px;
+				background:#f2f2f2;
+				border-radius:4px;
+				border:1px solid #ddd;
+				display: inline-block;
+				vertical-align: middle;
+				text-align: center;
+				user-select: none;
+			}
+			.hidden-new-arrival-cart{
+				position: absolute;
+				bottom: -14px;
+				z-index: 0;
+				left: 0;
+				width: 100%;
+				height: 35px;
+				-webkit-transition: .3s linear;
+				-moz-transition: .3s linear;
+				-ms-transition: .3s linear;
+				-o-transition: .3s linear;
+				transition: .3s linear;
+				opacity:0;
+				visibility:hidden;
+			}
+
+		</style>
+		<script>
+			function decrease_counter(id){
+				var input = document.getElementById('counter'+id);
+				var count = parseInt(input.value) - 1;
+				input.value = count < 1 ? 1 : count;
+			};
+			function increase_counter(id) {
+				var input = document.getElementById('counter'+id);
+				input.value = parseInt(input.value) + 1;
+			};
+			function agregar_carrito(url, id){
+				const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+				const counter = document.getElementById('counter'+id)
+				fetch(url, {
+					method: "POST",
+					headers: {'X-CSRFToken': csrftoken, 'Content-Type': 'application/json'},
+					body: JSON.stringify({
+						cantidad: counter.value
+					})
+				})
+				const pestaña_carrito = document.getElementById('carrito'+ id)
+				const pestaña_confirmacion = document.getElementById('confirmacion'+ id)
+				pestaña_carrito.classList.replace('new-arrival-cart','hidden-new-arrival-cart')
+				pestaña_confirmacion.classList.replace('hidden-new-arrival-cart','new-arrival-cart')
+			}
+			function hideConfirmacion(id){
+				const pestaña_carrito = document.getElementById('carrito'+ id)
+				const pestaña_confirmacion = document.getElementById('confirmacion'+ id)
+				pestaña_carrito.classList.replace('hidden-new-arrival-cart','new-arrival-cart')
+				pestaña_confirmacion.classList.replace('new-arrival-cart','hidden-new-arrival-cart')
+			}
+		</script>
 	</head>
 	
 	<body>
-		<!--[if lte IE 9]>
-            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
-        <![endif]-->
-		
-		
-	
 		<!--welcome-hero start -->
 		<header id="home" class="welcome-hero">
 
@@ -78,21 +141,33 @@
 					<div class="row">
                         {% for producto in productos%}
                         <div class="col-md-3 col-sm-4">
-							<div class="single-new-arrival">
-								<a href="{% url 'ficha_producto' producto.id%}">
-									<div class="single-new-arrival-bg">
+							<div class="single-new-arrival" onmouseleave="hideConfirmacion('{{producto.id}}')">
+								
+								<div class="single-new-arrival-bg" >
+									<a href="{% url 'ficha_producto' producto.id%}">
 										<img src="{{producto.foto.url}}" alt="new-arrivals images">
 										<div class="single-new-arrival-bg-overlay"></div>
-										<a href="{% url 'agregar_carrito' producto.id %}">
-											<div class="new-arrival-cart">
-												<p>
-													<span class="lnr lnr-cart"></span>
-													Añadir <span>al </span> carrito
-												</p>
-											</div>
-										</a>
+									</a>
+									<div id="carrito{{producto.id}}" class="new-arrival-cart">
+										<p onclick="agregar_carrito('{% url 'agregar_carrito' producto.id %}', '{{producto.id}}')">
+											<span class="lnr lnr-cart"></span>
+											Añadir <span>al </span> carrito
+										</p>
+
+										<form id="counter_form" style="float:right; margin-right: 20px; text-align: center;">
+											<span class="minus" onclick="decrease_counter('{{producto.id}}')">-</span>
+											{% csrf_token %}
+											<input class="cantidad_input" type="text" value="1" id="counter{{producto.id}}"/>
+											<span class="plus" onclick="increase_counter('{{producto.id}}')">+</span>
+										</form>
 									</div>
-								</a>
+
+									<!--Confirmación de añadido al carrito--> 
+									<div id="confirmacion{{producto.id}}" class="hidden-new-arrival-cart" style="background-color: #06ab1c; text-transform: none;">
+										<p style=" font-weight: bold;">Producto añadido al carrito</p>
+									</div>
+								</div>
+								
 								<h4>
 									<a href="{% url 'ficha_producto' producto.id%}">{{producto.nombre}}</a>
 								</h4>

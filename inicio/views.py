@@ -16,3 +16,6 @@ def search_results(request):
             Q(nombre__icontains=query) | Q(descripcion__icontains=query)
         )
     return render(request, 'search_results.html', {'results': results, 'query': query})
+
+def contacto(request):
+    return render(request, 'contacto.html')

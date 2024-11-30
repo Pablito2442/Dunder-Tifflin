@@ -1,32 +1,110 @@
-<h1>Seguimiento del Pedido</h1>
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="en">
 
-<p>Pedido ID: {{ pedido.id }}</p>
-<p>Estado: {{ pedido.estado }}</p>
-<p>Fecha: {{ pedido.fecha }}</p>
-<p>Dirección de Envío: {{ pedido.direccion_envio }}</p>
-<p>Método de Pago: {{ pedido.metodo_pago }}</p>
-<p>Total: €{{ pedido.total }}</p>
+<head>
+    <!-- Meta data -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<h3>Detalles del Pedido</h3>
-<table>
-    <thead>
-        <tr>
-            <th>Producto</th>
-            <th>Cantidad</th>
-            <th>Precio Unitario</th>
-            <th>Subtotal</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for detalle in pedido.detalles.all %}
-        <tr>
-            <td>{{ detalle.producto.nombre }}</td>
-            <td>{{ detalle.cantidad }}</td>
-            <td>€{{ detalle.precio_unitario }}</td>
-            <td>€{{ detalle.subtotal }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+    <!-- Font-family -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
 
-<a href="{% url 'catalogo' %}">Volver al Catálogo</a>
+    <!-- Title -->
+    <title>Furniture - Seguimiento del Pedido</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/icon" href="{% static 'logo/favicon.png' %}">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/linearicons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootsnav.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+</head>
+
+<body>
+    <!--[if lte IE 9]>
+        <p class="browserupgrade">
+            You are using an <strong>outdated</strong> browser. Please 
+            <a href="https://browsehappy.com/">upgrade your browser</a> 
+            to improve your experience and security.
+        </p>
+    <![endif]-->
+
+    <!-- Welcome Hero -->
+    <header id="home" class="welcome-hero">
+        {% include 'navbar_inicio.html' %}
+    </header>
+
+    <!-- Seguimiento del Pedido -->
+    <section id="blog" class="blog" style="margin-top: 70px;">
+        <div class="container">
+            <div class="section-header">
+                <h2>Seguimiento del pedido</h2>
+            </div>
+
+            <!-- Información del Pedido -->
+            <br><br>
+            <div class="bg-light p-4 rounded shadow-sm mb-4">
+                <p><strong>Seguimiento ID:</strong> {{ pedido.codigo_seguimiento }}</p>
+                <p><strong>Estado:</strong> {{ pedido.estado }}</p>
+                <p><strong>Fecha:</strong> {{ pedido.fecha }}</p>
+                <p><strong>Dirección de Envío:</strong> {{ pedido.direccion_envio }}</p>
+                <p><strong>Método de Pago:</strong> {{ pedido.metodo_pago }}</p>
+            </div>
+
+            <!-- Detalles del Pedido -->
+            <p><strong>Detalles del pedido:</p>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped text-center">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for detalle in pedido.detalles.all %}
+                        <tr>
+                            <td>{{ detalle.producto.nombre }}</td>
+                            <td>{{ detalle.cantidad }}</td>
+                            <td>€{{ detalle.precio_unitario }}</td>
+                            <td>€{{ detalle.subtotal }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Resumen Final -->
+            <div class="bg-light p-4 rounded shadow-sm mt-4">
+                <p><strong>Subtotal:</strong> €{{ pedido.subtotal|floatformat:2 }}</p>
+                <p><strong>Gastos de Envío:</strong> €{{ pedido.gastos_envio|floatformat:2 }}</p>
+                <p><strong>Total (con Envío):</strong> €{{ pedido.total|floatformat:2 }}</p>
+            </div>
+
+            <!-- Acción -->
+            <div class="text-center mt-4">
+                <a href="{% url 'catalogo' %}" class="btn btn-primary btn-lg">Volver al Catálogo</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/bootsnav.js' %}"></script>
+    <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+</body>
+
+</html>

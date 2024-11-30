@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth import update_session_auth_hash
 from pedido.models import DetallePedido, Pedido
-from producto.models import Fabricante, Producto
+from producto.models import Fabricante, Producto, Categoria
 
 #
 # Vistas y Botones de la vista de index
@@ -107,48 +107,60 @@ def actualizar_pedido(request, pedido_id):
         messages.success(request, "¡El pedido se actualizó correctamente!")
         return redirect('panel_usuario_pedidos')
     
-#    
-# Vistas y Botones de la vista de pagos
-#
-
-def panel_pagos(request):
-    # pagos = Pagos.objects.filter(cliente_id=request.user)
-    # return render(request, 'pagos.html', {'pagos': pagos})
-    return render(request, 'pagos.html')
-
 
 #
 # Vistas y Botones de la vista de administracion productos
 #
 
 def panel_tablas_productos_administracion(request):
-    productos = Producto.objects.all()
-    fabricantes = Fabricante.objects.all()
+    productos = Producto.objects.all().order_by('-id')
+    fabricantes = Fabricante.objects.all().order_by('-id')
+    categorias = Categoria.objects.all().order_by('-id')
 
     # Renderizar la plantilla con los datos
     return render(request, 'administracion_productos.html', {
         'productos': productos,
         'fabricantes': fabricantes,
+        'categorias': categorias,
     })
 
-def eliminar_producto(request, producto_id):
-    producto = get_object_or_404(Producto, id=producto_id)
-    producto.delete()
-    return redirect('gestionar_productos')
+def eliminar_producto(request):
+    if request.method == 'POST':
+        print(request.POST)  # Ver qué parámetros llegan en el POST
+        producto_id = request.POST.get('id')  # O 'detalle_id' según corresponda
+        if producto_id:
+            producto = get_object_or_404(Producto, id=producto_id)
+            producto.delete()
+            messages.success(request, "Producto eliminado correctamente.")
+        else:
+            messages.error(request, "ID del producto no proporcionado.")
+    return redirect('panel_administracion_productos')
 
 def actualizar_producto(request):
     if request.method == 'POST':
-        producto_id = request.POST['producto_id']
-        producto = get_object_or_404(Producto, id=producto_id)
-        producto.nombre = request.POST['nombre']
-        producto.descripcion = request.POST['descripcion']
-        producto.precio = request.POST['precio']
-        producto.cantidad_en_stock = request.POST['cantidad_en_stock']
-        producto.categoria = request.POST['categoria']
-        producto.destacado = request.POST['destacado'] == 'True'
-        producto.agotado = request.POST['agotado'] == 'True'
-        producto.save()
-        return redirect('gestionar_productos')
+        producto_id = request.POST.get('producto_id')
+        if producto_id:
+            # Obtener el producto a modificar
+            producto = get_object_or_404(Producto, id=producto_id)
+            
+            # Obtener los nuevos datos del formulario
+            producto.nombre = request.POST.get('nombre')
+            producto.descripcion = request.POST.get('descripcion')
+            producto.precio = request.POST.get('precio')
+            producto.cantidad_en_stock = request.POST.get('cantidad_en_stock')
+            producto.categoria = request.POST.get('categoria')
+            producto.destacado = request.POST.get('destacado') == 'True'  # Convertir a booleano
+            producto.agotado = request.POST.get('agotado') == 'True'  # Convertir a booleano
+            producto.foto = request.POST.get('foto')
+            
+            # Guardar los cambios en la base de datos
+            producto.save()
+            
+            messages.success(request, "Producto actualizado correctamente.")
+        else:
+            messages.error(request, "ID del producto no proporcionado.")
+        
+        return redirect('panel_administracion_productos')  # Redirige a la página de administración
 
 def crear_producto(request):
     if request.method == "POST":
@@ -168,6 +180,123 @@ def crear_producto(request):
             # Crear y guardar el nuevo producto
             nuevo_producto = Producto(nombre=nombre, descripcion=descripcion, precio=precio)
             nuevo_producto.save()
+            
+            # Mostrar un mensaje de éxito
+            messages.success(request, "Producto agregado correctamente.")
+        except ValueError:
+            messages.error(request, "El precio debe ser un número válido.")
+        
+        return redirect('panel_administracion_productos')  # Cambia por el nombre correcto de tu URL
+    
+    # Si el método no es POST, redirige al listado
+    return redirect('panel_administracion_productos')
+
+def actualizar_fabricante(request):
+    if request.method == 'POST':
+        fabricante_id = request.POST.get('fabricante_id')
+        if fabricante_id:
+            fabricante = get_object_or_404(Fabricante, id=fabricante_id)
+            
+            # Actualizar los datos del fabricante
+            fabricante.nombre = request.POST.get('nombre')
+            fabricante.descripcion = request.POST.get('descripcion')
+            fabricante.email = request.POST.get('email')
+            fabricante.numTlf = request.POST.get('numTlf')
+            fabricante.web = request.POST.get('web')
+            fabricante.pais = request.POST.get('pais')
+            
+            # Guardar los cambios
+            fabricante.save()
+            
+            messages.success(request, "Fabricante actualizado correctamente.")
+        else:
+            messages.error(request, "ID del fabricante no proporcionado.")
+        
+        return redirect('panel_administracion_productos') 
+
+def eliminar_fabricante(request):
+    if request.method == 'POST':
+        fabricante_id = request.POST.get('id')
+        if fabricante_id:
+            fabricante = get_object_or_404(Fabricante, id=fabricante_id)
+            fabricante.delete()
+            messages.success(request, "Fabricante eliminado correctamente.")
+        else:
+            messages.error(request, "ID del fabricante no proporcionado.")
+        
+    return redirect('panel_administracion_productos')  # Redirigir a la página de administración
+
+def crear_fabricante(request):
+    if request.method == "POST":
+        nombre = request.POST.get('nombre')
+        descripcion = request.POST.get('descripcion')
+        email = request.POST.get('email')
+        telefono = request.POST.get('numTlf')
+        web = request.POST.get('web')
+        pais = request.POST.get('pais')
+        
+        # Validación básica
+        if not nombre or not descripcion or not email or not telefono or not web or not pais:
+            messages.error(request, "Todos los campos son obligatorios.")
+            return redirect('panel_administracion_productos')  # Cambia por el nombre correcto de tu URL
+        
+        # Crear y guardar el nuevo producto
+        nuevo_fabricante = Fabricante(nombre=nombre, descripcion=descripcion, email=email, numTlf=telefono, web=web, pais=pais) 
+        nuevo_fabricante.save()
+            
+        # Mostrar un mensaje de éxito
+        messages.success(request, "Fabricante agregado correctamente.")
+        
+        return redirect('panel_administracion_productos')
+    
+    # Si el método no es POST, redirige al listado
+    return redirect('panel_administracion_productos')
+
+def actualizar_categoria(request):
+    if request.method == 'POST':
+        categoria_id = request.POST.get('categoria_id')
+        if categoria_id:
+            categoria = get_object_or_404(Categoria, id=categoria_id)
+            
+            # Actualizar los campos de la categoría
+            categoria.nombre = request.POST.get('nombre')
+            categoria.slug = request.POST.get('slug')
+            
+            # Guardar los cambios
+            categoria.save()
+            
+            messages.success(request, "Categoría actualizada correctamente.")
+        else:
+            messages.error(request, "ID de la categoría no proporcionado.")
+        
+        return redirect('panel_administracion_productos')  # Redirigir a la página de administración
+
+def eliminar_categoria(request):
+    if request.method == 'POST':
+        categoria_id = request.POST.get('id')
+        if categoria_id:
+            categoria = get_object_or_404(Categoria, id=categoria_id)
+            categoria.delete()
+            messages.success(request, "Categoría eliminada correctamente.")
+        else:
+            messages.error(request, "ID de la categoría no proporcionado.")
+        
+    return redirect('panel_administracion_productos')  # Redirigir a la página de administración
+
+def crear_categoria(request):
+    if request.method == "POST":
+        nombre = request.POST.get('nombre')
+        slug = request.POST.get('slug')
+        
+        # Validación básica
+        if not nombre or not slug :
+            messages.error(request, "Todos los campos son obligatorios.")
+            return redirect('panel_administracion_productos') 
+        
+        try:
+            # Crear y guardar el nuevo producto
+            nuevo_categoria = Categoria(nombre=nombre, slug=slug)
+            nuevo_categoria.save()
             
             # Mostrar un mensaje de éxito
             messages.success(request, "Producto agregado correctamente.")
@@ -240,6 +369,7 @@ def anadir_usuario(request):
         # Retornar una respuesta JSON
         return JsonResponse({'success': True})
     return JsonResponse({'success': False})
+
 
 #
 # Vistas y Botones de la vista de administracion pedidos
@@ -314,7 +444,6 @@ def modificar_detalles_pedidos(request):
             messages.error(request, "Detalle del pedido no encontrado.")
     return redirect('panel_administracion_pedidos')  # Redirige a la vista de administración de pedidos
 
-
 def eliminar_detalles_pedidos(request):
     if request.method == 'POST':
         detalle_id = request.POST.get('detalle_id')
@@ -330,10 +459,3 @@ def eliminar_detalles_pedidos(request):
         except DetallePedido.DoesNotExist:
             messages.error(request, "Detalle del pedido no encontrado.")
     return redirect('panel_administracion_pedidos')  # Redirige a la vista de administración de pedidos
-
-#
-# Vistas y Botones de la vista de administracion pagos
-#
-
-def panel_tablas_pagos_administracion(request):
-    return render(request, 'administracion_pagos.html')

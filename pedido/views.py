@@ -1,61 +1,66 @@
-import braintree.client_token
+import uuid
+import braintree
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
+from django.core.mail import send_mail
 from .models import Pedido, DetallePedido
 from producto.models import Producto
-import braintree
+from django.contrib import messages
 import mysite.settings as settings
-from django.core.mail import send_mail
-import uuid
 
+# Configuración de Braintree
 gateway = braintree.BraintreeGateway(
     braintree.Configuration(
-            braintree.Environment.Sandbox,
-            merchant_id= settings.BRAINTREE_MERCHANT_ID, # "kxsttcxndt4cz2bm",
-            public_key=settings.BRAINTREE_PUBLIC_KEY, # "p75tvtfx3tgr9z8w",
-            private_key= settings.BRAINTREE_PRIVATE_KEY,#"a42231b58bd05dda4faaf787614c05a2"
-        )
+        braintree.Environment.Sandbox,
+        merchant_id=settings.BRAINTREE_MERCHANT_ID,
+        public_key=settings.BRAINTREE_PUBLIC_KEY,
+        private_key=settings.BRAINTREE_PRIVATE_KEY,
     )
+)
 
-# Generar un ID de pedido único
-def generar_id_pedido():
-    return str(uuid.uuid4())
-
-# Ver el estado de un pedido por su ID
-def seguimiento_pedido(request, pedido_id):
-    pedido = get_object_or_404(Pedido, id=pedido_id)
+# Seguimiento de un pedido por su código de seguimiento
+def seguimiento_pedido(request, codigo_seguimiento):
+    # Busca el pedido utilizando el código de seguimiento
+    pedido = get_object_or_404(Pedido, codigo_seguimiento=codigo_seguimiento)
     return render(request, 'pedido/seguimiento.html', {'pedido': pedido})
 
-# Crear un pedido desde el carrito
+
+# Finalizar un pedido desde el carrito
 def finalizar_pedido(request):
     carrito = request.session.get('carrito', {})
     if not carrito:
+        messages.error(request, "El carrito está vacío.")
         return redirect('ver_carrito')
 
     if request.method == 'POST':
+        direccion_envio = request.POST.get('direccion_envio')
+        metodo_pago = request.POST.get('metodo_pago')
+        correo_cliente = request.POST.get('correo_cliente') if not request.user.is_authenticated else request.user.email
 
-        direccion_envio = request.POST['direccion_envio']
-        metodo_pago = request.POST['metodo_pago']
-        correo_cliente = request.POST.get('correo_cliente', None)  # Captura del correo
+        if not direccion_envio:
+            messages.error(request, "Debe proporcionar una dirección de envío.")
+            return redirect('finalizar_pedido')
 
-        if request.user.is_authenticated:
-            correo_cliente = request.user.email  # Usa el correo del usuario registrado
-
-        # Crear el pedido
+        # Crear instancia del pedido
         pedido = Pedido(
             cliente=request.user if request.user.is_authenticated else None,
             correo_cliente=correo_cliente,
             direccion_envio=direccion_envio,
             metodo_pago=metodo_pago,
-            total=0,  # Se calculará después
+            total=0,  # Calculado más adelante
+            gastos_envio=0,  # Inicializar gastos de envío
         )
 
         total = 0
         detalles_pedido = []
         productos_modificados = []
+
         for producto_id, item in carrito.items():
-            producto = Producto.objects.get(id=producto_id)
-            subtotal = item['cantidad'] * item['precio']
+            producto = get_object_or_404(Producto, id=producto_id)
+
+            if producto.cantidad_en_stock < item['cantidad']:
+                messages.error(request, f"No hay suficiente stock para el producto {producto.nombre}.")
+                return redirect('ver_carrito')
 
             # Crear detalle del pedido
             detalles_pedido.append(DetallePedido(
@@ -67,91 +72,91 @@ def finalizar_pedido(request):
 
             # Actualizar stock del producto
             producto.cantidad_en_stock -= item['cantidad']
+            if producto.cantidad_en_stock == 0:
+                producto.agotado = True
             productos_modificados.append(producto)
 
-            total += subtotal
-        
-        # Calcular los gastos de envío
-        gastos_envio = 6.99 if total <= 60 else 0
-        total += gastos_envio
+            total += item['cantidad'] * item['precio']
+
+
+        # Calcular gastos de envío
+        if total < 60:
+            pedido.gastos_envio = 6.99
+        else:
+            pedido.gastos_envio = 0
         
         # Actualizar el total del pedido
-        pedido.total = total
+        pedido.total = total + pedido.gastos_envio
+        pedido.subtotal=total
 
-        if (metodo_pago == 'tarjeta'):
-            nonce = request.POST['payment_method_nonce']
-
+        # Manejo del pago si el método es tarjeta
+        if metodo_pago == 'tarjeta':
+            nonce = request.POST.get('payment_method_nonce')
             result = gateway.transaction.sale({
                 'amount': str(total),
                 'payment_method_nonce': nonce,
-                'options': {
-                    'submit_for_settlement': True
-                }
+                'options': {'submit_for_settlement': True}
             })
 
             if not result.is_success:
-                return redirect(reverse('finalizar_pedido')+"?transaction_error")
+                messages.error(request, "Error en la transacción. Intente nuevamente.")
+                return redirect('finalizar_pedido')
 
-        # Guardar todas las entidades una vez se complete la transaccion con exito
+        # Guardar pedido y sus detalles
+        pedido.codigo_seguimiento=uuid.uuid4().hex[:8]
         pedido.save()
         DetallePedido.objects.bulk_create(detalles_pedido)
-        Producto.objects.bulk_update(productos_modificados, ['cantidad_en_stock'])
+        Producto.objects.bulk_update(productos_modificados, ['cantidad_en_stock', 'agotado'])
 
-        
+        # Enviar correo de confirmación
         enviar_correo_confirmacion(pedido)
-        
-        # Vaciar el carrito después de crear el pedido
-        
-        del request.session['carrito']
-        
-        return redirect('seguimiento_pedido', pedido_id=pedido.id)
+
+        # Vaciar el carrito
+        request.session['carrito'] = {}
+
+        messages.success(request, f"Pedido #{pedido.codigo_seguimiento} creado con éxito.")
+        return redirect('seguimiento_pedido', pedido.codigo_seguimiento)
 
     client_token = gateway.client_token.generate({})
+    error = request.GET.get('transaction_error', None)
 
-    error=None
-    if 'transaction_error' in request.GET:
-        error='Hubo un error en la transacción'
-
-    return render(request, 'pedido/finalizar_pedido.html', {'client_token':client_token, 'error': error})
-
+    return render(request, 'pedido/finalizar_pedido.html', {'client_token': client_token, 'error': error})
 
 
 def enviar_correo_confirmacion(pedido):
     """
-    Envía un correo de confirmación con los detalles del pedido al cliente.
+    Envía un correo de confirmación al cliente con los detalles del pedido.
     """
-    # Obtener los detalles del pedido
+    base_url = "http://127.0.0.1:8000"  # Cambiar por el dominio en producción
+    enlace_seguimiento = f"{base_url}{reverse('seguimiento_pedido', args=[pedido.codigo_seguimiento])}"
+
     detalles = pedido.detalles.all()
-    base_url = "http://127.0.0.1:8000"  # Cambia esto por el dominio de tu aplicación
     mensaje = f"""
     Hola,
 
-    Gracias por tu compra. Aquí tienes los detalles de tu pedido:
+    Gracias por tu compra. Aquí están los detalles de tu pedido:
 
-    Pedido ID: {pedido.id}
-    Enlace de Seguimiento: {base_url}{reverse('seguimiento_pedido', args=[pedido.id])}
-    
+    Estado: {pedido.estado}
     Dirección de Envío: {pedido.direccion_envio}
     Método de Pago: {pedido.metodo_pago}
 
     Productos:
     """
     for detalle in detalles:
-        mensaje += f"- {detalle.producto.nombre} (x{detalle.cantidad}): €{detalle.subtotal():.2f}\n"
+        mensaje += f"\t- {detalle.producto.nombre} (x{detalle.cantidad}): €{detalle.subtotal():.2f}\n"
 
     mensaje += f"""
-    Gastos de Envío: €{6.99 if pedido.total - 6.99 <= 60 else 0:.2f}
+    Gastos de Envío: €{pedido.gastos_envio:.2f}
     Total: €{pedido.total:.2f}
 
-    ¡Gracias por comprar con nosotros!
+    Enlace para seguir tu pedido: {enlace_seguimiento}
+
+    ¡Gracias por confiar en nosotros!
     """
 
-    # Determinar el destinatario
-    destinatario = pedido.cliente.email if pedido.cliente else pedido.correo_cliente
-
-    # Enviar el correo
+    destinatario = pedido.correo_cliente
     send_mail(
-        subject=f'Confirmación de tu Pedido #{pedido.id}',
+        subject=f"Confirmación de tu Pedido #{pedido.codigo_seguimiento}",
         message=mensaje,
         from_email=settings.EMAIL_HOST_USER,
         recipient_list=[destinatario],

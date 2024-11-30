@@ -112,11 +112,19 @@
 					body: JSON.stringify({
 						cantidad: counter.value
 					})
+				}).then( (response)=>{
+					if (response.status == 200){
+						const pestaña_carrito = document.getElementById('carrito'+ id)
+						const pestaña_confirmacion = document.getElementById('confirmacion'+ id)
+						pestaña_carrito.classList.replace('new-arrival-cart','hidden-new-arrival-cart')
+						pestaña_confirmacion.classList.replace('hidden-new-arrival-cart','new-arrival-cart')
+					} else {
+						message_container = document.getElementById("message-container")
+						response.json().then((data)=>{
+							message_container.innerHTML = data['msg']
+						})
+					}
 				})
-				const pestaña_carrito = document.getElementById('carrito'+ id)
-				const pestaña_confirmacion = document.getElementById('confirmacion'+ id)
-				pestaña_carrito.classList.replace('new-arrival-cart','hidden-new-arrival-cart')
-				pestaña_confirmacion.classList.replace('hidden-new-arrival-cart','new-arrival-cart')
 			}
 			function hideConfirmacion(id){
 				const pestaña_carrito = document.getElementById('carrito'+ id)
@@ -214,6 +222,8 @@
 		</section><!--/.new-arrivals-->
 		<!--new-arrivals end -->
 
+		<div id="message-container">
+		</div>
 		
 		<!-- Include all js compiled plugins (below), or include individual files as needed -->
 

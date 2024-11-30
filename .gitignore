@@ -1,5 +1,6 @@
 **/__pycache__/
 **/migrations/
 venv/
+media/
 launch.json
 db.sqlite3

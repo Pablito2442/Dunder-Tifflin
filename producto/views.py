@@ -11,12 +11,19 @@ def listar_productos(request):
 
     categoria_id = request.GET.get('categoria_id')
     fabricante_id = request.GET.get('fabricante_id')
+    max_precio = request.GET.get('max_precio')
 
     if categoria_id:
         productos = productos.filter(categoria_id=categoria_id)
+        agotados = agotados.filter(categoria_id=categoria_id)
 
     if fabricante_id:
         productos = productos.filter(fabricante_id=fabricante_id)
+        agotados = agotados.filter(fabricante_id=fabricante_id)
+    
+    if max_precio:
+        productos = productos.filter(precio__lte = max_precio)
+        agotados = agotados.filter(precio__lte = max_precio)
 
     return render(request, 'producto/catalogo.html', {
         'productos': productos,
@@ -25,6 +32,7 @@ def listar_productos(request):
         'fabricantes': fabricantes,
         'categoria_id': categoria_id,
         'fabricante_id': fabricante_id,
+        'max_precio' : max_precio
     })
 
 # Ficha de producto

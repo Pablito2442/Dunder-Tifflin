@@ -43,7 +43,7 @@ def seed():
                             foto= "images/silla_gamer.jpg")
     Producto.objects.create(nombre="Lámpara de cristal", descripcion="Lámpara muy elegante hecha parcialmente de vidreo",
                             precio=140, cantidad_en_stock=10, categoria = Categorias.iluminacion,
-                            fabricante= Fabricantes.pierre, destacado=False, agotado=False,
+                            fabricante= Fabricantes.pierre, destacado=True, agotado=False,
                             fecha_creacion= date('2024-11-23') ,fecha_actualizacion= date('2024-11-27'),
                             foto="images/lampara_de_cristal.jpg")
     Producto.objects.create(nombre="Sillón gris", descripcion="Sillón perfecto para cualquier salón",
@@ -53,7 +53,7 @@ def seed():
                             foto="images/sillon_gris.jpg")
     Producto.objects.create(nombre="Flexo azúl", descripcion="Lámpara de sobremesa de color azúl",
                             precio=15, cantidad_en_stock=0, categoria = Categorias.iluminacion,
-                            fabricante= Fabricantes.joe, destacado=False, agotado=False,
+                            fabricante= Fabricantes.joe, destacado=False, agotado=True,
                             fecha_creacion= date('2024-11-24') ,fecha_actualizacion= date('2024-11-27'),
                             foto="images/flexo.jpg")
 

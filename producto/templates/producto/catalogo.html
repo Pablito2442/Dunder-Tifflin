@@ -90,7 +90,10 @@
 				gap: 15px; /* Adds space between the two dropdowns */
 				justify-content: center; /* Centers the dropdowns */
 			}
+<<<<<<< HEAD
 			
+=======
+>>>>>>> fa272a87a4badc86fcfef7867095e9a387fa1f49
 			.hidden-new-arrival-cart p {
 				float: left;
 				margin-left: 20px;
@@ -190,7 +193,7 @@
 			<div class="container">
 				<div class="section-header">
                     <br>
-					<h2>catálogo</h2>
+					<h2>Catálogo</h2>
 					<!-- Dropdown for selecting Categoria -->
 					<div class="select-container">
 						<select id="categoria-dropdown" onchange="updateFilters()">
@@ -209,6 +212,7 @@
 							</option>
 							{% endfor %}
 						</select>
+<<<<<<< HEAD
 						<!-- Dropdown for range of producr prices -->
 						<select id="precio-dropdown" onchange="updateFilters()">
 							<option value="">-- Filtrar por Precio --</option>
@@ -226,6 +230,11 @@
 							<option value="True" {% if request.GET.en_stock == 'True' %}selected{% endif %}>Disponible</option>
 							<option value="">Todos los productos</option>
 						</select>
+=======
+						<p style="padding: 10px 0;">Precio máximo:</p>
+						<input id="precio-input" type="number" min="1" style="width: 100px" onchange="updateFilters()" value="{{max_precio}}">
+						<p style="padding: 10px 0;">€</p>
+>>>>>>> fa272a87a4badc86fcfef7867095e9a387fa1f49
 					</div>
 				</div><!--/.section-header-->
 				<div class="new-arrivals-content">

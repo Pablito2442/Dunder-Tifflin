@@ -17,8 +17,102 @@
       <link rel="stylesheet" href="{% static 'css/bootsnav.css' %}">
       <link rel="stylesheet" href="{% static 'css/style.css' %}">
       <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+
+      <style>
+         .cantidad_input {
+             width: 50px;
+             text-align: center;
+             border: 1px solid #ddd;
+             border-radius: 4px;
+             display: inline-block;
+             vertical-align: middle;
+         }
+         .minus, .plus {
+             width: 30px;
+             height: 30px;
+             background: #f2f2f2;
+             border-radius: 4px;
+             border: 1px solid #ddd;
+             display: inline-block;
+             vertical-align: middle;
+             text-align: center;
+             cursor: pointer;
+             line-height: 30px;
+         }
+         .plus:hover, .minus:hover {
+             background-color: #e0e0e0;
+         }
+         .error-msg {
+             color: red;
+             font-size: 0.9em;
+             margin-top: 5px;
+         }
+      </style>
+      <script>
+         function decrease_counter(counterId, errorMsgId, maxStock) {
+             let input = document.getElementById(counterId);
+             let errorMsg = document.getElementById(errorMsgId);
+             let count = parseInt(input.value) - 1;
+             input.value = count < 1 ? 1 : count;
+
+             if (count <= maxStock) {
+                 errorMsg.textContent = "";
+                 toggleButtonState(counterId, maxStock, true);
+             }
+         }
+
+         function increase_counter(counterId, errorMsgId, maxStock) {
+             let input = document.getElementById(counterId);
+             let errorMsg = document.getElementById(errorMsgId);
+             let count = parseInt(input.value) + 1;
+
+             if (count > maxStock) {
+                 errorMsg.textContent = "No puedes agregar más productos de los disponibles en stock.";
+                 toggleButtonState(counterId, maxStock, false);
+             } else {
+                 input.value = count;
+                 errorMsg.textContent = "";
+                 toggleButtonState(counterId, maxStock, true);
+             }
+         }
+
+         function toggleButtonState(counterId, maxStock, enable) {
+             let input = document.getElementById(counterId);
+             let button = document.getElementById(`add-to-cart-${counterId}`);
+             button.disabled = parseInt(input.value) > maxStock || !enable;
+         }
+
+         function agregar_carrito(url, counterId, maxStock) {
+             const input = document.getElementById(counterId);
+             const cantidad = parseInt(input.value);
+
+             if (cantidad > maxStock) {
+                 alert("No puedes agregar más productos de los disponibles en stock.");
+                 return;
+             }
+
+             const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+             fetch(url, {
+                 method: "POST",
+                 headers: {
+                     'X-CSRFToken': csrftoken,
+                     'Content-Type': 'application/json',
+                 },
+                 body: JSON.stringify({ cantidad }),
+             })
+             .then(response => {
+                 if (!response.ok) {
+                     throw new Error('Error al agregar al carrito');
+                 }
+                 return response.json();
+             })
+             .then(data => {
+                 alert('Producto añadido al carrito');
+             });
+         }
+      </script>
    </head>
-   
+
    <body>
       <header id="home" class="welcome-hero">
          <div id="header-carousel" class="carousel slide carousel-fade" data-ride="carousel" data-interval="4000">
@@ -43,13 +137,33 @@
                                           <h4>Producto destacado</h4>
                                           <h2>{{ producto.nombre }}</h2>
                                           <p>{{ producto.descripcion }}</p>
+                                          <p style="margin: 0 0 10px; color:#616060;">
+                                             <span style="font-weight: bold;">Unidades restantes:</span> {{ producto.cantidad_en_stock }}
+                                          </p>
                                           <div class="packages-price">
                                              <p>{{ producto.precio }} €</p>
                                           </div>
-                                          <button class="btn-cart welcome-add-cart" onclick="window.location.href='{% url 'agregar_carrito' producto.id %}'">
-                                             <span class="lnr lnr-plus-circle"></span> Añadir <span>al</span> carrito
-                                         </button>                                         
-                                          <button class="btn-cart welcome-add-cart welcome-more-info" onclick="window.location.href='{% url 'ficha_producto' producto.id %}'">
+
+                                          {% if not producto.agotado and producto.cantidad_en_stock > 0 %}
+                                          <form onsubmit="event.preventDefault(); agregar_carrito('{% url 'agregar_carrito' producto.id %}', 'counter_{{ producto.id }}', {{ producto.cantidad_en_stock }});">
+                                             {% csrf_token %}
+                                             <div style="margin-top: 10px;">
+                                                <span class="minus" onclick="decrease_counter('counter_{{ producto.id }}', 'error-msg-{{ producto.id }}', {{ producto.cantidad_en_stock }})">-</span>
+                                                <input class="cantidad_input" type="number" id="counter_{{ producto.id }}" name="cantidad" value="1" min="1" max="{{ producto.cantidad_en_stock }}">
+                                                <span class="plus" onclick="increase_counter('counter_{{ producto.id }}', 'error-msg-{{ producto.id }}', {{ producto.cantidad_en_stock }})">+</span>
+                                             </div>
+                                             <p id="error-msg-{{ producto.id }}" class="error-msg"></p>
+                                             <button id="add-to-cart-counter_{{ producto.id }}" type="submit" class="btn-cart welcome-add-cart mt-3">
+                                                <span class="lnr lnr-plus-circle"></span>
+                                                Añadir <span>al</span> carrito
+                                             </button>
+                                          </form>
+                                          {% else %}
+                                          <button class="btn-cart welcome-add-cart" style="background: #616060; border: #616060; color: #fff;">
+                                             Agotado
+                                          </button>
+                                          {% endif %}
+                                          <button class="btn-cart welcome-more-info" onclick="window.location.href='{% url 'ficha_producto' producto.id %}'">
                                              Más información
                                           </button>
                                        </div><!--/.welcome-hero-txt-->
@@ -72,9 +186,7 @@
          </div><!--/#header-carousel-->
          
          {% include 'navbar_inicio.html' %}
-      </header><!--/.welcome-hero-->
-      
-      <!-- blog, footer, etc. -->
+      </header>
 
       <script src="{% static 'js/jquery.js' %}"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>

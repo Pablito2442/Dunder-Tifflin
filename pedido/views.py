@@ -127,7 +127,7 @@ def enviar_correo_confirmacion(pedido):
     """
     Envía un correo de confirmación al cliente con los detalles del pedido.
     """
-    base_url = "http://127.0.0.1:8000"  # Cambiar por el dominio en producción
+    base_url = "https://dunder-tifflin.onrender.com"  # Cambiar por el dominio en producción
     enlace_seguimiento = f"{base_url}{reverse('seguimiento_pedido', args=[pedido.codigo_seguimiento])}"
 
     detalles = pedido.detalles.all()

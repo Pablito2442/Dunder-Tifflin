@@ -132,6 +132,23 @@
 								<option value="{{ fabricante.id }}">{{ fabricante.nombre }}</option>
 							{% endfor %}
 						</select>
+						<!-- Dropdown for range of producr prices -->
+						<select id="precio-dropdown" onchange="updateFilters()">
+							<option value="">-- Filtrar por Precio --</option>
+							<option value=0-30> Hasta 30€ </option>
+							<option value=30-50> Entre 30€ y 50€ </option>
+							<option value=50-75> Entre 50€ y 75€ </option>
+							<option value=75-100> Entre 75€ y 100€ </option>
+							<option value=100-150> Entre 100€ y 150€ </option>
+							<option value=150-200> Entre 150€ y 200€ </option>
+							<option value=200> Por encima de 200€ </option>
+						</select>
+						<!-- Dropdown for stock -->
+						<select id="stock-dropdown" onchange="updateFilters()">
+							<option value=''>-- Filtrar por existencias --</option>
+							<option value=True> Disponible </option>
+							<option value=''> Todos los productos </option>
+						</select>
 					</div>
 				</div><!--/.section-header-->
 				<div class="new-arrivals-content">
@@ -254,27 +271,31 @@
 		<script>
 		// Filtrado
 			const queryParam = new URLSearchParams(window.location.search).get('q');
-			const selectedCategoria = document.getElementById('categoria-dropdown');
-			const selectedFabricante = document.getElementById('fabricante-dropdown');
 			function updateFilters() {
 				const categoriaId = document.getElementById('categoria-dropdown').value;
 				const fabricanteId = document.getElementById('fabricante-dropdown').value;
-				// Build the query string with selected values
+				const rango_precio = document.getElementById('precio-dropdown').value;
+				const en_stock = document.getElementById('stock-dropdown').value;
 				let newUrl = '/inicio/search/?';
 
-				// Add the current query parameter (q) if it exists
 				if (queryParam) {
 					newUrl += `q=${encodeURIComponent(queryParam)}&`;
 				}
 
-				// Add the selected category ID if it exists
 				if (categoriaId) {
 					newUrl += `categoria_id=${categoriaId}&`;
 				}
 
-				// Add the selected manufacturer ID if it exists
 				if (fabricanteId) {
 					newUrl += `fabricante_id=${fabricanteId}&`;
+				}
+
+				if (rango_precio) {
+					newUrl += `rango_precio=${rango_precio}&`;
+				}
+
+				if (en_stock) {
+					newUrl += `en_stock=${en_stock}&`;
 				}
 
 				// Remove the trailing '&' if present

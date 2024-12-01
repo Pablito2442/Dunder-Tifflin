@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
 from datetime import date, datetime as dt
 from producto.models import *
+from django.contrib.auth.models import User
 
 # Para usar el seeder, ejecutad: python manage.py seeder
 class Command(BaseCommand):
@@ -12,8 +13,22 @@ def vaciar():
     Categoria.objects.all().delete()
     Fabricante.objects.all().delete()
     Producto.objects.all().delete()
+    User.objects.all().delete()
 
 def seed():
+        # Crear usuarios
+    admin = User.objects.create_superuser(
+        username="admin",
+        email="admin@example.com",
+        password="admin4512"
+    )
+    
+    user = User.objects.create_user(
+        username="user",
+        email="user@example.com",
+        password="user4512"
+    )
+    
     #Las entidades creadas están separados en clases por organización
     class Categorias:
         sillas =        Categoria.objects.create(nombre="Sillas", slug="sillas")

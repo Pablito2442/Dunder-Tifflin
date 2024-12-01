@@ -101,12 +101,19 @@
                                  data-target="#modalModificar">
                               Modificar Información
                               </button>
+                              {% if ultimo_pedido.codigo_seguimiento %}
                               <button class="btn-cart welcome-add-cart welcome-more-info animated fadeInDown" 
-                              style="opacity: 0; margin-top: -10px; margin-left: 20px;" 
-                              onclick="window.location.href='{% url 'seguimiento_pedido' ultimo_pedido.codigo_seguimiento %}'">
-                              Ver seguimiento
-                           </button>
-                                                    
+                                      style="opacity: 0; margin-top: -10px; margin-left: 20px;" 
+                                      onclick="window.location.href='{% url 'seguimiento_pedido' ultimo_pedido.codigo_seguimiento %}'">
+                                Ver seguimiento
+                              </button>
+                            {% else %}
+                              <button class="btn-cart welcome-add-cart welcome-more-info animated fadeInDown" 
+                                      style="opacity: 0; margin-top: -10px; margin-left: 20px;" 
+                                      disabled>
+                                Sin seguimiento
+                              </button>
+                            {% endif %}                                                    
                            </div>
                         </div>
                      </div>

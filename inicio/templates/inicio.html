@@ -102,13 +102,16 @@
              })
              .then(response => {
                  if (!response.ok) {
-                     throw new Error('Error al agregar al carrito');
+                     message_container = document.getElementById("message-container")
+                     response.json().then((data)=>{
+                        message_container.innerHTML = data['msg']
+                     })
+                 } else {
+                  if (response.redirected){
+                            window.location.href = response.url
+                     }
                  }
-                 return response.json();
              })
-             .then(data => {
-                 alert('Producto añadido al carrito');
-             });
 
             //window.location.href = '/carrito';
          }
@@ -189,6 +192,9 @@
          
          {% include 'navbar_inicio.html' %}
       </header>
+
+      <div id="message-container">
+      </div>
 
       <script src="{% static 'js/jquery.js' %}"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>

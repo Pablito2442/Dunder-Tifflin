@@ -182,7 +182,7 @@ def actualizar_producto(request):
                 filename = fs.save(foto.name, foto)
 
                 # Solo guardar el nombre del archivo en el modelo
-                producto.foto = 'images/' + filename
+                producto.foto = 'static/images/' + filename
 
             # Guardar los cambios en la base de datos
             producto.save()
@@ -237,7 +237,7 @@ def crear_producto(request):
                 fabricante=fabricante,
                 destacado=destacado,
                 agotado=agotado,
-                foto='images/' + filename
+                foto='static/images/' + filename
             )
             nuevo_producto.save()
 

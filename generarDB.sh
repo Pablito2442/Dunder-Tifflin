@@ -14,3 +14,5 @@ python manage.py migrate
 
 # Ejecutar el seeder
 python manage.py seeder
+
+python manage.py collectstatic

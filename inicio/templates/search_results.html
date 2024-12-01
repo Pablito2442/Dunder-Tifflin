@@ -122,32 +122,35 @@
 						<select id="categoria-dropdown" onchange="updateFilters()">
 							<option value="">-- Filtrar por Categoria --</option>
 							{% for categoria in categorias %}
-								<option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
+							<option value="{{ categoria.id }}" {{% if categoria.id == request.GET.categoria_id %}selected{% endif %}>
+								{{ categoria.nombre }}
 							{% endfor %}
 						</select>
 						<!-- Dropdown for selecting Fabricante -->
 						<select id="fabricante-dropdown" onchange="updateFilters()">
 							<option value="">-- Filtrar por Fabricante --</option>
 							{% for fabricante in fabricantes %}
-								<option value="{{ fabricante.id }}">{{ fabricante.nombre }}</option>
+							<option value="{{ fabricante.id }}" {% if fabricante.id == request.GET.fabricante_id %}selected{% endif %}>
+								{{ fabricante.nombre }}
+							</option>
 							{% endfor %}
 						</select>
 						<!-- Dropdown for range of producr prices -->
 						<select id="precio-dropdown" onchange="updateFilters()">
 							<option value="">-- Filtrar por Precio --</option>
-							<option value=0-30> Hasta 30€ </option>
-							<option value=30-50> Entre 30€ y 50€ </option>
-							<option value=50-75> Entre 50€ y 75€ </option>
-							<option value=75-100> Entre 75€ y 100€ </option>
-							<option value=100-150> Entre 100€ y 150€ </option>
-							<option value=150-200> Entre 150€ y 200€ </option>
-							<option value=200> Por encima de 200€ </option>
+							<option value="0-30" {% if request.GET.rango_precio == '0-30' %}selected{% endif %}>Hasta 30€</option>
+							<option value="30-50" {% if request.GET.rango_precio == '30-50' %}selected{% endif %}>Entre 30€ y 50€</option>
+							<option value="50-75" {% if request.GET.rango_precio == '50-75' %}selected{% endif %}>Entre 50€ y 75€</option>
+							<option value="75-100" {% if request.GET.rango_precio == '75-100' %}selected{% endif %}>Entre 75€ y 100€</option>
+							<option value="100-150" {% if request.GET.rango_precio == '100-150' %}selected{% endif %}>Entre 100€ y 150€</option>
+							<option value="150-200" {% if request.GET.rango_precio == '150-200' %}selected{% endif %}>Entre 150€ y 200€</option>
+							<option value="200" {% if request.GET.rango_precio == '200' %}selected{% endif %}>Por encima de 200€</option>
 						</select>
 						<!-- Dropdown for stock -->
 						<select id="stock-dropdown" onchange="updateFilters()">
-							<option value=''>-- Filtrar por existencias --</option>
-							<option value=True> Disponible </option>
-							<option value=''> Todos los productos </option>
+							<option value="">-- Filtrar por existencias --</option>
+							<option value="True" {% if request.GET.en_stock == 'True' %}selected{% endif %}>Disponible</option>
+							<option value="">Todos los productos</option>
 						</select>
 					</div>
 				</div><!--/.section-header-->
@@ -270,40 +273,78 @@
 	
 		<script>
 		// Filtrado
-			const queryParam = new URLSearchParams(window.location.search).get('q');
-			function updateFilters() {
-				const categoriaId = document.getElementById('categoria-dropdown').value;
-				const fabricanteId = document.getElementById('fabricante-dropdown').value;
-				const rango_precio = document.getElementById('precio-dropdown').value;
-				const en_stock = document.getElementById('stock-dropdown').value;
-				let newUrl = '/inicio/search/?';
+		// Function to retrieve URL parameters
+		function getQueryParams() {
+			const urlParams = new URLSearchParams(window.location.search);
+			return {
+				categoriaId: urlParams.get('categoria_id'),
+				fabricanteId: urlParams.get('fabricante_id'),
+				rangoPrecio: urlParams.get('rango_precio'),
+				enStock: urlParams.get('en_stock'),
+				query: urlParams.get('q')
+			};
+		}
 
-				if (queryParam) {
-					newUrl += `q=${encodeURIComponent(queryParam)}&`;
-				}
-
-				if (categoriaId) {
-					newUrl += `categoria_id=${categoriaId}&`;
-				}
-
-				if (fabricanteId) {
-					newUrl += `fabricante_id=${fabricanteId}&`;
-				}
-
-				if (rango_precio) {
-					newUrl += `rango_precio=${rango_precio}&`;
-				}
-
-				if (en_stock) {
-					newUrl += `en_stock=${en_stock}&`;
-				}
-
-				// Remove the trailing '&' if present
-				newUrl = newUrl.endsWith('&') ? newUrl.slice(0, -1) : newUrl;
-
-				// Redirect the page to the new URL
-				window.location.href = newUrl;
+		// Function to update filters on the page load and keep previous selections
+		function setSelectedFilters() {
+			const params = getQueryParams();
+			
+			// Set the selected value for each filter dropdown based on the URL parameters
+			if (params.categoriaId) {
+				document.getElementById('categoria-dropdown').value = params.categoriaId;
 			}
+			if (params.fabricanteId) {
+				document.getElementById('fabricante-dropdown').value = params.fabricanteId;
+			}
+			if (params.rangoPrecio) {
+				document.getElementById('precio-dropdown').value = params.rangoPrecio;
+			}
+			if (params.enStock) {
+				document.getElementById('stock-dropdown').value = params.enStock;
+			}
+		}
+
+		// Function to update the filters and reload the page with the new URL
+		function updateFilters() {
+			const categoriaId = document.getElementById('categoria-dropdown').value;
+			const fabricanteId = document.getElementById('fabricante-dropdown').value;
+			const rango_precio = document.getElementById('precio-dropdown').value;
+			const en_stock = document.getElementById('stock-dropdown').value;
+			const queryParam = new URLSearchParams(window.location.search).get('q');
+			
+			let newUrl = '/inicio/search/?';
+
+			if (queryParam) {
+				newUrl += `q=${encodeURIComponent(queryParam)}&`;
+			}
+
+			if (categoriaId) {
+				newUrl += `categoria_id=${categoriaId}&`;
+			}
+
+			if (fabricanteId) {
+				newUrl += `fabricante_id=${fabricanteId}&`;
+			}
+
+			if (rango_precio) {
+				newUrl += `rango_precio=${rango_precio}&`;
+			}
+
+			if (en_stock) {
+				newUrl += `en_stock=${en_stock}&`;
+			}
+
+			// Remove the trailing '&' if present
+			newUrl = newUrl.endsWith('&') ? newUrl.slice(0, -1) : newUrl;
+
+			// Redirect the page to the new URL
+			window.location.href = newUrl;
+		}
+
+		// Ensure filters are set when the page is loaded
+		window.onload = function() {
+			setSelectedFilters();
+		};
 		</script>
     </body>
 	

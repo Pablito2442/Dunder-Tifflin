@@ -17,8 +17,4 @@ urlpatterns = [
     path('productos/', include('producto.urls')),  # Rutas de productos
     path('carrito/', include('carrito.urls')),  # Rutas de carrito
     path('pedidos/', include('pedido.urls')),  # Rutas de pedidos    
-]
-
-# Solo en desarrollo, servir archivos multimedia
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

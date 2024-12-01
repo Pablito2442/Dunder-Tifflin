@@ -64,9 +64,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
@@ -90,12 +87,11 @@ TEMPLATES = [
     },
 ]
 
-MEDIA_URL= '/staticfiles/' 
-MEDIA_ROOT= os.path.join(BASE_DIR, 'staticfiles')
-
-# Asegúrate de que en producción se gestione correctamente la carpeta media
-if not DEBUG:
-    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+STATIC_URL = '/static/'  # URL para acceder a los archivos estáticos
+STATICFILES_DIRS = [
+    BASE_DIR / "static",  # Directorio de tus archivos estáticos
+]
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # Si vas a usar collectstatic en producción
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
 

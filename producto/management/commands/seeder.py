@@ -88,7 +88,7 @@ def seed():
                             precio=600, cantidad_en_stock=4, categoria = Categorias.escritorios,
                             fabricante= Fabricantes.pierre, destacado=False, agotado=False,
                             fecha_creacion= date('2024-11-24') ,fecha_actualizacion= date('2024-11-27'),
-                            foto="images/escritorio 5.jpg")
+                            foto="images/escritorio 6.jpg")
     
     Producto.objects.create(nombre="Estante blanco", descripcion="Estantería de madera y color blanco, muy elegante",
                             precio=60, cantidad_en_stock=20, categoria = Categorias.estanterias,
@@ -118,7 +118,7 @@ def seed():
                             precio=70, cantidad_en_stock=20, categoria = Categorias.estanterias,
                             fabricante= Fabricantes.pepe, destacado=True, agotado=False,
                             fecha_creacion= date('2024-11-24') ,fecha_actualizacion= date('2024-11-27'),
-                            foto="images/estante 4.jpg")
+                            foto="images/estante 5.jpg")
     
     Producto.objects.create(nombre="Silla confort", descripcion="Silla de oficina muy cómoda, sin reposacabezas",  
                             precio=80, cantidad_en_stock=20, categoria = Categorias.sillas,
@@ -214,7 +214,7 @@ def seed():
                             precio=15, cantidad_en_stock=30, categoria = Categorias.miscelanea,
                             fabricante= Fabricantes.joe, destacado=False, agotado=False,
                             fecha_creacion= date('2024-11-24'), fecha_actualizacion= date('2024-11-27'),
-                            foto="images/miscelanea 1.jpg")
+                            foto="images/miscelanea 3.jpg")
     
     Producto.objects.create(nombre="Rueda recambio", descripcion="Rueda de recambio para silla de oficina",  
                             precio=10, cantidad_en_stock=50, categoria = Categorias.miscelanea,

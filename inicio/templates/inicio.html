@@ -130,7 +130,6 @@
 
             <!-- Generar los items dinámicamente -->
             <div class="carousel-inner" role="listbox">
-               <img src="{% static 'images/flexo.jpg' %}" alt="Mi imagen">
                {% for producto in productos_destacados %}
                   <div class="item {% if forloop.first %}active{% endif %}">
                      <div class="single-slide-item">

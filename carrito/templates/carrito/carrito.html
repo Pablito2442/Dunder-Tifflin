@@ -98,20 +98,20 @@
             </div>
 
             <div class="actions text-center">
-                <a href="{% url 'finalizar_pedido' %}" class="btn btn-success btn-lg mx-2">
+                <a href="{% url 'finalizar_pedido' %}" class="btn btn-success btn-lg mx-2" style="padding: 10px 16px; font-size: 18px;">
                     Finalizar Compra
                 </a>
-                <a href="{% url 'vaciar_carrito' %}" class="btn btn-warning btn-lg mx-2">
+                <a href="{% url 'vaciar_carrito' %}" class="btn btn-warning btn-lg mx-2" style="padding: 10px 16px; font-size: 18px;">
                     Vaciar Carrito
                 </a>
-                <a href="{% url 'catalogo' %}" class="btn btn-primary btn-lg mt-4">
+                <a href="{% url 'catalogo' %}" class="btn btn-primary btn-lg mt-4" style="padding: 10px 16px; font-size: 18px;">
                     Volver al Catálogo
                 </a>
             </div>
             {% else %}
             <div class="empty-cart text-center">
                 <p>El carrito está vacío.</p>
-                <a href="{% url 'catalogo' %}" class="btn btn-primary btn-lg mt-4">
+                <a href="{% url 'catalogo' %}" class="btn btn-primary btn-lg mt-4" style="padding: 10px 16px; font-size: 18px;">
                     Volver al Catálogo
                 </a>
             </div>

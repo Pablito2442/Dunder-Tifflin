@@ -176,7 +176,7 @@ def actualizar_producto(request):
                 print(f"Archivo recibido: {foto.name}")  # Verifica que el archivo se ha recibido correctamente
 
                 # Crear un objeto FileSystemStorage para guardar en la carpeta 'media/productos/'
-                fs = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'images'))
+                fs = FileSystemStorage(location=os.path.join(settings.STATIC_ROOT, 'images'))
 
                 # Guardar la imagen con un nombre único (puedes usar el nombre original o generar uno único)
                 filename = fs.save(foto.name, foto)

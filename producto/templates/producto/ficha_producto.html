@@ -60,15 +60,27 @@
 				var input = document.getElementById('counter');
 				input.value = parseInt(input.value) + 1;
 			};
-			function agregar_carrito(url, id){
+			function agregar_carrito(url){
 				const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 				const counter = document.getElementById('counter')
+                console.log(url)
 				fetch(url, {
 					method: "POST",
 					headers: {'X-CSRFToken': csrftoken, 'Content-Type': 'application/json'},
 					body: JSON.stringify({
 						cantidad: counter.value
 					})
+				}).then( (response)=>{
+					if (response.status == 200){
+                        if (response.redirected){
+                            window.location.href = response.url
+                        }
+					} else {
+						message_container = document.getElementById("message-container")
+						response.json().then((data)=>{
+							message_container.innerHTML = data['msg']
+						})
+					}
 				})
 			}
         </script>
@@ -115,26 +127,24 @@
                                         </div>
 
                                         {%if producto.agotado == False and producto.cantidad_en_stock > 0 %}
-                                        <form id="counter_form" action="{% url 'agregar_carrito' producto.id %}" method="get">
+                                        <form id="counter_form">
                                             <div style="float:right; margin-right: 20px; text-align: center;">
                                                 <span class="minus" onclick="decrease_counter()">-</span>
                                                 {% csrf_token %}
                                                 <input class="cantidad_input" type="text" value="1" id="counter" name="cantidad"/>
                                                 <span class="plus" onclick="increase_counter()">+</span>
                                             </div>
-                                            <button id="submit_button">
-                                                <a class="btn-cart welcome-add-cart">
-                                                    <span class="lnr lnr-plus-circle"></span>
-                                                    Añadir <span>al</span> carrito
-                                                </a>
-                                            </button>
                                         </form>
-                                        <script>
+                                        <button id="submit_button" onclick="agregar_carrito('{% url 'agregar_carrito' producto.id %}')" class="btn-cart welcome-add-cart">
+                                            <span class="lnr lnr-plus-circle"></span>
+                                            Añadir <span>al</span> carrito
+                                        </button>
+                                        
+                                        <!--<script>
                                             document.getElementById('submit_button')
                                             .addEventListener('click', ()=>{
-                                                document.getElementById('counter_form').submit()
                                             })
-                                        </script>
+                                        </script>-->
                                         {% else %}
                                         <button>
                                             <a class="btn-cart welcome-add-cart" style="background: #616060; border: #616060; color:#fff">
@@ -152,6 +162,9 @@
             </div><!-- /.single-slide-item-->
 
 			{% include 'navbar_inicio.html' %}
+
+        <div id="message-container">
+        </div>
 
 		</header><!--/.welcome-hero-->
 		<!--welcome-hero end -->

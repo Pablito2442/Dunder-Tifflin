@@ -64,6 +64,13 @@
 				opacity:0;
 				visibility:hidden;
 			}
+			.hidden-new-arrival-cart p {
+				float: left;
+				margin-left: 20px;
+				color: #fff;
+				font-size: 12px;
+				line-height: 3;
+			}
 			.select-container {
 				margin: 20px 0;
 				display: flex;
@@ -120,7 +127,7 @@
 					<!-- Dropdown for selecting Categoria -->
 					<div class="select-container">
 						<select id="categoria-dropdown" onchange="updateFilters()">
-							<option value="">-- Filtrar por Categoria --</option>
+							<option value="">Todas las Categorias</option>
 							{% for categoria in categorias %}
 							<option value="{{ categoria.id }}" {{% if categoria.id == request.GET.categoria_id %}selected{% endif %}>
 								{{ categoria.nombre }}
@@ -128,7 +135,7 @@
 						</select>
 						<!-- Dropdown for selecting Fabricante -->
 						<select id="fabricante-dropdown" onchange="updateFilters()">
-							<option value="">-- Filtrar por Fabricante --</option>
+							<option value="">Todos los Fabricantes</option>
 							{% for fabricante in fabricantes %}
 							<option value="{{ fabricante.id }}" {% if fabricante.id == request.GET.fabricante_id %}selected{% endif %}>
 								{{ fabricante.nombre }}
@@ -137,7 +144,7 @@
 						</select>
 						<!-- Dropdown for range of producr prices -->
 						<select id="precio-dropdown" onchange="updateFilters()">
-							<option value="">-- Filtrar por Precio --</option>
+							<option value="">Cualquier Precio</option>
 							<option value="0-30" {% if request.GET.rango_precio == '0-30' %}selected{% endif %}>Hasta 30€</option>
 							<option value="30-50" {% if request.GET.rango_precio == '30-50' %}selected{% endif %}>Entre 30€ y 50€</option>
 							<option value="50-75" {% if request.GET.rango_precio == '50-75' %}selected{% endif %}>Entre 50€ y 75€</option>
@@ -148,9 +155,8 @@
 						</select>
 						<!-- Dropdown for stock -->
 						<select id="stock-dropdown" onchange="updateFilters()">
-							<option value="">-- Filtrar por existencias --</option>
-							<option value="True" {% if request.GET.en_stock == 'True' %}selected{% endif %}>Disponible</option>
 							<option value="">Todos los productos</option>
+							<option value="True" {% if request.GET.en_stock == 'True' %}selected{% endif %}>Disponible</option>
 						</select>
 					</div>
 				</div><!--/.section-header-->
@@ -227,6 +233,9 @@
 			</div><!--/.container-->
 		</section><!--/.new-arrivals-->
 
+		<div id="message-container">
+		</div>
+
         <!--footer start-->
 		<footer id="footer"  class="footer">
 			<div class="container">
@@ -268,11 +277,19 @@
 					body: JSON.stringify({
 						cantidad: counter.value
 					})
+				}).then( (response)=>{
+					if (response.status == 200){
+						const pestaña_carrito = document.getElementById('carrito'+ id)
+						const pestaña_confirmacion = document.getElementById('confirmacion'+ id)
+						pestaña_carrito.classList.replace('new-arrival-cart','hidden-new-arrival-cart')
+						pestaña_confirmacion.classList.replace('hidden-new-arrival-cart','new-arrival-cart')
+					} else {
+						message_container = document.getElementById("message-container")
+						response.json().then((data)=>{
+							message_container.innerHTML = data['msg']
+						})
+					}
 				})
-				const pestaña_carrito = document.getElementById('carrito'+ id)
-				const pestaña_confirmacion = document.getElementById('confirmacion'+ id)
-				pestaña_carrito.classList.replace('new-arrival-cart','hidden-new-arrival-cart')
-				pestaña_confirmacion.classList.replace('hidden-new-arrival-cart','new-arrival-cart')
 			}
 			function hideConfirmacion(id){
 				const pestaña_carrito = document.getElementById('carrito'+ id)

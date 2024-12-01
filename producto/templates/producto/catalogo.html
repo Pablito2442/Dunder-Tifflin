@@ -84,20 +84,18 @@
 				opacity:0;
 				visibility:hidden;
 			}
-<<<<<<< HEAD
 			.select-container {
 				margin: 20px 0;
 				display: flex;
 				gap: 15px; /* Adds space between the two dropdowns */
 				justify-content: center; /* Centers the dropdowns */
-=======
+			}
 			.hidden-new-arrival-cart p {
 				float: left;
 				margin-left: 20px;
 				color: #fff;
 				font-size: 12px;
 				line-height: 3;
->>>>>>> 79705e7e82f037884266eac9384c81cfdde4d4de
 			}
 
 			/* Style for individual select elements */
@@ -191,7 +189,7 @@
 			<div class="container">
 				<div class="section-header">
                     <br>
-					<h2>catálogo</h2>
+					<h2>Catálogo</h2>
 					<!-- Dropdown for selecting Categoria -->
 						<div class="select-container">
 						<select id="categoria-dropdown" onchange="updateFilters()">
@@ -207,6 +205,9 @@
 								<option value="{{ fabricante.id }}">{{ fabricante.nombre }}</option>
 							{% endfor %}
 						</select>
+						<p style="padding: 10px 0;">Precio máximo:</p>
+						<input id="precio-input" type="number" min="1" style="width: 100px" onchange="updateFilters()" value="{{max_precio}}">
+						<p style="padding: 10px 0;">€</p>
 					</div>
 				</div><!--/.section-header-->
 				<div class="new-arrivals-content">
@@ -307,9 +308,11 @@
 		// Filtrado
 		const selectedCategoria = document.getElementById('categoria-dropdown');
 		const selectedFabricante = document.getElementById('fabricante-dropdown');
+		const selectedPrecio = document.getElementById('precio-input');
 		function updateFilters() {
 			const categoriaId = document.getElementById('categoria-dropdown').value;
 			const fabricanteId = document.getElementById('fabricante-dropdown').value;
+			const max_precio = document.getElementById('precio-input').value;
 			// Build the query string with selected values
 			let queryString = '';
 			if (categoriaId) {
@@ -317,6 +320,9 @@
 			}
 			if (fabricanteId) {
 			queryString += (queryString ? '&' : '?') + `fabricante_id=${fabricanteId}`;
+			}
+			if (max_precio) {
+			queryString += (queryString ? '&' : '?') + `max_precio=${max_precio}`;
 			}
 			// Trigger a page refresh or use AJAX if you want to load the filtered products without reloading
 			window.location.href = '/productos/' + queryString;

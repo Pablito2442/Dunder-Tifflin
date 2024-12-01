@@ -222,7 +222,7 @@ def crear_producto(request):
             # Procesar la imagen si existe
             foto = request.FILES.get('foto')
             if foto:
-                fs = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'images'))
+                fs = FileSystemStorage(location=os.path.join(settings.STATIC_ROOT, 'images'))
                 filename = fs.save(foto.name, foto)
             else:
                 foto_url = None  # No hay foto, o puedes poner una foto por defecto

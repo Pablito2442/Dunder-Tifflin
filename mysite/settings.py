@@ -93,6 +93,10 @@ TEMPLATES = [
 MEDIA_URL= '/media/' 
 MEDIA_ROOT= os.path.join(BASE_DIR, 'media')
 
+# Asegúrate de que en producción se gestione correctamente la carpeta media
+if not DEBUG:
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
 

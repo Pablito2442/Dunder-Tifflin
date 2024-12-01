@@ -6,3 +6,4 @@ py .\manage.py makemigrations pedido
 py .\manage.py makemigrations producto
 py .\manage.py makemigrations usuario
 py .\manage.py migrate
+py .\manage.py seeder

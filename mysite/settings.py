@@ -90,8 +90,8 @@ TEMPLATES = [
     },
 ]
 
-MEDIA_URL= '/media/' 
-MEDIA_ROOT= os.path.join(BASE_DIR, 'media')
+MEDIA_URL= '/staticfiles/' 
+MEDIA_ROOT= os.path.join(BASE_DIR, 'staticfiles')
 
 # Asegúrate de que en producción se gestione correctamente la carpeta media
 if not DEBUG:

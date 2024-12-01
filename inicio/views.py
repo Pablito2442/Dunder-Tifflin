@@ -6,7 +6,12 @@ from producto.models import *
 # Create your views here.
 
 def inicio(request):
-    return render(request, 'inicio.html')
+    # Obtener productos destacados
+    productos_destacados = Producto.objects.filter(destacado=True)
+
+    return render(request, 'inicio.html', {
+        'productos_destacados': productos_destacados
+    })
 
 def search_results(request):
     categorias = Categoria.objects.all()

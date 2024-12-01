@@ -22,6 +22,7 @@ def search_results(request):
     fabricante_id = request.GET.get('fabricante_id')
     rango_precio = request.GET.get('rango_precio')
     en_stock = request.GET.get('en_stock')
+    
 
     results =  Producto.objects.all()
     if query:
@@ -53,8 +54,12 @@ def search_results(request):
     if en_stock:
         results = results.filter(agotado=False)
 
+    agotados = results.filter(Q(agotado=True) | Q(cantidad_en_stock=0))
+    results = results.filter(agotado=False, cantidad_en_stock__gt=0)
+
     return render(request, 'search_results.html', {
         'results': results,
+        'agotados' : agotados,
         'categorias': categorias,
         'fabricantes': fabricantes,
         'categoria_id': categoria_id,

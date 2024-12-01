@@ -111,7 +111,7 @@
         <header id="home" class="welcome-hero">
             {% include 'navbar_inicio.html' %}
         </header><!--/.welcome-hero-->
-
+		<div class="container" style="margin-top: 70px;">
 		<section id="new-arrivals" class="new-arrivals">
 			<div class="container">
 				<div class="section-header">
@@ -198,6 +198,30 @@
 						{% else %}
 							<p>No results found.</p>
 						{% endif %}
+											<!--Producto agotados-->
+						{% for agotado in agotados%}
+						<div class="col-md-3 col-sm-4">
+							<div class="single-new-arrival">
+								
+								<div class="single-new-arrival-bg" >
+									<a href="{% url 'ficha_producto' agotado.id%}">
+										<img src="{{agotado.foto.url}}" alt="new-arrivals images" style="filter: grayscale(1)">
+										<div class="single-new-arrival-bg-overlay"></div>
+									</a>
+									<div class="new-arrival-cart" style="bottom: 0px; visibility: visible; opacity: 1;">
+										<p>
+											Agotado
+										</p>
+									</div>
+								</div>
+								
+								<h4>
+									<a href="{% url 'ficha_producto' agotado.id%}">{{agotado.nombre}}</a>
+								</h4>
+								<p class="arrival-product-price">{{agotado.precio}}€</p>
+							</div>
+						</div>
+						{% endfor %}
 					</div>
 				</div>
 			</div><!--/.container-->

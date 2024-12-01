@@ -1,3 +1,4 @@
+#!/bin/bash
 py .\manage.py makemigrations carrito
 py .\manage.py makemigrations catalogo
 py .\manage.py makemigrations inicio

@@ -248,6 +248,13 @@
                         <label for="direccion_envio">Dirección de Envío</label>
                         <input type="text" class="form-control" id="direccion_envio" name="direccion_envio" value="{{ ultimo_pedido.direccion_envio }}" required>
                      </div>
+                     <div class="form-group">
+                        <label for="metodo_pago">Método de Pago</label>
+                        <select class="form-control" id="metodo_pago" name="metodo_pago" required>
+                            <option value="contrareembolso">Contrareembolso</option>
+                            <option value="tarjeta">Tarjeta</option>
+                        </select>
+                    </div>
                      <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                   </form>
                </div>

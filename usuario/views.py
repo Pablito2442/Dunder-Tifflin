@@ -105,11 +105,22 @@ def panel_pedidos(request):
 def actualizar_pedido(request, pedido_id):
     if request.method == "POST":
         pedido = get_object_or_404(Pedido, id=pedido_id)
+        # Actualizar el correo del cliente si se proporciona
         pedido.correo_cliente = request.POST.get('correo_cliente', pedido.correo_cliente)
+        # Actualizar la dirección de envío si se proporciona
         pedido.direccion_envio = request.POST.get('direccion_envio', pedido.direccion_envio)
+        # Actualizar el método de pago si se proporciona
+        metodo_pago = request.POST.get('metodo_pago', pedido.metodo_pago)
+        if metodo_pago in ['contrareembolso', 'tarjeta']:  # Validar valores permitidos
+            pedido.metodo_pago = metodo_pago
+        else:
+            messages.error(request, "Método de pago no válido.")
+            return redirect('panel_usuario_pedidos')
+        # Guardar los cambios
         pedido.save()
         messages.success(request, "¡El pedido se actualizó correctamente!")
         return redirect('panel_usuario_pedidos')
+    return redirect('panel_usuario_pedidos')
     
 
 #

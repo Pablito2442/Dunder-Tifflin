@@ -227,15 +227,24 @@
                      </div>
                      <div class="form-group">
                         <label for="estado">Estado</label>
-                        <input type="text" class="form-control" id="estado" name="estado">
-                     </div>
+                        <select class="form-control" id="estado" name="estado">
+                            <option value="pendiente">Pendiente</option>
+                            <option value="en_proceso">En proceso</option>
+                            <option value="enviado">Enviado</option>
+                            <option value="entregado">Entregado</option>
+                            <option value="cancelado">Cancelado</option>
+                        </select>
+                    </div>                    
                      <div class="form-group">
                         <label for="direccion_envio">Dirección de Envío</label>
                         <input type="text" class="form-control" id="direccion_envio" name="direccion_envio">
                      </div>
                      <div class="form-group">
                         <label for="metodo_pago">Método de Pago</label>
-                        <input type="text" class="form-control" id="metodo_pago" name="metodo_pago">
+                        <select class="form-control" id="metodo_pago" name="metodo_pago" required>
+                            <option value="contrareembolso">Contrareembolso</option>
+                            <option value="tarjeta">Tarjeta</option>
+                        </select>
                      </div>
                      <button type="submit" class="btn btn-primary">Guardar cambios</button>
                   </form>

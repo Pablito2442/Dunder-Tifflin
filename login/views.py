@@ -9,6 +9,7 @@ from .forms import LoginForm, RegisterForm
 import re
 
 def user_login(request):
+    next_url = request.GET.get('next', 'inicio')  # Obtener la URL de redirección
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -36,7 +37,7 @@ def user_login(request):
                 if user is not None:
                     if user.is_active:
                         login(request, user)
-                        return redirect('panel_usuario')
+                        return redirect(next_url)  # Redirigir a la URL anterior
                     else:
                         messages.error(request, 'Cuenta deshabilitada')
                         return redirect('login')
@@ -49,7 +50,7 @@ def user_login(request):
     else:
         form = LoginForm()
 
-    return render(request, 'login.html', {'form': form})
+    return render(request, 'login.html', {'form': form, 'next': next_url})
 
 def registro(request):
     if request.method == 'POST':
@@ -90,4 +91,3 @@ def registro(request):
         field.field.widget.attrs.update({'class': 'login__input'})
 
     return render(request, 'registro.html', {'form': form})
-

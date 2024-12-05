@@ -33,9 +33,9 @@ DEFAULT_FROM_EMAIL = 'Dunder Tifflin <dundertifflin@gmail.com>'
 SECRET_KEY = 'django-insecure-c@0$85r&p)_ey1(l@h@e*evns*79cp^)2r1kf6qvg5y+e+hb*s'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['dunder-tifflin.onrender.com', 'localhost']
+ALLOWED_HOSTS = ['dunder-tifflin.onrender.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -64,7 +64,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware'
 ]
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
@@ -87,16 +89,21 @@ TEMPLATES = [
     },
 ]
 
+MEDIA_ROOT= os.path.join(BASE_DIR, 'media')
+MEDIA_URL= '/media/'
+
 STATIC_URL = '/static/'  # URL para acceder a los archivos estáticos
-STATICFILES_DIRS = [
-    BASE_DIR / "static",  # Directorio de tus archivos estáticos
-]
+#STATICFILES_DIRS = [
+#    BASE_DIR / "static",  # Directorio de tus archivos estáticos
+#]
 STATIC_ROOT = BASE_DIR / 'staticfiles'  # Si vas a usar collectstatic en producción
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
 
-# Database
+# DatabaseSTATIC_URL = 'static/'
+#STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
@@ -145,9 +152,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+#STATIC_URL = 'static/'
+#STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

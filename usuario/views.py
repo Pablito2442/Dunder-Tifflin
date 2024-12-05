@@ -187,13 +187,13 @@ def actualizar_producto(request):
                 print(f"Archivo recibido: {foto.name}")  # Verifica que el archivo se ha recibido correctamente
 
                 # Crear un objeto FileSystemStorage para guardar en la carpeta 'media/productos/'
-                fs = FileSystemStorage(location=os.path.join(settings.STATIC_ROOT, 'images'))
+                fs = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'images'))
 
                 # Guardar la imagen con un nombre único (puedes usar el nombre original o generar uno único)
                 filename = fs.save(foto.name, foto)
 
                 # Solo guardar el nombre del archivo en el modelo
-                producto.foto = 'static/images/' + filename
+                producto.foto = 'images/' + filename
 
             # Guardar los cambios en la base de datos
             producto.save()
@@ -233,7 +233,7 @@ def crear_producto(request):
             # Procesar la imagen si existe
             foto = request.FILES.get('foto')
             if foto:
-                fs = FileSystemStorage(location=os.path.join(settings.STATIC_ROOT, 'images'))
+                fs = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'images'))
                 filename = fs.save(foto.name, foto)
             else:
                 foto_url = None  # No hay foto, o puedes poner una foto por defecto
@@ -248,7 +248,7 @@ def crear_producto(request):
                 fabricante=fabricante,
                 destacado=destacado,
                 agotado=agotado,
-                foto='static/images/' + filename
+                foto='images/' + filename
             )
             nuevo_producto.save()
 

@@ -43,6 +43,11 @@
 									<li class="dropdown">
 										<a href="{% url 'ver_carrito' %}" class="dropdown-toggle" data-toggle="dropdown">
 											<span class="lnr lnr-cart"></span>
+											{% if request.session.carrito %}
+											<span class="cart-count" style="color: white; background-color: darkorange; border-radius: 40%; padding: 5px 8px; font-size: small;">
+												{{ request.session.carrito|length }}
+											</span>
+											{% endif %}
 										</a>        
 									</li><!--/.dropdown-->
 								</ul>

@@ -24,7 +24,6 @@ Dunder-Tifflin/
 ├── tests/            # Pruebas unitarias
 ├── README.md         # Documentación del proyecto
 ├── requirements.txt  # Dependencias del proyecto
-└── LICENSE           # Licencia del proyecto
 ```
 
 ---
@@ -43,14 +42,19 @@ Dunder-Tifflin/
    source env/bin/activate  # En Windows usa env\Scripts\activate
    ```
 
-3. **Instalar dependencias**  
+3. **Instalar dependencias**
+   Para Linux
    ```bash
-   pip install -r requirements.txt
+   pip install -r requirements.txt && ./generarDB.sh
+   ```
+   Para Windows
+   ```bash
+   pip install -r requirements.txt && ./GenerarDB.bat
    ```
 
-4. **Ejecutar el sistema**  
+5. **Ejecutar el sistema**  
    ```bash
-   python src/main.py
+   python manage.py runserver
    ```
 
 ---
@@ -73,25 +77,6 @@ Dunder-Tifflin/
 - **Exportación de reportes a formatos como PDF y Excel.**
 - **Diseño responsivo para dispositivos móviles.**
 - **Integración con APIs de envío y logística.**
-
----
-
-## 🤝 Contribuciones
-
-¡Las contribuciones son bienvenidas!  
-Si deseas colaborar, sigue estos pasos:
-
-1. Haz un fork del proyecto.
-2. Crea una rama para tu función o corrección (`git checkout -b feature/nueva-funcion`).
-3. Realiza un commit de tus cambios (`git commit -m 'Añadir nueva función'`).
-4. Sube tus cambios a tu rama (`git push origin feature/nueva-funcion`).
-5. Abre un pull request en el repositorio original.
-
----
-
-## 📜 Licencia
-
-Este proyecto está bajo la licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más información.
 
 ---
 

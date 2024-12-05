@@ -1,7 +1,7 @@
 
 # 📝 Dunder Tifflin
 
-Dunder Tifflin es un sistema de gestión para una empresa de venta de papel que permite manejar clientes, inventarios, ventas y reportes de manera eficiente. Inspirado en la icónica compañía ficticia de *The Office*, este proyecto busca implementar un sistema sencillo y funcional para pequeñas empresas.
+Dunder Tifflin es un sistema de gestión para una empresa de venta de mateial de oficina que permite manejar clientes, inventarios, ventas y reportes de manera eficiente. Inspirado en la icónica compañía ficticia de *The Office*, este proyecto busca implementar un sistema sencillo y funcional para pequeñas empresas.
 
 ---
 
@@ -63,10 +63,7 @@ Dunder-Tifflin/
 
 - **Lenguaje:** Python 3.8+
 - **Bibliotecas principales:**
-  - Flask: Para el desarrollo de la interfaz web.
-  - SQLAlchemy: Gestión de la base de datos.
-  - Pandas: Análisis y manipulación de datos.
-  - PyTest: Para la ejecución de pruebas.
+  - Django: Estruturacion del proyecto .
 
 ---
 

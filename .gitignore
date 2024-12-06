@@ -4,4 +4,5 @@ venv/
 .venv/
 launch.json
 db.sqlite3
-/staticfiles
+staticfiles
+.gitignore
